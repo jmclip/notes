@@ -1,0 +1,1736 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Lecture 13 Maximum likelihood estimation and linear regression | Computational Math Camp</title>
+  <meta name="description" content="Contains lecture notes for the 2022 Computational Math Camp." />
+  <meta name="generator" content="bookdown 0.26 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Lecture 13 Maximum likelihood estimation and linear regression | Computational Math Camp" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="Contains lecture notes for the 2022 Computational Math Camp." />
+  <meta name="github-repo" content="math-camp/notes" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Lecture 13 Maximum likelihood estimation and linear regression | Computational Math Camp" />
+  
+  <meta name="twitter:description" content="Contains lecture notes for the 2022 Computational Math Camp." />
+  
+
+<meta name="author" content="Yanyan Sheng" />
+
+
+<meta name="date" content="2022-08-17" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="classic-inference.html"/>
+<link rel="next" href="bayesian-inference.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<script src="libs/plotly-binding-4.10.0/plotly.js"></script>
+<script src="libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
+<link href="libs/plotly-htmlwidgets-css-2.5.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="libs/plotly-main-2.5.1/plotly-latest.min.js"></script>
+\[
+\newcommand{\E}{\mathrm{E}}
+\newcommand{\Var}{\mathrm{Var}}
+\newcommand{\Cov}{\mathrm{Cov}}
+\newcommand{\se}{\text{se}}
+\newcommand{\sd}{\text{sd}}
+\newcommand{\Cor}{\mathrm{Cor}}
+\newcommand{\Lagr}{\mathcal{L}}
+\newcommand{\lagr}{\mathcal{l}}
+\]
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="css/style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Overview</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#meeting-information"><i class="fa fa-check"></i>Meeting information</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#instructional-staff"><i class="fa fa-check"></i>Instructional staff</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#teaching-assistants"><i class="fa fa-check"></i>Teaching assistants</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#course-description"><i class="fa fa-check"></i>Course description</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#who-should-take-this-course"><i class="fa fa-check"></i>Who should take this course</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#grades"><i class="fa fa-check"></i>Grades</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#disability-services"><i class="fa fa-check"></i>Disability services</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#core-texts"><i class="fa fa-check"></i>Core texts</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#course-format"><i class="fa fa-check"></i>Course format</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#problem-sets"><i class="fa fa-check"></i>Problem sets</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#course-schedule"><i class="fa fa-check"></i>Course schedule</a></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="sets-functions.html"><a href="sets-functions.html"><i class="fa fa-check"></i><b>1</b> Linear equations, inequalities, sets and functions, quadratics, and logarithms</a>
+<ul>
+<li class="chapter" data-level="" data-path="sets-functions.html"><a href="sets-functions.html#learning-objectives"><i class="fa fa-check"></i>Learning objectives</a></li>
+<li class="chapter" data-level="" data-path="sets-functions.html"><a href="sets-functions.html#supplemental-readings"><i class="fa fa-check"></i>Supplemental readings</a></li>
+<li class="chapter" data-level="1.1" data-path="sets-functions.html"><a href="sets-functions.html#what-is-computational-social-science"><i class="fa fa-check"></i><b>1.1</b> What is computational social science?</a>
+<ul>
+<li class="chapter" data-level="1.1.1" data-path="sets-functions.html"><a href="sets-functions.html#disciplines-within-social-science"><i class="fa fa-check"></i><b>1.1.1</b> Disciplines within social science</a></li>
+<li class="chapter" data-level="1.1.2" data-path="sets-functions.html"><a href="sets-functions.html#computational-social-science"><i class="fa fa-check"></i><b>1.1.2</b> Computational social science</a></li>
+<li class="chapter" data-level="1.1.3" data-path="sets-functions.html"><a href="sets-functions.html#acquiring-css-skills"><i class="fa fa-check"></i><b>1.1.3</b> Acquiring CSS skills</a></li>
+</ul></li>
+<li class="chapter" data-level="1.2" data-path="sets-functions.html"><a href="sets-functions.html#difference-between-math-probability-and-statistics"><i class="fa fa-check"></i><b>1.2</b> Difference between math, probability, and statistics</a>
+<ul>
+<li class="chapter" data-level="1.2.1" data-path="sets-functions.html"><a href="sets-functions.html#mathematics"><i class="fa fa-check"></i><b>1.2.1</b> Mathematics</a></li>
+<li class="chapter" data-level="1.2.2" data-path="sets-functions.html"><a href="sets-functions.html#probability"><i class="fa fa-check"></i><b>1.2.2</b> Probability</a></li>
+<li class="chapter" data-level="1.2.3" data-path="sets-functions.html"><a href="sets-functions.html#statistics"><i class="fa fa-check"></i><b>1.2.3</b> Statistics</a></li>
+<li class="chapter" data-level="1.2.4" data-path="sets-functions.html"><a href="sets-functions.html#their-uses"><i class="fa fa-check"></i><b>1.2.4</b> Their uses</a></li>
+</ul></li>
+<li class="chapter" data-level="1.3" data-path="sets-functions.html"><a href="sets-functions.html#goals-for-this-camp"><i class="fa fa-check"></i><b>1.3</b> Goals for this camp</a></li>
+<li class="chapter" data-level="1.4" data-path="sets-functions.html"><a href="sets-functions.html#course-logistics"><i class="fa fa-check"></i><b>1.4</b> Course logistics</a>
+<ul>
+<li class="chapter" data-level="1.4.1" data-path="sets-functions.html"><a href="sets-functions.html#course-staff"><i class="fa fa-check"></i><b>1.4.1</b> Course staff</a></li>
+<li class="chapter" data-level="1.4.2" data-path="sets-functions.html"><a href="sets-functions.html#teaching-assistants-1"><i class="fa fa-check"></i><b>1.4.2</b> Teaching assistants</a></li>
+<li class="chapter" data-level="1.4.3" data-path="sets-functions.html"><a href="sets-functions.html#prerequisites-for-the-math-camp"><i class="fa fa-check"></i><b>1.4.3</b> Prerequisites for the math camp</a></li>
+<li class="chapter" data-level="1.4.4" data-path="sets-functions.html"><a href="sets-functions.html#alternatives-to-this-camp"><i class="fa fa-check"></i><b>1.4.4</b> Alternatives to this camp</a></li>
+<li class="chapter" data-level="1.4.5" data-path="sets-functions.html"><a href="sets-functions.html#evaluation"><i class="fa fa-check"></i><b>1.4.5</b> Evaluation</a></li>
+<li class="chapter" data-level="1.4.6" data-path="sets-functions.html"><a href="sets-functions.html#why-are-we-doing-this"><i class="fa fa-check"></i><b>1.4.6</b> Why are we doing this</a></li>
+</ul></li>
+<li class="chapter" data-level="1.5" data-path="sets-functions.html"><a href="sets-functions.html#mathematical-notation"><i class="fa fa-check"></i><b>1.5</b> Mathematical notation</a>
+<ul>
+<li class="chapter" data-level="1.5.1" data-path="sets-functions.html"><a href="sets-functions.html#why-math-is-important-to-social-science"><i class="fa fa-check"></i><b>1.5.1</b> Why math is important to social science</a></li>
+<li class="chapter" data-level="1.5.2" data-path="sets-functions.html"><a href="sets-functions.html#example-paradox-of-voting"><i class="fa fa-check"></i><b>1.5.2</b> Example: Paradox of voting</a></li>
+</ul></li>
+<li class="chapter" data-level="1.6" data-path="sets-functions.html"><a href="sets-functions.html#sets"><i class="fa fa-check"></i><b>1.6</b> Sets</a>
+<ul>
+<li class="chapter" data-level="1.6.1" data-path="sets-functions.html"><a href="sets-functions.html#set-builder-notation"><i class="fa fa-check"></i><b>1.6.1</b> Set builder notation</a></li>
+<li class="chapter" data-level="1.6.2" data-path="sets-functions.html"><a href="sets-functions.html#set-operations"><i class="fa fa-check"></i><b>1.6.2</b> Set operations</a></li>
+<li class="chapter" data-level="1.6.3" data-path="sets-functions.html"><a href="sets-functions.html#some-facts-about-sets"><i class="fa fa-check"></i><b>1.6.3</b> Some facts about sets</a></li>
+</ul></li>
+<li class="chapter" data-level="1.7" data-path="sets-functions.html"><a href="sets-functions.html#functions"><i class="fa fa-check"></i><b>1.7</b> Functions</a>
+<ul>
+<li class="chapter" data-level="1.7.1" data-path="sets-functions.html"><a href="sets-functions.html#ordered-pairs"><i class="fa fa-check"></i><b>1.7.1</b> Ordered pairs</a></li>
+<li class="chapter" data-level="1.7.2" data-path="sets-functions.html"><a href="sets-functions.html#relation"><i class="fa fa-check"></i><b>1.7.2</b> Relation</a></li>
+<li class="chapter" data-level="1.7.3" data-path="sets-functions.html"><a href="sets-functions.html#relation-vs.-function"><i class="fa fa-check"></i><b>1.7.3</b> Relation vs. function</a></li>
+<li class="chapter" data-level="1.7.4" data-path="sets-functions.html"><a href="sets-functions.html#two-major-properties-of-functions"><i class="fa fa-check"></i><b>1.7.4</b> Two major properties of functions</a></li>
+</ul></li>
+<li class="chapter" data-level="1.8" data-path="sets-functions.html"><a href="sets-functions.html#quadratic-functions"><i class="fa fa-check"></i><b>1.8</b> Quadratic functions</a>
+<ul>
+<li class="chapter" data-level="1.8.1" data-path="sets-functions.html"><a href="sets-functions.html#quadratic-equation"><i class="fa fa-check"></i><b>1.8.1</b> Quadratic equation</a></li>
+<li class="chapter" data-level="1.8.2" data-path="sets-functions.html"><a href="sets-functions.html#quadratic-formula"><i class="fa fa-check"></i><b>1.8.2</b> Quadratic formula</a></li>
+</ul></li>
+<li class="chapter" data-level="1.9" data-path="sets-functions.html"><a href="sets-functions.html#systems-of-linear-equations"><i class="fa fa-check"></i><b>1.9</b> Systems of linear equations</a>
+<ul>
+<li class="chapter" data-level="1.9.1" data-path="sets-functions.html"><a href="sets-functions.html#one-solution"><i class="fa fa-check"></i><b>1.9.1</b> One solution</a></li>
+<li class="chapter" data-level="1.9.2" data-path="sets-functions.html"><a href="sets-functions.html#no-solution"><i class="fa fa-check"></i><b>1.9.2</b> No solution</a></li>
+<li class="chapter" data-level="1.9.3" data-path="sets-functions.html"><a href="sets-functions.html#infinite-solutions"><i class="fa fa-check"></i><b>1.9.3</b> Infinite solutions</a></li>
+<li class="chapter" data-level="1.9.4" data-path="sets-functions.html"><a href="sets-functions.html#three-equations-in-three-unknowns"><i class="fa fa-check"></i><b>1.9.4</b> Three equations in three unknowns</a></li>
+<li class="chapter" data-level="1.9.5" data-path="sets-functions.html"><a href="sets-functions.html#gaussian-elimination"><i class="fa fa-check"></i><b>1.9.5</b> Gaussian elimination</a></li>
+</ul></li>
+<li class="chapter" data-level="1.10" data-path="sets-functions.html"><a href="sets-functions.html#logarithms-and-exponential-functions"><i class="fa fa-check"></i><b>1.10</b> Logarithms and exponential functions</a>
+<ul>
+<li class="chapter" data-level="1.10.1" data-path="sets-functions.html"><a href="sets-functions.html#functions-with-exponents"><i class="fa fa-check"></i><b>1.10.1</b> Functions with exponents</a></li>
+<li class="chapter" data-level="1.10.2" data-path="sets-functions.html"><a href="sets-functions.html#common-rules-of-exponents"><i class="fa fa-check"></i><b>1.10.2</b> Common rules of exponents</a></li>
+<li class="chapter" data-level="1.10.3" data-path="sets-functions.html"><a href="sets-functions.html#logarithms"><i class="fa fa-check"></i><b>1.10.3</b> Logarithms</a></li>
+</ul></li>
+<li class="chapter" data-level="1.11" data-path="sets-functions.html"><a href="sets-functions.html#bonus-content-computational-tools-for-the-future"><i class="fa fa-check"></i><b>1.11</b> Bonus content: Computational tools for the future</a>
+<ul>
+<li class="chapter" data-level="1.11.1" data-path="sets-functions.html"><a href="sets-functions.html#programming-languages-for-statistical-learning"><i class="fa fa-check"></i><b>1.11.1</b> Programming languages for statistical learning</a></li>
+<li class="chapter" data-level="1.11.2" data-path="sets-functions.html"><a href="sets-functions.html#version-control-git"><i class="fa fa-check"></i><b>1.11.2</b> Version control (Git)</a></li>
+<li class="chapter" data-level="1.11.3" data-path="sets-functions.html"><a href="sets-functions.html#publishing"><i class="fa fa-check"></i><b>1.11.3</b> Publishing</a></li>
+<li class="chapter" data-level="1.11.4" data-path="sets-functions.html"><a href="sets-functions.html#how-will-you-acquire-these-skills"><i class="fa fa-check"></i><b>1.11.4</b> How will you acquire these skills?</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html"><i class="fa fa-check"></i><b>2</b> Sequences, limits, continuity, and derivatives</a>
+<ul>
+<li class="chapter" data-level="" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#learning-objectives-1"><i class="fa fa-check"></i>Learning objectives</a></li>
+<li class="chapter" data-level="" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#supplemental-readings-1"><i class="fa fa-check"></i>Supplemental readings</a></li>
+<li class="chapter" data-level="2.1" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#sequence"><i class="fa fa-check"></i><b>2.1</b> Sequence</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#definition"><i class="fa fa-check"></i><b>2.1.1</b> Definition</a></li>
+<li class="chapter" data-level="2.1.2" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#examples"><i class="fa fa-check"></i><b>2.1.2</b> Examples</a></li>
+<li class="chapter" data-level="2.1.3" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#arithmetic-and-geometric-progressions"><i class="fa fa-check"></i><b>2.1.3</b> Arithmetic and geometric progressions</a></li>
+<li class="chapter" data-level="2.1.4" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#convergence"><i class="fa fa-check"></i><b>2.1.4</b> Convergence</a></li>
+<li class="chapter" data-level="2.1.5" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#algebra-of-sequences"><i class="fa fa-check"></i><b>2.1.5</b> Algebra of sequences</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#limits"><i class="fa fa-check"></i><b>2.2</b> Limits</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#sequences-leadsto-limits-of-functions"><i class="fa fa-check"></i><b>2.2.1</b> Sequences <span class="math inline">\(\leadsto\)</span> limits of functions</a></li>
+<li class="chapter" data-level="2.2.2" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#limits-of-functions"><i class="fa fa-check"></i><b>2.2.2</b> Limits of functions</a></li>
+<li class="chapter" data-level="2.2.3" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#examples-of-limits"><i class="fa fa-check"></i><b>2.2.3</b> Examples of limits</a></li>
+<li class="chapter" data-level="2.2.4" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#not-all-functions-have-limits"><i class="fa fa-check"></i><b>2.2.4</b> Not all functions have limits</a></li>
+<li class="chapter" data-level="2.2.5" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#intuitive-definition-of-a-limit"><i class="fa fa-check"></i><b>2.2.5</b> Intuitive definition of a limit</a></li>
+<li class="chapter" data-level="2.2.6" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#algebra-of-limits"><i class="fa fa-check"></i><b>2.2.6</b> Algebra of limits</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#continuity"><i class="fa fa-check"></i><b>2.3</b> Continuity</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#defining-continuity"><i class="fa fa-check"></i><b>2.3.1</b> Defining continuity</a></li>
+<li class="chapter" data-level="2.3.2" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#a-real-world-example-of-limits-measuring-incumbency-advantage"><i class="fa fa-check"></i><b>2.3.2</b> A real-world example of limits: Measuring incumbency advantage</a></li>
+<li class="chapter" data-level="2.3.3" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#continuity-and-limits"><i class="fa fa-check"></i><b>2.3.3</b> Continuity and limits</a></li>
+<li class="chapter" data-level="2.3.4" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#algebra-of-continuous-functions"><i class="fa fa-check"></i><b>2.3.4</b> Algebra of continuous functions</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#what-is-calculus"><i class="fa fa-check"></i><b>2.4</b> What is calculus?</a></li>
+<li class="chapter" data-level="2.5" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#derivatives"><i class="fa fa-check"></i><b>2.5</b> Derivatives</a>
+<ul>
+<li class="chapter" data-level="2.5.1" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#how-functions-change"><i class="fa fa-check"></i><b>2.5.1</b> How functions change</a></li>
+<li class="chapter" data-level="2.5.2" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#the-tangent-as-a-limit"><i class="fa fa-check"></i><b>2.5.2</b> The tangent as a limit</a></li>
+<li class="chapter" data-level="2.5.3" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#derivative"><i class="fa fa-check"></i><b>2.5.3</b> Derivative</a></li>
+<li class="chapter" data-level="2.5.4" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#rates-of-change-in-a-function"><i class="fa fa-check"></i><b>2.5.4</b> Rates of change in a function</a></li>
+<li class="chapter" data-level="2.5.5" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#examples-of-derivatives"><i class="fa fa-check"></i><b>2.5.5</b> Examples of derivatives</a></li>
+<li class="chapter" data-level="2.5.6" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#continuity-and-derivatives"><i class="fa fa-check"></i><b>2.5.6</b> Continuity and derivatives</a></li>
+<li class="chapter" data-level="2.5.7" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#what-goes-wrong"><i class="fa fa-check"></i><b>2.5.7</b> What goes wrong?</a></li>
+</ul></li>
+<li class="chapter" data-level="2.6" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#calculating-derivatives"><i class="fa fa-check"></i><b>2.6</b> Calculating derivatives</a>
+<ul>
+<li class="chapter" data-level="2.6.1" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#derivative-rules"><i class="fa fa-check"></i><b>2.6.1</b> Derivative rules</a></li>
+<li class="chapter" data-level="2.6.2" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#challenge-problems"><i class="fa fa-check"></i><b>2.6.2</b> Challenge problems</a></li>
+<li class="chapter" data-level="2.6.3" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#composite-functions"><i class="fa fa-check"></i><b>2.6.3</b> Composite functions</a></li>
+<li class="chapter" data-level="2.6.4" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#chain-rule"><i class="fa fa-check"></i><b>2.6.4</b> Chain rule</a></li>
+</ul></li>
+<li class="chapter" data-level="2.7" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#derivatives-for-the-exponential-function-and-natural-logarithms"><i class="fa fa-check"></i><b>2.7</b> Derivatives for the exponential function and natural logarithms</a>
+<ul>
+<li class="chapter" data-level="2.7.1" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#derivative-of-exponential-function"><i class="fa fa-check"></i><b>2.7.1</b> Derivative of exponential function</a></li>
+<li class="chapter" data-level="2.7.2" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#derivative-of-the-natural-logarithm"><i class="fa fa-check"></i><b>2.7.2</b> Derivative of the natural logarithm</a></li>
+<li class="chapter" data-level="2.7.3" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#relevance-of-exponential-functions-and-natural-logarithm"><i class="fa fa-check"></i><b>2.7.3</b> Relevance of exponential functions and natural logarithm</a></li>
+</ul></li>
+<li class="chapter" data-level="2.8" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#derivatives-and-properties-of-functions"><i class="fa fa-check"></i><b>2.8</b> Derivatives and properties of functions</a>
+<ul>
+<li class="chapter" data-level="2.8.1" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#relative-maxima-minima-and-derivatives"><i class="fa fa-check"></i><b>2.8.1</b> Relative maxima, minima and derivatives</a></li>
+<li class="chapter" data-level="2.8.2" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#mean-value-theorem"><i class="fa fa-check"></i><b>2.8.2</b> Mean value theorem</a></li>
+<li class="chapter" data-level="2.8.3" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#applications-of-the-mean-value-theorem"><i class="fa fa-check"></i><b>2.8.3</b> Applications of the mean value theorem</a></li>
+<li class="chapter" data-level="2.8.4" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#extension-to-indeterminate-form-limits"><i class="fa fa-check"></i><b>2.8.4</b> Extension to indeterminate form limits</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="critical-points.html"><a href="critical-points.html"><i class="fa fa-check"></i><b>3</b> Critical points and approximation</a>
+<ul>
+<li class="chapter" data-level="" data-path="critical-points.html"><a href="critical-points.html#learning-objectives-2"><i class="fa fa-check"></i>Learning objectives</a></li>
+<li class="chapter" data-level="" data-path="critical-points.html"><a href="critical-points.html#supplemental-readings-2"><i class="fa fa-check"></i>Supplemental readings</a></li>
+<li class="chapter" data-level="3.1" data-path="critical-points.html"><a href="critical-points.html#intuition"><i class="fa fa-check"></i><b>3.1</b> Intuition</a></li>
+<li class="chapter" data-level="3.2" data-path="critical-points.html"><a href="critical-points.html#higher-order-derivatives"><i class="fa fa-check"></i><b>3.2</b> Higher order derivatives</a></li>
+<li class="chapter" data-level="3.3" data-path="critical-points.html"><a href="critical-points.html#critical-points-1"><i class="fa fa-check"></i><b>3.3</b> Critical points</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="critical-points.html"><a href="critical-points.html#inflection-point"><i class="fa fa-check"></i><b>3.3.1</b> Inflection point</a></li>
+<li class="chapter" data-level="3.3.2" data-path="critical-points.html"><a href="critical-points.html#concavity"><i class="fa fa-check"></i><b>3.3.2</b> Concavity</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="critical-points.html"><a href="critical-points.html#extrema"><i class="fa fa-check"></i><b>3.4</b> Extrema</a>
+<ul>
+<li class="chapter" data-level="3.4.1" data-path="critical-points.html"><a href="critical-points.html#minimum-and-maximum-on-the-interval-05-are-located-at-the-endpoints"><i class="fa fa-check"></i><b>3.4.1</b> Minimum and maximum on the interval <span class="math inline">\([0,5]\)</span> are located at the endpoints</a></li>
+<li class="chapter" data-level="3.4.2" data-path="critical-points.html"><a href="critical-points.html#global-maximum-is-located-at-x0"><i class="fa fa-check"></i><b>3.4.2</b> Global maximum is located at <span class="math inline">\(x=0\)</span></a></li>
+<li class="chapter" data-level="3.4.3" data-path="critical-points.html"><a href="critical-points.html#global-minimum-is-located-at-x---frac92"><i class="fa fa-check"></i><b>3.4.3</b> Global minimum is located at <span class="math inline">\(x= - \frac{9}{2}\)</span></a></li>
+<li class="chapter" data-level="3.4.4" data-path="critical-points.html"><a href="critical-points.html#a-bunch-of-local-minima-and-maxima"><i class="fa fa-check"></i><b>3.4.4</b> A bunch of local minima and maxima</a></li>
+<li class="chapter" data-level="3.4.5" data-path="critical-points.html"><a href="critical-points.html#x0-is-an-inflection-point-that-is-neither-a-minimum-nor-a-maximum-fx-0"><i class="fa fa-check"></i><b>3.4.5</b> <span class="math inline">\(x=0\)</span> is an inflection point that is neither a minimum nor a maximum (<span class="math inline">\(f&#39;&#39;(x) = 0\)</span>)</a></li>
+</ul></li>
+<li class="chapter" data-level="3.5" data-path="critical-points.html"><a href="critical-points.html#framework-for-analytical-optimization"><i class="fa fa-check"></i><b>3.5</b> Framework for analytical optimization</a>
+<ul>
+<li class="chapter" data-level="3.5.1" data-path="critical-points.html"><a href="critical-points.html#example-fx--x2-x-in--3-3"><i class="fa fa-check"></i><b>3.5.1</b> Example: <span class="math inline">\(f(x) = -x^2\)</span>, <span class="math inline">\(x \in [-3, 3]\)</span></a></li>
+<li class="chapter" data-level="3.5.2" data-path="critical-points.html"><a href="critical-points.html#example-fx-x3-x-in--3-3"><i class="fa fa-check"></i><b>3.5.2</b> Example: <span class="math inline">\(f(x) = x^3\)</span>, <span class="math inline">\(x \in [-3, 3]\)</span></a></li>
+<li class="chapter" data-level="3.5.3" data-path="critical-points.html"><a href="critical-points.html#example-spatial-model"><i class="fa fa-check"></i><b>3.5.3</b> Example: spatial model</a></li>
+<li class="chapter" data-level="3.5.4" data-path="critical-points.html"><a href="critical-points.html#example-maximum-likelihood-estimation"><i class="fa fa-check"></i><b>3.5.4</b> Example: Maximum likelihood estimation</a></li>
+</ul></li>
+<li class="chapter" data-level="3.6" data-path="critical-points.html"><a href="critical-points.html#computational-optimization-procedures"><i class="fa fa-check"></i><b>3.6</b> Computational optimization procedures</a>
+<ul>
+<li class="chapter" data-level="3.6.1" data-path="critical-points.html"><a href="critical-points.html#newton-raphson-root-finding"><i class="fa fa-check"></i><b>3.6.1</b> Newton-Raphson root finding</a></li>
+<li class="chapter" data-level="3.6.2" data-path="critical-points.html"><a href="critical-points.html#grid-search"><i class="fa fa-check"></i><b>3.6.2</b> Grid search</a></li>
+<li class="chapter" data-level="3.6.3" data-path="critical-points.html"><a href="critical-points.html#gradient-descent"><i class="fa fa-check"></i><b>3.6.3</b> Gradient descent</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="linear-algebra.html"><a href="linear-algebra.html"><i class="fa fa-check"></i><b>4</b> Linear algebra</a>
+<ul>
+<li class="chapter" data-level="" data-path="linear-algebra.html"><a href="linear-algebra.html#learning-objectives-3"><i class="fa fa-check"></i>Learning objectives</a></li>
+<li class="chapter" data-level="" data-path="linear-algebra.html"><a href="linear-algebra.html#supplemental-readings-3"><i class="fa fa-check"></i>Supplemental readings</a></li>
+<li class="chapter" data-level="4.1" data-path="linear-algebra.html"><a href="linear-algebra.html#linear-algebra-1"><i class="fa fa-check"></i><b>4.1</b> Linear algebra</a></li>
+<li class="chapter" data-level="4.2" data-path="linear-algebra.html"><a href="linear-algebra.html#points-and-vectors"><i class="fa fa-check"></i><b>4.2</b> Points and vectors</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="linear-algebra.html"><a href="linear-algebra.html#points"><i class="fa fa-check"></i><b>4.2.1</b> Points</a></li>
+<li class="chapter" data-level="4.2.2" data-path="linear-algebra.html"><a href="linear-algebra.html#vectors"><i class="fa fa-check"></i><b>4.2.2</b> Vectors</a></li>
+<li class="chapter" data-level="4.2.3" data-path="linear-algebra.html"><a href="linear-algebra.html#one-dimensional-example"><i class="fa fa-check"></i><b>4.2.3</b> One dimensional example</a></li>
+<li class="chapter" data-level="4.2.4" data-path="linear-algebra.html"><a href="linear-algebra.html#two-dimensional-example"><i class="fa fa-check"></i><b>4.2.4</b> Two dimensional example</a></li>
+<li class="chapter" data-level="4.2.5" data-path="linear-algebra.html"><a href="linear-algebra.html#three-dimensional-example"><i class="fa fa-check"></i><b>4.2.5</b> Three dimensional example</a></li>
+<li class="chapter" data-level="4.2.6" data-path="linear-algebra.html"><a href="linear-algebra.html#n-dimensional-example"><i class="fa fa-check"></i><b>4.2.6</b> <span class="math inline">\(N\)</span>-dimensional example</a></li>
+<li class="chapter" data-level="4.2.7" data-path="linear-algebra.html"><a href="linear-algebra.html#examples-of-some-basic-arithmetic"><i class="fa fa-check"></i><b>4.2.7</b> Examples of some basic arithmetic</a></li>
+<li class="chapter" data-level="4.2.8" data-path="linear-algebra.html"><a href="linear-algebra.html#linear-dependence"><i class="fa fa-check"></i><b>4.2.8</b> Linear dependence</a></li>
+<li class="chapter" data-level="4.2.9" data-path="linear-algebra.html"><a href="linear-algebra.html#inner-product"><i class="fa fa-check"></i><b>4.2.9</b> Inner product</a></li>
+<li class="chapter" data-level="4.2.10" data-path="linear-algebra.html"><a href="linear-algebra.html#calculating-vector-length"><i class="fa fa-check"></i><b>4.2.10</b> Calculating vector length</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="linear-algebra.html"><a href="linear-algebra.html#example-text-analysis"><i class="fa fa-check"></i><b>4.3</b> Example: text analysis</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="linear-algebra.html"><a href="linear-algebra.html#measure-1-inner-product"><i class="fa fa-check"></i><b>4.3.1</b> Measure 1: inner product</a></li>
+<li class="chapter" data-level="4.3.2" data-path="linear-algebra.html"><a href="linear-algebra.html#measure-2-cosine-similarity"><i class="fa fa-check"></i><b>4.3.2</b> Measure 2: cosine similarity</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="linear-algebra.html"><a href="linear-algebra.html#matricies"><i class="fa fa-check"></i><b>4.4</b> Matricies</a>
+<ul>
+<li class="chapter" data-level="4.4.1" data-path="linear-algebra.html"><a href="linear-algebra.html#basic-arithmetic"><i class="fa fa-check"></i><b>4.4.1</b> Basic arithmetic</a></li>
+<li class="chapter" data-level="4.4.2" data-path="linear-algebra.html"><a href="linear-algebra.html#transposition"><i class="fa fa-check"></i><b>4.4.2</b> Transposition</a></li>
+<li class="chapter" data-level="4.4.3" data-path="linear-algebra.html"><a href="linear-algebra.html#multiplication"><i class="fa fa-check"></i><b>4.4.3</b> Multiplication</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="linear-algebra.html"><a href="linear-algebra.html#example-neural-networks"><i class="fa fa-check"></i><b>4.5</b> Example: neural networks</a>
+<ul>
+<li class="chapter" data-level="4.5.1" data-path="linear-algebra.html"><a href="linear-algebra.html#how-are-neural-networks-used"><i class="fa fa-check"></i><b>4.5.1</b> How are neural networks used</a></li>
+<li class="chapter" data-level="4.5.2" data-path="linear-algebra.html"><a href="linear-algebra.html#how-are-neural-networks-related-to-linear-algebra"><i class="fa fa-check"></i><b>4.5.2</b> How are neural networks related to linear algebra?</a></li>
+</ul></li>
+<li class="chapter" data-level="4.6" data-path="linear-algebra.html"><a href="linear-algebra.html#matrix-inversion"><i class="fa fa-check"></i><b>4.6</b> Matrix inversion</a>
+<ul>
+<li class="chapter" data-level="4.6.1" data-path="linear-algebra.html"><a href="linear-algebra.html#calculating-matrix-inversions"><i class="fa fa-check"></i><b>4.6.1</b> Calculating matrix inversions</a></li>
+<li class="chapter" data-level="4.6.2" data-path="linear-algebra.html"><a href="linear-algebra.html#when-do-inverses-exist"><i class="fa fa-check"></i><b>4.6.2</b> When do inverses exist</a></li>
+<li class="chapter" data-level="4.6.3" data-path="linear-algebra.html"><a href="linear-algebra.html#inverting-a-2-times-2-matrix"><i class="fa fa-check"></i><b>4.6.3</b> Inverting a <span class="math inline">\(2 \times 2\)</span> matrix</a></li>
+<li class="chapter" data-level="4.6.4" data-path="linear-algebra.html"><a href="linear-algebra.html#inverting-an-n-times-n-matrix"><i class="fa fa-check"></i><b>4.6.4</b> Inverting an <span class="math inline">\(n \times n\)</span> matrix</a></li>
+<li class="chapter" data-level="4.6.5" data-path="linear-algebra.html"><a href="linear-algebra.html#application-to-regression-analysis"><i class="fa fa-check"></i><b>4.6.5</b> Application to regression analysis</a></li>
+<li class="chapter" data-level="4.6.6" data-path="linear-algebra.html"><a href="linear-algebra.html#application-to-solving-systems-of-equations-tax-benefits-of-charitable-contributions"><i class="fa fa-check"></i><b>4.6.6</b> Application to solving systems of equations: tax benefits of charitable contributions</a></li>
+</ul></li>
+<li class="chapter" data-level="4.7" data-path="linear-algebra.html"><a href="linear-algebra.html#determinant"><i class="fa fa-check"></i><b>4.7</b> Determinant</a>
+<ul>
+<li class="chapter" data-level="4.7.1" data-path="linear-algebra.html"><a href="linear-algebra.html#relevance-of-the-determinant"><i class="fa fa-check"></i><b>4.7.1</b> Relevance of the determinant</a></li>
+</ul></li>
+<li class="chapter" data-level="4.8" data-path="linear-algebra.html"><a href="linear-algebra.html#matrix-decomposition"><i class="fa fa-check"></i><b>4.8</b> Matrix decomposition</a>
+<ul>
+<li class="chapter" data-level="4.8.1" data-path="linear-algebra.html"><a href="linear-algebra.html#dimension-reduction"><i class="fa fa-check"></i><b>4.8.1</b> Dimension reduction</a></li>
+<li class="chapter" data-level="4.8.2" data-path="linear-algebra.html"><a href="linear-algebra.html#singular-value-decomposition"><i class="fa fa-check"></i><b>4.8.2</b> Singular value decomposition</a></li>
+<li class="chapter" data-level="4.8.3" data-path="linear-algebra.html"><a href="linear-algebra.html#principal-components-analysis"><i class="fa fa-check"></i><b>4.8.3</b> Principal components analysis</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="linear-algebra.html"><a href="linear-algebra.html#acknowledgements"><i class="fa fa-check"></i>Acknowledgements</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="multivariable-differentiation.html"><a href="multivariable-differentiation.html"><i class="fa fa-check"></i><b>5</b> Functions of several variables and optimization with several variables</a>
+<ul>
+<li class="chapter" data-level="" data-path="multivariable-differentiation.html"><a href="multivariable-differentiation.html#learning-objectives-4"><i class="fa fa-check"></i>Learning objectives</a></li>
+<li class="chapter" data-level="" data-path="multivariable-differentiation.html"><a href="multivariable-differentiation.html#supplemental-readings-4"><i class="fa fa-check"></i>Supplemental readings</a></li>
+<li class="chapter" data-level="5.1" data-path="multivariable-differentiation.html"><a href="multivariable-differentiation.html#higher-order-derivatives-1"><i class="fa fa-check"></i><b>5.1</b> Higher order derivatives</a></li>
+<li class="chapter" data-level="5.2" data-path="multivariable-differentiation.html"><a href="multivariable-differentiation.html#multivariate-function"><i class="fa fa-check"></i><b>5.2</b> Multivariate function</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="multivariable-differentiation.html"><a href="multivariable-differentiation.html#definition-2"><i class="fa fa-check"></i><b>5.2.1</b> Definition</a></li>
+<li class="chapter" data-level="5.2.2" data-path="multivariable-differentiation.html"><a href="multivariable-differentiation.html#evaluating-multivariate-functions"><i class="fa fa-check"></i><b>5.2.2</b> Evaluating multivariate functions</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="multivariable-differentiation.html"><a href="multivariable-differentiation.html#multivariate-derivatives"><i class="fa fa-check"></i><b>5.3</b> Multivariate derivatives</a></li>
+<li class="chapter" data-level="5.4" data-path="multivariable-differentiation.html"><a href="multivariable-differentiation.html#multivariate-optimization"><i class="fa fa-check"></i><b>5.4</b> Multivariate optimization</a>
+<ul>
+<li class="chapter" data-level="5.4.1" data-path="multivariable-differentiation.html"><a href="multivariable-differentiation.html#differences-from-single-variable-optimization-procedure"><i class="fa fa-check"></i><b>5.4.1</b> Differences from single variable optimization procedure</a></li>
+<li class="chapter" data-level="5.4.2" data-path="multivariable-differentiation.html"><a href="multivariable-differentiation.html#first-derivative-test-gradient"><i class="fa fa-check"></i><b>5.4.2</b> First derivative test: Gradient</a></li>
+<li class="chapter" data-level="5.4.3" data-path="multivariable-differentiation.html"><a href="multivariable-differentiation.html#second-derivative-test-hessian"><i class="fa fa-check"></i><b>5.4.3</b> Second derivative test: Hessian</a></li>
+<li class="chapter" data-level="5.4.4" data-path="multivariable-differentiation.html"><a href="multivariable-differentiation.html#basic-procedure-summarized"><i class="fa fa-check"></i><b>5.4.4</b> Basic procedure summarized</a></li>
+</ul></li>
+<li class="chapter" data-level="5.5" data-path="multivariable-differentiation.html"><a href="multivariable-differentiation.html#a-simple-optimization-example"><i class="fa fa-check"></i><b>5.5</b> A simple optimization example</a></li>
+<li class="chapter" data-level="5.6" data-path="multivariable-differentiation.html"><a href="multivariable-differentiation.html#maximum-likelihood-estimation-for-a-normal-distribution"><i class="fa fa-check"></i><b>5.6</b> Maximum likelihood estimation for a normal distribution</a></li>
+<li class="chapter" data-level="5.7" data-path="multivariable-differentiation.html"><a href="multivariable-differentiation.html#computational-optimization-procedures-1"><i class="fa fa-check"></i><b>5.7</b> Computational optimization procedures</a>
+<ul>
+<li class="chapter" data-level="5.7.1" data-path="multivariable-differentiation.html"><a href="multivariable-differentiation.html#multivariate-newton-raphson"><i class="fa fa-check"></i><b>5.7.1</b> Multivariate Newton-Raphson</a></li>
+<li class="chapter" data-level="5.7.2" data-path="multivariable-differentiation.html"><a href="multivariable-differentiation.html#grid-search-1"><i class="fa fa-check"></i><b>5.7.2</b> Grid search</a></li>
+<li class="chapter" data-level="5.7.3" data-path="multivariable-differentiation.html"><a href="multivariable-differentiation.html#gradient-descent-1"><i class="fa fa-check"></i><b>5.7.3</b> Gradient descent</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="integral-calculus.html"><a href="integral-calculus.html"><i class="fa fa-check"></i><b>6</b> Integration and integral calculus</a>
+<ul>
+<li class="chapter" data-level="" data-path="integral-calculus.html"><a href="integral-calculus.html#learning-objectives-5"><i class="fa fa-check"></i>Learning objectives</a></li>
+<li class="chapter" data-level="" data-path="integral-calculus.html"><a href="integral-calculus.html#supplemental-readings-5"><i class="fa fa-check"></i>Supplemental readings</a></li>
+<li class="chapter" data-level="6.1" data-path="integral-calculus.html"><a href="integral-calculus.html#prepare-for-the-journey"><i class="fa fa-check"></i><b>6.1</b> Prepare for the journey</a></li>
+<li class="chapter" data-level="6.2" data-path="integral-calculus.html"><a href="integral-calculus.html#indefinite-integration"><i class="fa fa-check"></i><b>6.2</b> Indefinite integration</a>
+<ul>
+<li class="chapter" data-level="6.2.1" data-path="integral-calculus.html"><a href="integral-calculus.html#many-possible-antiderivatives"><i class="fa fa-check"></i><b>6.2.1</b> Many possible antiderivatives</a></li>
+<li class="chapter" data-level="6.2.2" data-path="integral-calculus.html"><a href="integral-calculus.html#common-rules-of-integration"><i class="fa fa-check"></i><b>6.2.2</b> Common rules of integration</a></li>
+<li class="chapter" data-level="6.2.3" data-path="integral-calculus.html"><a href="integral-calculus.html#practice-integrating-functions"><i class="fa fa-check"></i><b>6.2.3</b> Practice integrating functions</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="integral-calculus.html"><a href="integral-calculus.html#the-definite-integral-area-under-the-curve"><i class="fa fa-check"></i><b>6.3</b> The definite integral: area under the curve</a>
+<ul>
+<li class="chapter" data-level="6.3.1" data-path="integral-calculus.html"><a href="integral-calculus.html#the-definite-integral-riemann"><i class="fa fa-check"></i><b>6.3.1</b> The definite integral (Riemann)</a></li>
+<li class="chapter" data-level="6.3.2" data-path="integral-calculus.html"><a href="integral-calculus.html#counterexamples"><i class="fa fa-check"></i><b>6.3.2</b> Counterexamples</a></li>
+<li class="chapter" data-level="6.3.3" data-path="integral-calculus.html"><a href="integral-calculus.html#fundamental-theorem-of-calculus"><i class="fa fa-check"></i><b>6.3.3</b> Fundamental theorem of calculus</a></li>
+<li class="chapter" data-level="6.3.4" data-path="integral-calculus.html"><a href="integral-calculus.html#common-rules-for-definite-integrals"><i class="fa fa-check"></i><b>6.3.4</b> Common rules for definite integrals</a></li>
+<li class="chapter" data-level="6.3.5" data-path="integral-calculus.html"><a href="integral-calculus.html#practice-solving-definite-integrals"><i class="fa fa-check"></i><b>6.3.5</b> Practice solving definite integrals</a></li>
+<li class="chapter" data-level="6.3.6" data-path="integral-calculus.html"><a href="integral-calculus.html#integration-by-substitution"><i class="fa fa-check"></i><b>6.3.6</b> Integration by substitution</a></li>
+<li class="chapter" data-level="6.3.7" data-path="integral-calculus.html"><a href="integral-calculus.html#integration-by-parts"><i class="fa fa-check"></i><b>6.3.7</b> Integration by parts</a></li>
+</ul></li>
+<li class="chapter" data-level="6.4" data-path="integral-calculus.html"><a href="integral-calculus.html#infinite-integrals"><i class="fa fa-check"></i><b>6.4</b> Infinite integrals</a>
+<ul>
+<li class="chapter" data-level="6.4.1" data-path="integral-calculus.html"><a href="integral-calculus.html#two-sided-infinite-integrals"><i class="fa fa-check"></i><b>6.4.1</b> Two-sided infinite integrals</a></li>
+<li class="chapter" data-level="6.4.2" data-path="integral-calculus.html"><a href="integral-calculus.html#improper-integrals"><i class="fa fa-check"></i><b>6.4.2</b> Improper integrals</a></li>
+</ul></li>
+<li class="chapter" data-level="6.5" data-path="integral-calculus.html"><a href="integral-calculus.html#monte-carlo-and-integration"><i class="fa fa-check"></i><b>6.5</b> Monte Carlo and integration</a></li>
+<li class="chapter" data-level="6.6" data-path="integral-calculus.html"><a href="integral-calculus.html#multivariate-integration"><i class="fa fa-check"></i><b>6.6</b> Multivariate integration</a>
+<ul>
+<li class="chapter" data-level="6.6.1" data-path="integral-calculus.html"><a href="integral-calculus.html#more-complicated-bounds-of-integration"><i class="fa fa-check"></i><b>6.6.1</b> More complicated bounds of integration</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="integral-calculus.html"><a href="integral-calculus.html#acknowledgments"><i class="fa fa-check"></i>Acknowledgments</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="sample-space-probability.html"><a href="sample-space-probability.html"><i class="fa fa-check"></i><b>7</b> Sample space and probability</a>
+<ul>
+<li class="chapter" data-level="" data-path="sample-space-probability.html"><a href="sample-space-probability.html#learning-objectives-6"><i class="fa fa-check"></i>Learning objectives</a></li>
+<li class="chapter" data-level="" data-path="sample-space-probability.html"><a href="sample-space-probability.html#supplemental-readings-6"><i class="fa fa-check"></i>Supplemental readings</a></li>
+<li class="chapter" data-level="7.1" data-path="sample-space-probability.html"><a href="sample-space-probability.html#model-of-probability"><i class="fa fa-check"></i><b>7.1</b> Model of probability</a></li>
+<li class="chapter" data-level="7.2" data-path="sample-space-probability.html"><a href="sample-space-probability.html#sample-space"><i class="fa fa-check"></i><b>7.2</b> Sample space</a></li>
+<li class="chapter" data-level="7.3" data-path="sample-space-probability.html"><a href="sample-space-probability.html#events"><i class="fa fa-check"></i><b>7.3</b> Events</a>
+<ul>
+<li class="chapter" data-level="7.3.1" data-path="sample-space-probability.html"><a href="sample-space-probability.html#event-operations"><i class="fa fa-check"></i><b>7.3.1</b> Event operations</a></li>
+</ul></li>
+<li class="chapter" data-level="7.4" data-path="sample-space-probability.html"><a href="sample-space-probability.html#probability-1"><i class="fa fa-check"></i><b>7.4</b> Probability</a>
+<ul>
+<li class="chapter" data-level="7.4.1" data-path="sample-space-probability.html"><a href="sample-space-probability.html#three-axioms"><i class="fa fa-check"></i><b>7.4.1</b> Three axioms</a></li>
+<li class="chapter" data-level="7.4.2" data-path="sample-space-probability.html"><a href="sample-space-probability.html#basic-examples"><i class="fa fa-check"></i><b>7.4.2</b> Basic examples</a></li>
+<li class="chapter" data-level="7.4.3" data-path="sample-space-probability.html"><a href="sample-space-probability.html#surprising-probability-facts"><i class="fa fa-check"></i><b>7.4.3</b> Surprising probability facts</a></li>
+</ul></li>
+<li class="chapter" data-level="7.5" data-path="sample-space-probability.html"><a href="sample-space-probability.html#conditional-probability"><i class="fa fa-check"></i><b>7.5</b> Conditional probability</a>
+<ul>
+<li class="chapter" data-level="7.5.1" data-path="sample-space-probability.html"><a href="sample-space-probability.html#examples-1"><i class="fa fa-check"></i><b>7.5.1</b> Examples</a></li>
+<li class="chapter" data-level="7.5.2" data-path="sample-space-probability.html"><a href="sample-space-probability.html#difference-between-prab-and-prba"><i class="fa fa-check"></i><b>7.5.2</b> Difference between <span class="math inline">\(\Pr(A|B)\)</span> and <span class="math inline">\(\Pr(B|A)\)</span></a></li>
+</ul></li>
+<li class="chapter" data-level="7.6" data-path="sample-space-probability.html"><a href="sample-space-probability.html#law-of-total-probability"><i class="fa fa-check"></i><b>7.6</b> Law of total probability</a></li>
+<li class="chapter" data-level="7.7" data-path="sample-space-probability.html"><a href="sample-space-probability.html#bayes-rule"><i class="fa fa-check"></i><b>7.7</b> Bayes’ Rule</a></li>
+<li class="chapter" data-level="7.8" data-path="sample-space-probability.html"><a href="sample-space-probability.html#independence-of-probabilities"><i class="fa fa-check"></i><b>7.8</b> Independence of probabilities</a>
+<ul>
+<li class="chapter" data-level="7.8.1" data-path="sample-space-probability.html"><a href="sample-space-probability.html#rolling-a-4-sided-die"><i class="fa fa-check"></i><b>7.8.1</b> Rolling a 4-sided die</a></li>
+<li class="chapter" data-level="7.8.2" data-path="sample-space-probability.html"><a href="sample-space-probability.html#independence-and-causal-inference"><i class="fa fa-check"></i><b>7.8.2</b> Independence and causal inference</a></li>
+<li class="chapter" data-level="7.8.3" data-path="sample-space-probability.html"><a href="sample-space-probability.html#independence-of-a-collection-of-events"><i class="fa fa-check"></i><b>7.8.3</b> Independence of a collection of events</a></li>
+<li class="chapter" data-level="7.8.4" data-path="sample-space-probability.html"><a href="sample-space-probability.html#independent-trials-and-the-binomial-probabilities"><i class="fa fa-check"></i><b>7.8.4</b> Independent trials and the binomial probabilities</a></li>
+</ul></li>
+<li class="chapter" data-level="7.9" data-path="sample-space-probability.html"><a href="sample-space-probability.html#counting"><i class="fa fa-check"></i><b>7.9</b> Counting</a>
+<ul>
+<li class="chapter" data-level="7.9.1" data-path="sample-space-probability.html"><a href="sample-space-probability.html#counting-principle"><i class="fa fa-check"></i><b>7.9.1</b> Counting principle</a></li>
+<li class="chapter" data-level="7.9.2" data-path="sample-space-probability.html"><a href="sample-space-probability.html#permutations"><i class="fa fa-check"></i><b>7.9.2</b> Permutations</a></li>
+<li class="chapter" data-level="7.9.3" data-path="sample-space-probability.html"><a href="sample-space-probability.html#combinations"><i class="fa fa-check"></i><b>7.9.3</b> Combinations</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html"><i class="fa fa-check"></i><b>8</b> Discrete random variables</a>
+<ul>
+<li class="chapter" data-level="" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#learning-objectives-7"><i class="fa fa-check"></i>Learning objectives</a></li>
+<li class="chapter" data-level="" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#supplemental-readings-7"><i class="fa fa-check"></i>Supplemental readings</a></li>
+<li class="chapter" data-level="8.1" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#random-variable"><i class="fa fa-check"></i><b>8.1</b> Random variable</a>
+<ul>
+<li class="chapter" data-level="8.1.1" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#discrete-random-variables-1"><i class="fa fa-check"></i><b>8.1.1</b> Discrete random variables</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#probability-mass-functions"><i class="fa fa-check"></i><b>8.2</b> Probability mass functions</a>
+<ul>
+<li class="chapter" data-level="8.2.1" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#intuition-1"><i class="fa fa-check"></i><b>8.2.1</b> Intuition</a></li>
+<li class="chapter" data-level="8.2.2" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#definition-3"><i class="fa fa-check"></i><b>8.2.2</b> Definition</a></li>
+</ul></li>
+<li class="chapter" data-level="8.3" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#cumulative-mass-function"><i class="fa fa-check"></i><b>8.3</b> Cumulative mass function</a>
+<ul>
+<li class="chapter" data-level="8.3.1" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#three-person-experiment"><i class="fa fa-check"></i><b>8.3.1</b> Three person experiment</a></li>
+</ul></li>
+<li class="chapter" data-level="8.4" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#famous-discrete-random-variables"><i class="fa fa-check"></i><b>8.4</b> Famous discrete random variables</a>
+<ul>
+<li class="chapter" data-level="8.4.1" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#bernoulli"><i class="fa fa-check"></i><b>8.4.1</b> Bernoulli</a></li>
+<li class="chapter" data-level="8.4.2" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#binomial"><i class="fa fa-check"></i><b>8.4.2</b> Binomial</a></li>
+<li class="chapter" data-level="8.4.3" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#geometric"><i class="fa fa-check"></i><b>8.4.3</b> Geometric</a></li>
+<li class="chapter" data-level="8.4.4" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#poisson"><i class="fa fa-check"></i><b>8.4.4</b> Poisson</a></li>
+</ul></li>
+<li class="chapter" data-level="8.5" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#functions-of-random-variables"><i class="fa fa-check"></i><b>8.5</b> Functions of random variables</a></li>
+<li class="chapter" data-level="8.6" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#expectation-mean-and-variance"><i class="fa fa-check"></i><b>8.6</b> Expectation, mean, and variance</a>
+<ul>
+<li class="chapter" data-level="8.6.1" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#motivation"><i class="fa fa-check"></i><b>8.6.1</b> Motivation</a></li>
+<li class="chapter" data-level="8.6.2" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#expectation"><i class="fa fa-check"></i><b>8.6.2</b> Expectation</a></li>
+<li class="chapter" data-level="8.6.3" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#variance-moments-and-the-expected-value-rule"><i class="fa fa-check"></i><b>8.6.3</b> Variance, moments, and the expected value rule</a></li>
+<li class="chapter" data-level="8.6.4" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#practice-calculating-expectation-and-variance"><i class="fa fa-check"></i><b>8.6.4</b> Practice calculating expectation and variance</a></li>
+<li class="chapter" data-level="8.6.5" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#decision-making-using-expected-values"><i class="fa fa-check"></i><b>8.6.5</b> Decision making using expected values</a></li>
+</ul></li>
+<li class="chapter" data-level="8.7" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#cumulative-mass-function-redux"><i class="fa fa-check"></i><b>8.7</b> Cumulative mass function, redux</a>
+<ul>
+<li class="chapter" data-level="8.7.1" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#common-cmfs"><i class="fa fa-check"></i><b>8.7.1</b> Common CMFs</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="general-random-variables.html"><a href="general-random-variables.html"><i class="fa fa-check"></i><b>9</b> General random variables</a>
+<ul>
+<li class="chapter" data-level="" data-path="general-random-variables.html"><a href="general-random-variables.html#learning-objectives-8"><i class="fa fa-check"></i>Learning objectives</a></li>
+<li class="chapter" data-level="" data-path="general-random-variables.html"><a href="general-random-variables.html#supplemental-readings-8"><i class="fa fa-check"></i>Supplemental readings</a></li>
+<li class="chapter" data-level="9.1" data-path="general-random-variables.html"><a href="general-random-variables.html#continuous-random-variables"><i class="fa fa-check"></i><b>9.1</b> Continuous random variables</a></li>
+<li class="chapter" data-level="9.2" data-path="general-random-variables.html"><a href="general-random-variables.html#probability-density-function"><i class="fa fa-check"></i><b>9.2</b> Probability density function</a>
+<ul>
+<li class="chapter" data-level="9.2.1" data-path="general-random-variables.html"><a href="general-random-variables.html#definition-4"><i class="fa fa-check"></i><b>9.2.1</b> Definition</a></li>
+<li class="chapter" data-level="9.2.2" data-path="general-random-variables.html"><a href="general-random-variables.html#example-uniform-random-variable"><i class="fa fa-check"></i><b>9.2.2</b> Example: Uniform Random Variable</a></li>
+<li class="chapter" data-level="9.2.3" data-path="general-random-variables.html"><a href="general-random-variables.html#expectation-continuous"><i class="fa fa-check"></i><b>9.2.3</b> Expectation</a></li>
+<li class="chapter" data-level="9.2.4" data-path="general-random-variables.html"><a href="general-random-variables.html#exponential-random-variable"><i class="fa fa-check"></i><b>9.2.4</b> Exponential random variable</a></li>
+</ul></li>
+<li class="chapter" data-level="9.3" data-path="general-random-variables.html"><a href="general-random-variables.html#cumulative-distribution-function"><i class="fa fa-check"></i><b>9.3</b> Cumulative distribution function</a>
+<ul>
+<li class="chapter" data-level="9.3.1" data-path="general-random-variables.html"><a href="general-random-variables.html#properties-of-cdfs"><i class="fa fa-check"></i><b>9.3.1</b> Properties of CDFs</a></li>
+</ul></li>
+<li class="chapter" data-level="9.4" data-path="general-random-variables.html"><a href="general-random-variables.html#normal-distribution"><i class="fa fa-check"></i><b>9.4</b> Normal distribution</a>
+<ul>
+<li class="chapter" data-level="9.4.1" data-path="general-random-variables.html"><a href="general-random-variables.html#expected-valuevariance-of-normal-distribution"><i class="fa fa-check"></i><b>9.4.1</b> Expected value/variance of normal distribution</a></li>
+<li class="chapter" data-level="9.4.2" data-path="general-random-variables.html"><a href="general-random-variables.html#why-rely-on-the-standard-normal-distribution"><i class="fa fa-check"></i><b>9.4.2</b> Why rely on the standard normal distribution</a></li>
+</ul></li>
+<li class="chapter" data-level="9.5" data-path="general-random-variables.html"><a href="general-random-variables.html#gamma-distribution"><i class="fa fa-check"></i><b>9.5</b> Gamma distribution</a>
+<ul>
+<li class="chapter" data-level="9.5.1" data-path="general-random-variables.html"><a href="general-random-variables.html#properties-of-gamma-distributions"><i class="fa fa-check"></i><b>9.5.1</b> Properties of Gamma distributions</a></li>
+<li class="chapter" data-level="9.5.2" data-path="general-random-variables.html"><a href="general-random-variables.html#importance-of-the-gamma-distribution"><i class="fa fa-check"></i><b>9.5.2</b> Importance of the Gamma distribution</a></li>
+</ul></li>
+<li class="chapter" data-level="9.6" data-path="general-random-variables.html"><a href="general-random-variables.html#chi2-distribution"><i class="fa fa-check"></i><b>9.6</b> <span class="math inline">\(\chi^2\)</span> distribution</a>
+<ul>
+<li class="chapter" data-level="9.6.1" data-path="general-random-variables.html"><a href="general-random-variables.html#chi2-properties"><i class="fa fa-check"></i><b>9.6.1</b> <span class="math inline">\(\chi^2\)</span> properties</a></li>
+</ul></li>
+<li class="chapter" data-level="9.7" data-path="general-random-variables.html"><a href="general-random-variables.html#students-t-distribution"><i class="fa fa-check"></i><b>9.7</b> Student’s <span class="math inline">\(t\)</span> distribution</a>
+<ul>
+<li class="chapter" data-level="9.7.1" data-path="general-random-variables.html"><a href="general-random-variables.html#history-of-students-t"><i class="fa fa-check"></i><b>9.7.1</b> History of Student’s <span class="math inline">\(t\)</span></a></li>
+<li class="chapter" data-level="9.7.2" data-path="general-random-variables.html"><a href="general-random-variables.html#differences-from-the-normal-distribution"><i class="fa fa-check"></i><b>9.7.2</b> Differences from the Normal Distribution</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="multivar-distribs.html"><a href="multivar-distribs.html"><i class="fa fa-check"></i><b>10</b> Multivariate distributions</a>
+<ul>
+<li class="chapter" data-level="" data-path="multivar-distribs.html"><a href="multivar-distribs.html#learning-objectives-9"><i class="fa fa-check"></i>Learning objectives</a></li>
+<li class="chapter" data-level="" data-path="multivar-distribs.html"><a href="multivar-distribs.html#supplemental-readings-9"><i class="fa fa-check"></i>Supplemental readings</a></li>
+<li class="chapter" data-level="10.1" data-path="multivar-distribs.html"><a href="multivar-distribs.html#multivariate-distribution"><i class="fa fa-check"></i><b>10.1</b> Multivariate distribution</a></li>
+<li class="chapter" data-level="10.2" data-path="multivar-distribs.html"><a href="multivar-distribs.html#examples-of-joint-pdfs"><i class="fa fa-check"></i><b>10.2</b> Examples of joint PDFs</a></li>
+<li class="chapter" data-level="10.3" data-path="multivar-distribs.html"><a href="multivar-distribs.html#multivariate-cumulative-density-function"><i class="fa fa-check"></i><b>10.3</b> Multivariate cumulative density function</a></li>
+<li class="chapter" data-level="10.4" data-path="multivar-distribs.html"><a href="multivar-distribs.html#marginalization"><i class="fa fa-check"></i><b>10.4</b> Marginalization</a>
+<ul>
+<li class="chapter" data-level="10.4.1" data-path="multivar-distribs.html"><a href="multivar-distribs.html#joint-vs.-conditional-pdf"><i class="fa fa-check"></i><b>10.4.1</b> Joint vs. conditional PDF</a></li>
+<li class="chapter" data-level="10.4.2" data-path="multivar-distribs.html"><a href="multivar-distribs.html#why-does-marginalization-work"><i class="fa fa-check"></i><b>10.4.2</b> Why does marginalization work?</a></li>
+<li class="chapter" data-level="10.4.3" data-path="multivar-distribs.html"><a href="multivar-distribs.html#move-to-the-continuous-case"><i class="fa fa-check"></i><b>10.4.3</b> Move to the continuous case</a></li>
+<li class="chapter" data-level="10.4.4" data-path="multivar-distribs.html"><a href="multivar-distribs.html#a-simple-example"><i class="fa fa-check"></i><b>10.4.4</b> A (simple) example</a></li>
+<li class="chapter" data-level="10.4.5" data-path="multivar-distribs.html"><a href="multivar-distribs.html#more-complex-example"><i class="fa fa-check"></i><b>10.4.5</b> More complex example</a></li>
+</ul></li>
+<li class="chapter" data-level="10.5" data-path="multivar-distribs.html"><a href="multivar-distribs.html#conditional-distribution"><i class="fa fa-check"></i><b>10.5</b> Conditional distribution</a>
+<ul>
+<li class="chapter" data-level="10.5.1" data-path="multivar-distribs.html"><a href="multivar-distribs.html#a-simple-example-of-dependence"><i class="fa fa-check"></i><b>10.5.1</b> A (simple) example of dependence</a></li>
+</ul></li>
+<li class="chapter" data-level="10.6" data-path="multivar-distribs.html"><a href="multivar-distribs.html#expectation-1"><i class="fa fa-check"></i><b>10.6</b> Expectation</a></li>
+<li class="chapter" data-level="10.7" data-path="multivar-distribs.html"><a href="multivar-distribs.html#covariance-and-correlation"><i class="fa fa-check"></i><b>10.7</b> Covariance and correlation</a>
+<ul>
+<li class="chapter" data-level="10.7.1" data-path="multivar-distribs.html"><a href="multivar-distribs.html#some-observations"><i class="fa fa-check"></i><b>10.7.1</b> Some observations</a></li>
+</ul></li>
+<li class="chapter" data-level="10.8" data-path="multivar-distribs.html"><a href="multivar-distribs.html#sums-of-random-variables"><i class="fa fa-check"></i><b>10.8</b> Sums of random variables</a></li>
+<li class="chapter" data-level="10.9" data-path="multivar-distribs.html"><a href="multivar-distribs.html#multivariate-normal-distribution-1"><i class="fa fa-check"></i><b>10.9</b> Multivariate normal distribution</a>
+<ul>
+<li class="chapter" data-level="10.9.1" data-path="multivar-distribs.html"><a href="multivar-distribs.html#bivariate-example"><i class="fa fa-check"></i><b>10.9.1</b> Bivariate example</a></li>
+<li class="chapter" data-level="10.9.2" data-path="multivar-distribs.html"><a href="multivar-distribs.html#properties-of-the-multivariate-normal-distribution"><i class="fa fa-check"></i><b>10.9.2</b> Properties of the multivariate normal distribution</a></li>
+<li class="chapter" data-level="10.9.3" data-path="multivar-distribs.html"><a href="multivar-distribs.html#independence-and-multivariate-normal"><i class="fa fa-check"></i><b>10.9.3</b> Independence and multivariate normal</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#limits"><i class="fa fa-check"></i><b>11</b> Properties of random variables and limit theorems</a>
+<ul>
+<li class="chapter" data-level="" data-path="limits.html"><a href="limits.html"><i class="fa fa-check"></i>Learning objectives</a></li>
+<li class="chapter" data-level="" data-path="limits.html"><a href="limits.html#supplemental-readings-10"><i class="fa fa-check"></i>Supplemental readings</a></li>
+<li class="chapter" data-level="11.1" data-path="limits.html"><a href="limits.html#iterated-expectations"><i class="fa fa-check"></i><b>11.1</b> Iterated Expectations</a></li>
+<li class="chapter" data-level="11.2" data-path="limits.html"><a href="limits.html#change-of-coordinates"><i class="fa fa-check"></i><b>11.2</b> Change of coordinates</a></li>
+<li class="chapter" data-level="11.3" data-path="limits.html"><a href="limits.html#moment-generating-functions"><i class="fa fa-check"></i><b>11.3</b> Moment generating functions</a>
+<ul>
+<li class="chapter" data-level="11.3.1" data-path="limits.html"><a href="limits.html#the-moments-of-the-normal-distribution"><i class="fa fa-check"></i><b>11.3.1</b> The moments of the normal distribution</a></li>
+<li class="chapter" data-level="11.3.2" data-path="limits.html"><a href="limits.html#extracting-moments-of-the-normal-distribution"><i class="fa fa-check"></i><b>11.3.2</b> Extracting moments of the normal distribution</a></li>
+</ul></li>
+<li class="chapter" data-level="11.4" data-path="limits.html"><a href="limits.html#sequences-of-independent-random-variables"><i class="fa fa-check"></i><b>11.4</b> Sequences of independent random variables</a></li>
+<li class="chapter" data-level="11.5" data-path="limits.html"><a href="limits.html#inequalities-and-limit-theorems"><i class="fa fa-check"></i><b>11.5</b> Inequalities and limit theorems</a>
+<ul>
+<li class="chapter" data-level="11.5.1" data-path="limits.html"><a href="limits.html#limit-theorems"><i class="fa fa-check"></i><b>11.5.1</b> Limit theorems</a></li>
+<li class="chapter" data-level="11.5.2" data-path="limits.html"><a href="limits.html#weak-law-of-large-numbers"><i class="fa fa-check"></i><b>11.5.2</b> Weak law of large numbers</a></li>
+</ul></li>
+<li class="chapter" data-level="11.6" data-path="limits.html"><a href="limits.html#sequence-of-random-variables"><i class="fa fa-check"></i><b>11.6</b> Sequence of random variables</a>
+<ul>
+<li class="chapter" data-level="11.6.1" data-path="limits.html"><a href="limits.html#meanvariance-of-sample-mean"><i class="fa fa-check"></i><b>11.6.1</b> Mean/variance of sample mean</a></li>
+<li class="chapter" data-level="11.6.2" data-path="limits.html"><a href="limits.html#weak-law-of-large-numbers-1"><i class="fa fa-check"></i><b>11.6.2</b> Weak law of large numbers</a></li>
+</ul></li>
+<li class="chapter" data-level="11.7" data-path="limits.html"><a href="limits.html#sequences-and-convergence"><i class="fa fa-check"></i><b>11.7</b> Sequences and convergence</a>
+<ul>
+<li class="chapter" data-level="11.7.1" data-path="limits.html"><a href="limits.html#convergence-definitions"><i class="fa fa-check"></i><b>11.7.1</b> Convergence definitions</a></li>
+<li class="chapter" data-level="11.7.2" data-path="limits.html"><a href="limits.html#convergence-in-probability"><i class="fa fa-check"></i><b>11.7.2</b> Convergence in probability</a></li>
+<li class="chapter" data-level="11.7.3" data-path="limits.html"><a href="limits.html#almost-sure-convergence"><i class="fa fa-check"></i><b>11.7.3</b> Almost sure convergence</a></li>
+<li class="chapter" data-level="11.7.4" data-path="limits.html"><a href="limits.html#convergence-in-distribution"><i class="fa fa-check"></i><b>11.7.4</b> Convergence in distribution</a></li>
+<li class="chapter" data-level="11.7.5" data-path="limits.html"><a href="limits.html#convergence-in-distribution-not-rightarrow-convergence-in-probability"><i class="fa fa-check"></i><b>11.7.5</b> Convergence in distribution <span class="math inline">\(\not \Rightarrow\)</span> convergence in probability</a></li>
+<li class="chapter" data-level="11.7.6" data-path="limits.html"><a href="limits.html#central-limit-theorem"><i class="fa fa-check"></i><b>11.7.6</b> Central limit theorem</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="classic-inference.html"><a href="classic-inference.html"><i class="fa fa-check"></i><b>12</b> Classical statistical inference</a>
+<ul>
+<li class="chapter" data-level="" data-path="classic-inference.html"><a href="classic-inference.html#learning-objectives-11"><i class="fa fa-check"></i>Learning objectives</a></li>
+<li class="chapter" data-level="" data-path="classic-inference.html"><a href="classic-inference.html#supplemental-readings-11"><i class="fa fa-check"></i>Supplemental readings</a></li>
+<li class="chapter" data-level="12.1" data-path="classic-inference.html"><a href="classic-inference.html#statistical-inference"><i class="fa fa-check"></i><b>12.1</b> Statistical inference</a></li>
+<li class="chapter" data-level="12.2" data-path="classic-inference.html"><a href="classic-inference.html#parametric-models"><i class="fa fa-check"></i><b>12.2</b> Parametric models</a>
+<ul>
+<li class="chapter" data-level="12.2.1" data-path="classic-inference.html"><a href="classic-inference.html#examples-of-parametric-models"><i class="fa fa-check"></i><b>12.2.1</b> Examples of parametric models</a></li>
+</ul></li>
+<li class="chapter" data-level="12.3" data-path="classic-inference.html"><a href="classic-inference.html#point-estimates"><i class="fa fa-check"></i><b>12.3</b> Point estimates</a>
+<ul>
+<li class="chapter" data-level="12.3.1" data-path="classic-inference.html"><a href="classic-inference.html#properties-of-point-estimates"><i class="fa fa-check"></i><b>12.3.1</b> Properties of point estimates</a></li>
+</ul></li>
+<li class="chapter" data-level="12.4" data-path="classic-inference.html"><a href="classic-inference.html#confidence-sets"><i class="fa fa-check"></i><b>12.4</b> Confidence sets</a>
+<ul>
+<li class="chapter" data-level="12.4.1" data-path="classic-inference.html"><a href="classic-inference.html#caution-interpreting-confidence-intervals"><i class="fa fa-check"></i><b>12.4.1</b> Caution interpreting confidence intervals</a></li>
+<li class="chapter" data-level="12.4.2" data-path="classic-inference.html"><a href="classic-inference.html#constructing-confidence-intervals"><i class="fa fa-check"></i><b>12.4.2</b> Constructing confidence intervals</a></li>
+</ul></li>
+<li class="chapter" data-level="12.5" data-path="classic-inference.html"><a href="classic-inference.html#hypothesis-testing"><i class="fa fa-check"></i><b>12.5</b> Hypothesis testing</a>
+<ul>
+<li class="chapter" data-level="12.5.1" data-path="classic-inference.html"><a href="classic-inference.html#types-of-errors"><i class="fa fa-check"></i><b>12.5.1</b> Types of errors</a></li>
+<li class="chapter" data-level="12.5.2" data-path="classic-inference.html"><a href="classic-inference.html#power-function"><i class="fa fa-check"></i><b>12.5.2</b> Power function</a></li>
+<li class="chapter" data-level="12.5.3" data-path="classic-inference.html"><a href="classic-inference.html#sided-tests"><i class="fa fa-check"></i><b>12.5.3</b> Sided tests</a></li>
+<li class="chapter" data-level="12.5.4" data-path="classic-inference.html"><a href="classic-inference.html#example-hypothesis-test"><i class="fa fa-check"></i><b>12.5.4</b> Example hypothesis test</a></li>
+<li class="chapter" data-level="12.5.5" data-path="classic-inference.html"><a href="classic-inference.html#wald-test"><i class="fa fa-check"></i><b>12.5.5</b> Wald test</a></li>
+<li class="chapter" data-level="12.5.6" data-path="classic-inference.html"><a href="classic-inference.html#wald-or-t-test"><i class="fa fa-check"></i><b>12.5.6</b> Wald or <span class="math inline">\(t\)</span>-test?</a></li>
+<li class="chapter" data-level="12.5.7" data-path="classic-inference.html"><a href="classic-inference.html#relationship-to-confidence-intervals"><i class="fa fa-check"></i><b>12.5.7</b> Relationship to confidence intervals</a></li>
+<li class="chapter" data-level="12.5.8" data-path="classic-inference.html"><a href="classic-inference.html#statistical-vs.-scientific-significance"><i class="fa fa-check"></i><b>12.5.8</b> Statistical vs. scientific significance</a></li>
+</ul></li>
+<li class="chapter" data-level="12.6" data-path="classic-inference.html"><a href="classic-inference.html#p-values"><i class="fa fa-check"></i><b>12.6</b> <span class="math inline">\(p\)</span>-values</a>
+<ul>
+<li class="chapter" data-level="12.6.1" data-path="classic-inference.html"><a href="classic-inference.html#interpreting-p-values"><i class="fa fa-check"></i><b>12.6.1</b> Interpreting <span class="math inline">\(p\)</span>-values</a></li>
+<li class="chapter" data-level="12.6.2" data-path="classic-inference.html"><a href="classic-inference.html#calculating-p-values"><i class="fa fa-check"></i><b>12.6.2</b> Calculating <span class="math inline">\(p\)</span>-values</a></li>
+<li class="chapter" data-level="12.6.3" data-path="classic-inference.html"><a href="classic-inference.html#pearsons-chi2-test-for-multinomial-data"><i class="fa fa-check"></i><b>12.6.3</b> Pearson’s <span class="math inline">\(\chi^2\)</span> test for multinomial data</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="mle-ols.html"><a href="mle-ols.html"><i class="fa fa-check"></i><b>13</b> Maximum likelihood estimation and linear regression</a>
+<ul>
+<li class="chapter" data-level="" data-path="mle-ols.html"><a href="mle-ols.html#learning-objectives-12"><i class="fa fa-check"></i>Learning objectives</a></li>
+<li class="chapter" data-level="" data-path="mle-ols.html"><a href="mle-ols.html#supplemental-readings-12"><i class="fa fa-check"></i>Supplemental readings</a></li>
+<li class="chapter" data-level="13.1" data-path="mle-ols.html"><a href="mle-ols.html#maximum-likelihood"><i class="fa fa-check"></i><b>13.1</b> Maximum likelihood</a>
+<ul>
+<li class="chapter" data-level="13.1.1" data-path="mle-ols.html"><a href="mle-ols.html#properties-of-maximum-likelihood-estimators"><i class="fa fa-check"></i><b>13.1.1</b> Properties of maximum likelihood estimators</a></li>
+</ul></li>
+<li class="chapter" data-level="13.2" data-path="mle-ols.html"><a href="mle-ols.html#least-squares-regression"><i class="fa fa-check"></i><b>13.2</b> Least squares regression</a>
+<ul>
+<li class="chapter" data-level="13.2.1" data-path="mle-ols.html"><a href="mle-ols.html#simple-linear-regression"><i class="fa fa-check"></i><b>13.2.1</b> Simple linear regression</a></li>
+<li class="chapter" data-level="13.2.2" data-path="mle-ols.html"><a href="mle-ols.html#estimation-strategy"><i class="fa fa-check"></i><b>13.2.2</b> Estimation strategy</a></li>
+<li class="chapter" data-level="13.2.3" data-path="mle-ols.html"><a href="mle-ols.html#least-squares-estimator"><i class="fa fa-check"></i><b>13.2.3</b> Least squares estimator</a></li>
+<li class="chapter" data-level="13.2.4" data-path="mle-ols.html"><a href="mle-ols.html#maximum-likelihood-estimation"><i class="fa fa-check"></i><b>13.2.4</b> Maximum likelihood estimation</a></li>
+<li class="chapter" data-level="13.2.5" data-path="mle-ols.html"><a href="mle-ols.html#properties-of-the-least-squares-estimator"><i class="fa fa-check"></i><b>13.2.5</b> Properties of the least squares estimator</a></li>
+</ul></li>
+<li class="chapter" data-level="13.3" data-path="mle-ols.html"><a href="mle-ols.html#assumptions-of-linear-regression-models"><i class="fa fa-check"></i><b>13.3</b> Assumptions of linear regression models</a>
+<ul>
+<li class="chapter" data-level="13.3.1" data-path="mle-ols.html"><a href="mle-ols.html#linearity"><i class="fa fa-check"></i><b>13.3.1</b> Linearity</a></li>
+<li class="chapter" data-level="13.3.2" data-path="mle-ols.html"><a href="mle-ols.html#constant-variance"><i class="fa fa-check"></i><b>13.3.2</b> Constant variance</a></li>
+<li class="chapter" data-level="13.3.3" data-path="mle-ols.html"><a href="mle-ols.html#normality"><i class="fa fa-check"></i><b>13.3.3</b> Normality</a></li>
+<li class="chapter" data-level="13.3.4" data-path="mle-ols.html"><a href="mle-ols.html#independence"><i class="fa fa-check"></i><b>13.3.4</b> Independence</a></li>
+<li class="chapter" data-level="13.3.5" data-path="mle-ols.html"><a href="mle-ols.html#fixed-x-or-x-measured-without-error-and-independent-of-the-error"><i class="fa fa-check"></i><b>13.3.5</b> Fixed <span class="math inline">\(X\)</span>, or <span class="math inline">\(X\)</span> measured without error and independent of the error</a></li>
+<li class="chapter" data-level="13.3.6" data-path="mle-ols.html"><a href="mle-ols.html#x-is-not-invariant"><i class="fa fa-check"></i><b>13.3.6</b> <span class="math inline">\(X\)</span> is not invariant</a></li>
+<li class="chapter" data-level="13.3.7" data-path="mle-ols.html"><a href="mle-ols.html#handling-violations-of-assumptions"><i class="fa fa-check"></i><b>13.3.7</b> Handling violations of assumptions</a></li>
+</ul></li>
+<li class="chapter" data-level="13.4" data-path="mle-ols.html"><a href="mle-ols.html#unusual-and-influential-data"><i class="fa fa-check"></i><b>13.4</b> Unusual and influential data</a>
+<ul>
+<li class="chapter" data-level="13.4.1" data-path="mle-ols.html"><a href="mle-ols.html#terms"><i class="fa fa-check"></i><b>13.4.1</b> Terms</a></li>
+<li class="chapter" data-level="13.4.2" data-path="mle-ols.html"><a href="mle-ols.html#measuring-leverage"><i class="fa fa-check"></i><b>13.4.2</b> Measuring leverage</a></li>
+<li class="chapter" data-level="13.4.3" data-path="mle-ols.html"><a href="mle-ols.html#measuring-discrepancy"><i class="fa fa-check"></i><b>13.4.3</b> Measuring discrepancy</a></li>
+<li class="chapter" data-level="13.4.4" data-path="mle-ols.html"><a href="mle-ols.html#measuring-influence"><i class="fa fa-check"></i><b>13.4.4</b> Measuring influence</a></li>
+<li class="chapter" data-level="13.4.5" data-path="mle-ols.html"><a href="mle-ols.html#visualizing-leverage-discrepancy-and-influence"><i class="fa fa-check"></i><b>13.4.5</b> Visualizing leverage, discrepancy, and influence</a></li>
+<li class="chapter" data-level="13.4.6" data-path="mle-ols.html"><a href="mle-ols.html#numerical-rules-of-thumb"><i class="fa fa-check"></i><b>13.4.6</b> Numerical rules of thumb</a></li>
+<li class="chapter" data-level="13.4.7" data-path="mle-ols.html"><a href="mle-ols.html#how-to-treat-unusual-observations"><i class="fa fa-check"></i><b>13.4.7</b> How to treat unusual observations</a></li>
+</ul></li>
+<li class="chapter" data-level="13.5" data-path="mle-ols.html"><a href="mle-ols.html#non-normally-distributed-errors"><i class="fa fa-check"></i><b>13.5</b> Non-normally distributed errors</a>
+<ul>
+<li class="chapter" data-level="13.5.1" data-path="mle-ols.html"><a href="mle-ols.html#detecting-non-normally-distributed-errors"><i class="fa fa-check"></i><b>13.5.1</b> Detecting non-normally distributed errors</a></li>
+<li class="chapter" data-level="13.5.2" data-path="mle-ols.html"><a href="mle-ols.html#fixing-non-normally-distributed-errors"><i class="fa fa-check"></i><b>13.5.2</b> Fixing non-normally distributed errors</a></li>
+</ul></li>
+<li class="chapter" data-level="13.6" data-path="mle-ols.html"><a href="mle-ols.html#non-constant-error-variance"><i class="fa fa-check"></i><b>13.6</b> Non-constant error variance</a>
+<ul>
+<li class="chapter" data-level="13.6.1" data-path="mle-ols.html"><a href="mle-ols.html#detecting-heteroscedasticity"><i class="fa fa-check"></i><b>13.6.1</b> Detecting heteroscedasticity</a></li>
+<li class="chapter" data-level="13.6.2" data-path="mle-ols.html"><a href="mle-ols.html#accounting-for-heteroscedasticity"><i class="fa fa-check"></i><b>13.6.2</b> Accounting for heteroscedasticity</a></li>
+</ul></li>
+<li class="chapter" data-level="13.7" data-path="mle-ols.html"><a href="mle-ols.html#non-linearity-in-the-data"><i class="fa fa-check"></i><b>13.7</b> Non-linearity in the data</a>
+<ul>
+<li class="chapter" data-level="13.7.1" data-path="mle-ols.html"><a href="mle-ols.html#partial-residual-plots"><i class="fa fa-check"></i><b>13.7.1</b> Partial residual plots</a></li>
+</ul></li>
+<li class="chapter" data-level="13.8" data-path="mle-ols.html"><a href="mle-ols.html#collinearity"><i class="fa fa-check"></i><b>13.8</b> Collinearity</a>
+<ul>
+<li class="chapter" data-level="13.8.1" data-path="mle-ols.html"><a href="mle-ols.html#perfect-collinearity"><i class="fa fa-check"></i><b>13.8.1</b> Perfect collinearity</a></li>
+<li class="chapter" data-level="13.8.2" data-path="mle-ols.html"><a href="mle-ols.html#less-than-perfect-collinearity"><i class="fa fa-check"></i><b>13.8.2</b> Less-than-perfect collinearity</a></li>
+<li class="chapter" data-level="13.8.3" data-path="mle-ols.html"><a href="mle-ols.html#fixing-multicollinearity"><i class="fa fa-check"></i><b>13.8.3</b> Fixing multicollinearity</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="bayesian-inference.html"><a href="bayesian-inference.html"><i class="fa fa-check"></i><b>14</b> Bayesian inference</a>
+<ul>
+<li class="chapter" data-level="" data-path="bayesian-inference.html"><a href="bayesian-inference.html#learning-objectives-13"><i class="fa fa-check"></i>Learning objectives</a></li>
+<li class="chapter" data-level="" data-path="bayesian-inference.html"><a href="bayesian-inference.html#supplemental-readings-13"><i class="fa fa-check"></i>Supplemental readings</a></li>
+<li class="chapter" data-level="14.1" data-path="bayesian-inference.html"><a href="bayesian-inference.html#bayesian-philosophy"><i class="fa fa-check"></i><b>14.1</b> Bayesian philosophy</a></li>
+<li class="chapter" data-level="14.2" data-path="bayesian-inference.html"><a href="bayesian-inference.html#bayes-theorem"><i class="fa fa-check"></i><b>14.2</b> Bayes’ theorem</a></li>
+<li class="chapter" data-level="14.3" data-path="bayesian-inference.html"><a href="bayesian-inference.html#bayesian-method"><i class="fa fa-check"></i><b>14.3</b> Bayesian method</a>
+<ul>
+<li class="chapter" data-level="14.3.1" data-path="bayesian-inference.html"><a href="bayesian-inference.html#example-coin-tossing"><i class="fa fa-check"></i><b>14.3.1</b> Example: coin tossing</a></li>
+</ul></li>
+<li class="chapter" data-level="14.4" data-path="bayesian-inference.html"><a href="bayesian-inference.html#updating-your-prior-beliefs"><i class="fa fa-check"></i><b>14.4</b> Updating your prior beliefs</a></li>
+<li class="chapter" data-level="14.5" data-path="bayesian-inference.html"><a href="bayesian-inference.html#simulation"><i class="fa fa-check"></i><b>14.5</b> Simulation</a></li>
+<li class="chapter" data-level="14.6" data-path="bayesian-inference.html"><a href="bayesian-inference.html#priors"><i class="fa fa-check"></i><b>14.6</b> Priors</a>
+<ul>
+<li class="chapter" data-level="14.6.1" data-path="bayesian-inference.html"><a href="bayesian-inference.html#improper-priors"><i class="fa fa-check"></i><b>14.6.1</b> Improper priors</a></li>
+<li class="chapter" data-level="14.6.2" data-path="bayesian-inference.html"><a href="bayesian-inference.html#flat-priors-are-not-invariant"><i class="fa fa-check"></i><b>14.6.2</b> Flat priors are not invariant</a></li>
+</ul></li>
+<li class="chapter" data-level="14.7" data-path="bayesian-inference.html"><a href="bayesian-inference.html#multiparameter-problems"><i class="fa fa-check"></i><b>14.7</b> Multiparameter problems</a></li>
+<li class="chapter" data-level="14.8" data-path="bayesian-inference.html"><a href="bayesian-inference.html#critiques-and-defenses-of-bayesian-inference"><i class="fa fa-check"></i><b>14.8</b> Critiques and defenses of Bayesian inference</a>
+<ul>
+<li class="chapter" data-level="14.8.1" data-path="bayesian-inference.html"><a href="bayesian-inference.html#critique-of-bayesian-inference"><i class="fa fa-check"></i><b>14.8.1</b> Critique of Bayesian inference</a></li>
+<li class="chapter" data-level="14.8.2" data-path="bayesian-inference.html"><a href="bayesian-inference.html#defense-of-bayesian-inference"><i class="fa fa-check"></i><b>14.8.2</b> Defense of Bayesian inference</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="bayesian-inference.html"><a href="bayesian-inference.html#acknowledgements-1"><i class="fa fa-check"></i>Acknowledgements</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Computational Math Camp</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="mle-ols" class="section level1 hasAnchor" number="13">
+<h1><span class="header-section-number">Lecture 13</span> Maximum likelihood estimation and linear regression<a href="mle-ols.html#mle-ols" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="learning-objectives-12" class="section level2 unnumbered hasAnchor">
+<h2>Learning objectives<a href="mle-ols.html#learning-objectives-12" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ul>
+<li>Define maximum likelihood estimation (MLE)</li>
+<li>Review the properties of the maximum likelihood estimator</li>
+<li>Demonstrate MLE for basic estimators</li>
+<li>Define ordinary least squares (OLS) estimation</li>
+<li>Identify why OLS estimator is the best linear unbiased estimator</li>
+<li>Identify key assumptions of OLS models</li>
+<li>Evaluate methods to test for violations of assumptions</li>
+<li>Consider how to alleviate violations</li>
+</ul>
+</div>
+<div id="supplemental-readings-12" class="section level2 unnumbered hasAnchor">
+<h2>Supplemental readings<a href="mle-ols.html#supplemental-readings-12" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ul>
+<li>Chapter 9 <span class="citation">Bertsekas and Tsitsiklis (<a href="#ref-bertsekas2008" role="doc-biblioref">2008</a>)</span></li>
+<li><span class="citation">Wasserman (<a href="#ref-wasserman2013" role="doc-biblioref">2013</a>)</span>
+<ul>
+<li><a href="https://link-springer-com.proxy.uchicago.edu/content/pdf/10.1007%2F978-0-387-21736-9_9.pdf">Ch 9 - Parametric Inference</a></li>
+<li><a href="https://link-springer-com.proxy.uchicago.edu/content/pdf/10.1007%2F978-0-387-21736-9_13.pdf">Ch 13 - Linear and Logistic Regression</a></li>
+</ul></li>
+</ul>
+</div>
+<div id="maximum-likelihood" class="section level2 hasAnchor" number="13.1">
+<h2><span class="header-section-number">13.1</span> Maximum likelihood<a href="mle-ols.html#maximum-likelihood" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The most common method for estimating parameters in a parametric model is the <strong>maximum likelihood method</strong>. Let <span class="math inline">\(X_1, \ldots, X_n\)</span> be IID with PDF <span class="math inline">\(f(x; \theta)\)</span>. The <strong>likelihood function</strong> is defined by</p>
+<p><span class="math display">\[\Lagr_n(\theta) = \prod_{i=1}^n f(X_i; \theta)\]</span></p>
+<p>The <strong>log-likelihood function</strong> is defined by <span class="math inline">\(\lagr_n (\theta) = \log \Lagr_n(\theta)\)</span>. The likelihood function is the joint density of the data, except we treat it as a function of the parameter <span class="math inline">\(\theta\)</span>. However the likelihood function is not a density function – it is a likelihood function. In general, it is not true that <span class="math inline">\(\Lagr_n(\theta)\)</span> integrates to 1 (with respect to <span class="math inline">\(\theta\)</span>).</p>
+<p>The <strong>maximum likelihood estimator</strong> (MLE), denoted by <span class="math inline">\(\hat{\theta}_n\)</span>, is the value of <span class="math inline">\(\theta\)</span> that maximizes <span class="math inline">\(\Lagr_n(\theta)\)</span>. The maximum of <span class="math inline">\(\lagr_n(\theta)\)</span> occurs at the same place as the maximum of <span class="math inline">\(\Lagr_n(\theta)\)</span>, so maximizing the log-likelihood leads to the same answer as maximizing the likelihood. Often, it is just easier to work with the log-likelihood.</p>
+
+<div class="rmdnote">
+<p>If we multiply <span class="math inline">\(\Lagr_n(\theta)\)</span> by any positive constant <span class="math inline">\(c\)</span> (not depending on <span class="math inline">\(\theta\)</span>) then this will not change the MLE. Thus we shall drop constants in the likelihood function.</p>
+</div>
+<div class="example">
+<p><span id="exm:unlabeled-div-194" class="example"><strong>Example 13.1  (Bernoulli distribution) </strong></span>Suppose that <span class="math inline">\(X_1, \ldots, X_n \sim \text{Bernoulli} (\pi)\)</span>. The probability function is</p>
+<p><span class="math display">\[f(x; \pi) = \pi^x (1 - \pi)^{1 - x}\]</span></p>
+<p>for <span class="math inline">\(x = 0,1\)</span>. The unknown parameter is <span class="math inline">\(\pi\)</span>. Then,</p>
+<p><span class="math display">\[
+\begin{align}
+\Lagr_n(\pi) &amp;= \prod_{i=1}^n f(X_i; \pi) \\
+&amp;= \prod_{i=1}^n \pi^{X_i} (1 - \pi)^{1 - X_i} \\
+&amp;= \pi^S (1 - \pi)^{n - S}
+\end{align}
+\]</span></p>
+<p>where <span class="math inline">\(S = \sum_{i} X_i\)</span>. The log-likelihood function is therefore</p>
+<p><span class="math display">\[\lagr_n (\pi) = S \log(\pi) + (n - S) \log(1 - \pi)\]</span></p>
+<p>To analytically solve for <span class="math inline">\(\hat{\pi}_n\)</span>, take the derivative of <span class="math inline">\(\lagr_n (\pi)\)</span>, set it equal to 0, and solve for <span class="math inline">\(\hat{\pi}_n = \frac{S}{n}\)</span>.</p>
+<p><img src="13-mle-ols_files/figure-html/loglik-bern-1.png" width="90%" style="display: block; margin: auto;" /></p>
+</div>
+<div class="example">
+<p><span id="exm:unlabeled-div-195" class="example"><strong>Example 13.2  (Normal distribution) </strong></span>Let <span class="math inline">\(X_1, \ldots, X_n \sim N(\mu, \sigma^2)\)</span>. The parameter is <span class="math inline">\(\theta = (\mu, \sigma)\)</span> and the likelihood function (ignoring some constants) is:</p>
+<p><span class="math display">\[
+\begin{align}
+\Lagr_n (\mu, \sigma) &amp;= \prod_i \frac{1}{\sigma} \exp \left[ - \frac{1}{2\sigma^2} (X_i - \mu)^2 \right] \\
+&amp;= \frac{1}{\sigma^n} \exp \left[ - \frac{1}{2\sigma^2} \sum_i (X_i - \mu)^2 \right] \\
+&amp;= \frac{1}{\sigma^n} \exp \left[ \frac{n S^2}{2 \sigma^2} \right] \exp \left[ - \frac{n (\bar{X} - \mu)^2}{2 \sigma^2} \right]
+\end{align}
+\]</span></p>
+<p>where <span class="math inline">\(\bar{X} = \frac{1}{n} \sum_i X_i\)</span> is the sample mean and <span class="math inline">\(S^2 = \frac{1}{n} \sum_i (X_i - \bar{X})^2\)</span>. The log-likelihood is</p>
+<p><span class="math display">\[\lagr_n (\mu, \sigma) = -n \log \sigma - \frac{nS^2}{2\sigma^2} - \frac{n(\bar{X} - \mu)^2}{2\sigma^2}\]</span></p>
+<p>Calculating the first derivatives with respect to <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma\)</span>, setting them equal to 0, and solving for <span class="math inline">\(\hat{\mu}, \hat{\sigma}\)</span> leads to <span class="math inline">\(\hat{\mu} = \bar{X} = \E [X]\)</span> and <span class="math inline">\(\hat{\sigma} = S = \sqrt{\Var[X]}\)</span>. So the mean and variance/standard deviation of a normal distribution are also maximum likelihood estimators.</p>
+</div>
+<div id="properties-of-maximum-likelihood-estimators" class="section level3 hasAnchor" number="13.1.1">
+<h3><span class="header-section-number">13.1.1</span> Properties of maximum likelihood estimators<a href="mle-ols.html#properties-of-maximum-likelihood-estimators" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Under certain conditions, the maximum likelihood estimator <span class="math inline">\(\hat{\theta}_n\)</span> possesses many properties that make it an appealing choice of estimatory. The main properties are:</p>
+<ol style="list-style-type: decimal">
+<li>Consistency</li>
+<li>Equivariant</li>
+<li>Asymptotically Normal</li>
+<li>Asymptotically optimal or efficient</li>
+</ol>
+<p>These properties generally hold true for random variables with large sample sizes and smooth conditions for <span class="math inline">\(f(x; \theta)\)</span>. If these requirements are not met, then MLE may not be a good estimator for the parameter of interest.</p>
+<div id="consistency" class="section level4 hasAnchor" number="13.1.1.1">
+<h4><span class="header-section-number">13.1.1.1</span> Consistency<a href="mle-ols.html#consistency" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>The MLE is consistent, in that <span class="math inline">\(\hat{\theta}_n \xrightarrow{P} \theta_*\)</span>, where <span class="math inline">\(\theta_*\)</span> denotes the true value of the parameter <span class="math inline">\(\theta\)</span>. Consistency means that the MLE converges in probability to the true value as the number of observations increases.</p>
+</div>
+<div id="equivariance" class="section level4 hasAnchor" number="13.1.1.2">
+<h4><span class="header-section-number">13.1.1.2</span> Equivariance<a href="mle-ols.html#equivariance" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Equivariance indicates that if <span class="math inline">\(\hat{\theta}_n\)</span> is the MLE of <span class="math inline">\(\theta\)</span>, then <span class="math inline">\(g(\hat{\theta}_n)\)</span> is the MLE of <span class="math inline">\(g(\theta)\)</span>. Basically, the MLE estimator for a random variable transformed by a function <span class="math inline">\(g(x)\)</span> is also the MLE estimator for the new random variable <span class="math inline">\(g(x)\)</span>. For example, let <span class="math inline">\(X_1, \ldots, X_n \sim N(\theta,1)\)</span>. The MLE for <span class="math inline">\(\theta\)</span> is <span class="math inline">\(\hat{\theta}_n = \bar{X}_n\)</span>. Let <span class="math inline">\(\tau = e^\theta\)</span>. Then the MLE for <span class="math inline">\(\tau\)</span> is <span class="math inline">\(\hat{\tau} = e^{\hat{\theta}} = e^{\bar{X}}\)</span>.</p>
+</div>
+<div id="asymptotic-normality" class="section level4 hasAnchor" number="13.1.1.3">
+<h4><span class="header-section-number">13.1.1.3</span> Asymptotic normality<a href="mle-ols.html#asymptotic-normality" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Asymptotic normality indicates that the distribution of the MLE estimator is asymptotically normal. That is, let <span class="math inline">\(\se = \sqrt{\Var (\hat{\sigma}_n)}\)</span>.</p>
+<p><span class="math display">\[\frac{\hat{\theta}_n - \theta_*}{\se} \leadsto N(0,1)\]</span></p>
+<p>The distribution of the true standard error of <span class="math inline">\(\hat{\theta}_n\)</span> is approximately a standard Normal distribution. Since we typically have to estimate the standard error from the data, it also holds true that</p>
+<p><span class="math display">\[\frac{\hat{\theta}_n - \theta_*}{\widehat{\se}} \leadsto N(0,1)\]</span></p>
+<p>The proof of this property is in the book. Informally, this means that the distribution of the MLE can be approximated with <span class="math inline">\(N(\theta, \widehat{\se}^2)\)</span>. This is what allows us to construct confidence intervals for point estimates like we saw previously. As long as the sample size is sufficiently large and <span class="math inline">\(f(x; \theta)\)</span> is sufficiently smooth, this property holds true and we do not need to estimate actual confidence intervals for the MLE – the Normal approximation is sufficient.</p>
+</div>
+<div id="optimality" class="section level4 hasAnchor" number="13.1.1.4">
+<h4><span class="header-section-number">13.1.1.4</span> Optimality<a href="mle-ols.html#optimality" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Suppose that <span class="math inline">\(X_1, \ldots, X_n \sim N(\theta, \sigma^2)\)</span>. The MLE is <span class="math inline">\(\hat{\sigma}_n = \bar{X}_n\)</span>. Another reasonable estimator of <span class="math inline">\(\theta\)</span> is the sample median <span class="math inline">\(\tilde{\theta}_n\)</span>. The MLE satisfies</p>
+<p><span class="math display">\[\sqrt{n} (\hat{\theta}_n - \theta) \leadsto N(0, \sigma^2)\]</span></p>
+<p>It can be shown that the median satisfies</p>
+<p><span class="math display">\[\sqrt{n} (\tilde{\theta}_n - \theta) \leadsto N \left(0, \sigma^2 \frac{\pi}{2} \right)\]</span></p>
+<p>This means the median converges to the right value but has a larger variance than the MLE.</p>
+<p>More generally, consider two estimators <span class="math inline">\(T_n\)</span> and <span class="math inline">\(U_n\)</span>, and suppose that</p>
+<p><span class="math display">\[
+\begin{align}
+\sqrt{n} (T_n - \theta) &amp;\leadsto N(0, t^2) \\
+\sqrt{n} (U_n - \theta) &amp;\leadsto N(0, u^2) \\
+\end{align}
+\]</span></p>
+<p>We define the asymptotic relative efficiency of <span class="math inline">\(U\)</span> to <span class="math inline">\(T\)</span> by <span class="math inline">\(\text{ARE}(U, T) = \frac{t^2}{u^2}\)</span>. In the Normal example, <span class="math inline">\(\text{ARE}(\tilde{\theta}_n, \hat{\theta}_n) = \frac{2}{\pi} \approx .63\)</span>. The interpretation is that if you use the median, you are effectively using only a fraction of the data and your estimate is not as optimal as the mean.</p>
+<p>Fundamentally, if <span class="math inline">\(\hat{\theta}_n\)</span> is the MLE and <span class="math inline">\(\tilde{\theta}_n\)</span> is any other estimator, then</p>
+<p><span class="math display">\[\text{ARE} (\tilde{\theta}_n, \hat{\theta}_n) \leq 1\]</span></p>
+<p>Thus, the MLE has the smallest (asymptotic) variance and we say the MLE is efficient or asymptotically optimal.</p>
+<div class="example">
+<p><span id="exm:unlabeled-div-196" class="example"><strong>Example 13.3  (Calculating the MLE of the mean of the Normal variable) </strong></span>We presume the response variable <span class="math inline">\(Y\)</span> is drawn from a Gaussian (normal) distribution with mean <span class="math inline">\(\mu\)</span> and variance <span class="math inline">\(\sigma^2\)</span>:</p>
+<p><span class="math display">\[\Pr(X_i = x_i) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp \left[\frac{(X_i - \mu)^2}{2\sigma^2}\right]\]</span></p>
+<p><img src="13-mle-ols_files/figure-html/plot-normal-1.png" width="90%" style="display: block; margin: auto;" /></p>
+<p>This is the density, or probability density function (PDF) of the variable <span class="math inline">\(Y\)</span>.</p>
+<ul>
+<li>The probability that, for any one observation <span class="math inline">\(i\)</span>, <span class="math inline">\(Y\)</span> will take on the particular value <span class="math inline">\(y\)</span>.</li>
+<li>This is a function of <span class="math inline">\(\mu\)</span>, the expected value of the distribution, and <span class="math inline">\(\sigma^2\)</span>, the variability of the distribution around the mean.</li>
+</ul>
+<p>We want to generate estimates of the parameters <span class="math inline">\(\hat{\mu}_n\)</span> and <span class="math inline">\(\hat{\sigma}_n^2\)</span> based on the data. For the normal distribution, the log-likelihood function is:</p>
+<p><span class="math display">\[
+\begin{align}
+\lagr_n(\mu, \sigma^2 | X) &amp;= \log \prod_{i = 1}^{N}{\frac{1}{\sqrt{2\pi\sigma^2}} \exp \left[\frac{(X_i - \mu)^2}{2\sigma^2}\right]} \\
+&amp;= \sum_{i=1}^{N}{\log\left(\frac{1}{\sqrt{2\pi\sigma^2}} \exp \left[\frac{(X_i - \mu)^2}{2\sigma^2}\right]\right)} \\
+&amp;= -\frac{N}{2} \log(2\pi) - \left[ \sum_{i = 1}^{N} \log{\sigma^2 - \frac{1}{2\sigma^2}} (X_i - \mu)^2 \right]
+\end{align}
+\]</span></p>
+<p>Suppose we had a sample of assistant professor salaries:</p>
+<table>
+<caption><span id="tab:prof">Table 13.1: </span>Salaries of assistant professors</caption>
+<thead>
+<tr class="header">
+<th align="right">id</th>
+<th align="right">salary</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">60</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">55</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">65</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="right">50</td>
+</tr>
+<tr class="odd">
+<td align="right">5</td>
+<td align="right">70</td>
+</tr>
+</tbody>
+</table>
+<p>If we want to explain the distribution of possible assistant professor salaries given these data points, we could use maximum-likelihood estimation to find the <span class="math inline">\(\hat{\mu}\)</span> that maximizes the likelihood of the data. We are testing different values for <span class="math inline">\(\mu\)</span> to see what optimizes the function. If we have no regressors or predictors, <span class="math inline">\(\hat{\mu}\)</span> is a constant. Furthermore, we treat <span class="math inline">\(\sigma^2\)</span> as a nuisance parameter and hold it constant at <span class="math inline">\(\sigma^2 = 1\)</span>. The log-likelihood curve would look like this:</p>
+<p><img src="13-mle-ols_files/figure-html/loglik-normal-1.png" width="90%" style="display: block; margin: auto;" /></p>
+<p>And the maximum is 60, which is the mean of the 5 sample observations. Notice our choice of value for <span class="math inline">\(\sigma^2\)</span> doesn’t change our estimate <span class="math inline">\(\hat{\mu}_n\)</span>.</p>
+<p><img src="13-mle-ols_files/figure-html/loglik-normal-diff-var-1.png" width="90%" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+</div>
+</div>
+<div id="least-squares-regression" class="section level2 hasAnchor" number="13.2">
+<h2><span class="header-section-number">13.2</span> Least squares regression<a href="mle-ols.html#least-squares-regression" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><strong>Regression</strong> is a method for studying the relationship between a <strong>response variable</strong> <span class="math inline">\(Y\)</span> and a <strong>covariate</strong> <span class="math inline">\(X\)</span> (also known as the <strong>predictor variable</strong> or a <strong>feature</strong>). One way to summarize this relationship between <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> is through a <strong>regression function</strong>:</p>
+<p><span class="math display">\[r(x) = \E (Y | X = x) = \int y f(y|x) dy\]</span></p>
+<p>Our goal is to estimate the regression function <span class="math inline">\(r(x)\)</span> from the data of the form</p>
+<p><span class="math display">\[(Y_1, X_1), \ldots, (Y_n, X_n) \sim F_{X,Y}\]</span></p>
+<div id="simple-linear-regression" class="section level3 hasAnchor" number="13.2.1">
+<h3><span class="header-section-number">13.2.1</span> Simple linear regression<a href="mle-ols.html#simple-linear-regression" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The simplest form of regression is when <span class="math inline">\(X_i\)</span> is simple (one-dimensional) and <span class="math inline">\(r(x)\)</span> is assumed to be linear:</p>
+<p><span class="math display">\[r(x) = \beta_0 + \beta_1 x\]</span></p>
+<p>This model is called the <strong>simple linear regression model</strong>. We make the further assumption that <span class="math inline">\(\Var (\epsilon_i | X = x) = \sigma^2\)</span> does not depend on <span class="math inline">\(x\)</span>. Thus the linear regression model is:</p>
+<p><span class="math display">\[Y_i = \beta_0 + \beta_1 X_i + \epsilon_i\]</span></p>
+<p>where <span class="math inline">\(\E (\epsilon_i | X_i) = 0\)</span> and <span class="math inline">\(\Var (\epsilon_i | X_i) = \sigma^2\)</span>. The unknown parameters in the model are the intercept <span class="math inline">\(\beta_0\)</span> and the slope <span class="math inline">\(\beta_1\)</span> and the variance <span class="math inline">\(\sigma^2\)</span>. Let <span class="math inline">\(\hat{\beta}_0\)</span> and <span class="math inline">\(\hat{\beta}_1\)</span> denote estimates of <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span>. The <strong>fitted line</strong> is</p>
+<p><span class="math display">\[\hat{r}(x) = \hat{\beta}_0 + \hat{\beta}_1 x\]</span></p>
+<p>The <strong>predicted values</strong> or <strong>fitted values</strong> are</p>
+<p><span class="math display">\[\hat{Y}_i = \hat{r}(X_i)\]</span></p>
+<p>and the <strong>residuals</strong> are defined as</p>
+<p><span class="math display">\[\hat{\epsilon}_i = Y_i - \hat{Y}_i = Y_i - (\hat{\beta}_0 + \hat{\beta}_1 x)\]</span></p>
+<p>The <strong>residual sum of squares</strong> or RSS measures how well the line fits the data. It is defined by</p>
+<p><span class="math display">\[RSS = \sum_{i=1}^n \hat{\epsilon}_i^2\]</span></p>
+</div>
+<div id="estimation-strategy" class="section level3 hasAnchor" number="13.2.2">
+<h3><span class="header-section-number">13.2.2</span> Estimation strategy<a href="mle-ols.html#estimation-strategy" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>What is an appropriate way to estimate the <span class="math inline">\(\beta\)</span>s? We could fit many lines to this data, some better than others.</p>
+<p><img src="13-mle-ols_files/figure-html/sim-plot-1.png" width="90%" style="display: block; margin: auto;" /></p>
+<p><img src="13-mle-ols_files/figure-html/sim-random-fit-1.png" width="90%" style="display: block; margin: auto;" /></p>
+<p>We should seek estimators with some set of desired qualities. Classically, two desired qualities for an estimator are <strong>unbiasedness</strong> and <strong>efficiency</strong>.</p>
+<div class="definition">
+<p><span id="def:unlabeled-div-197" class="definition"><strong>Definition 13.1  (Unbiasedness) </strong></span><span class="math inline">\(\E(\hat{\beta}) = \beta\)</span>, or an estimator that “gets it right” vis-a-vis <span class="math inline">\(\beta\)</span>.</p>
+</div>
+<div class="definition">
+<p><span id="def:unlabeled-div-198" class="definition"><strong>Definition 13.2  (Efficiency) </strong></span><span class="math inline">\(\min(\Var(\hat{\beta}))\)</span>. Not only do we get it right, but for any given sample used to generate the model we never want to be too far off from “right”.</p>
+</div>
+</div>
+<div id="least-squares-estimator" class="section level3 hasAnchor" number="13.2.3">
+<h3><span class="header-section-number">13.2.3</span> Least squares estimator<a href="mle-ols.html#least-squares-estimator" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The <strong>least squares estimates</strong> are the values <span class="math inline">\(\hat{\beta}_0, \hat{\beta}_1\)</span> that minimize the RSS.</p>
+<p><span class="math display">\[\min(RSS)\]</span></p>
+<p>This requires a bit of calculus to solve.</p>
+<p><span class="math display">\[
+\begin{aligned}
+RSS &amp;= \sum_{i=1}^n \hat{\epsilon}_i^2 \\
+\sum_{i=1}^n (\hat{\epsilon}_i)^2 &amp;= \sum_{i=1}^n (Y_i - (\beta_0 + \beta_1 X_i))^2\\
+f(\beta_0, \beta_1 | x_i, y_i) &amp; = \sum_{i=1}^n (Y_i - \beta_0 - \beta_1 X_i )^2\\
+\dfrac{\partial{ f(\beta_0, \beta_1 | x_i, y_i)}}{\partial \beta_0} &amp; = -2 (\sum_{i=1}^n (Y_i - \beta_0 - \beta_1 X_i))\\
+&amp; = \sum_{i=1}^n -2Y_i + 2\beta_0 + 2\beta_1 X_i\\
+0 &amp; = \sum_{i=1}^n -2Y_{i} + 2\beta_0 + 2\beta_1 X_i\\
+0 &amp; = -2 \sum_{i=1}^n Y_{i} +  2\sum_{i=1}^n \beta_0 +  2\beta_1 \sum_{i=1}^n X_i\\
+0 &amp; = -2 \sum_{i=1}^n Y_{i} +  (n \times 2\beta_0) +  2\beta_1 \sum_{i=1}^n X_i\\
+n \times 2\beta_0 &amp; = 2 \sum_{i=1}^n Y_i - 2\beta_1 \sum_{i=1}^n X_i\\
+\hat \beta_0 &amp; = \dfrac{2 \sum_{i=1}^n Y_i}{2n} - \dfrac{2\beta_1 \sum_{i=1}^n X_i}{2n}\\
+&amp; =  \dfrac{\sum_{i=1}^n Y_i}{n} - \beta_1\dfrac{ \sum_{i=1}^n X_i}{n}\\
+\hat \beta_0 &amp; = \bar{Y}_n - \beta_1 \bar{X}_n
+\end{aligned}
+\]</span></p>
+<p><span class="math display">\[
+\begin{aligned}
+\dfrac{\partial{ f(\beta_0, \beta_1 | x_i, y_i)}}{\partial \beta_1} &amp; = \sum_{i=1}^n -2X_i(Y_i - \beta_0 - \beta_1 X_i) \\
+&amp; =  \sum_{i=1}^n -2Y_iX_i + 2\beta_0X_i + 2\beta_1 X_i^2\\
+0 &amp; =  \sum_{i=1}^n -2Y_iX_i + 2\beta_0 \sum_{i=1}^nX_i + 2\beta_1  \sum_{i=1}^n X_i^2\\
+&amp; =  \sum_{i=1}^n -2Y_iX_i + 2 (\bar{Y}_n - \beta_1 \bar{X}_n) \sum_{i=1}^nX_i + 2\beta_1  \sum_{i=1}^n X_i^2\\
+&amp; = \sum_{i=1}^n -2Y_iX_i + 2\bar{Y}_n \sum_{i=1}^nX_i - 2\beta_1 \bar{X}_n\sum_{i=1}^nX_i + 2\beta_1  \sum_{i=1}^n X_i^2\\
+2\beta_1  \sum_{i=1}^n X_i^2 - 2\beta_1 \bar{X}_n\sum_{i=1}^nX_i  &amp; = \sum_{i=1}^n 2Y_iX_i  - 2\bar{Y}_n \sum_{i=1}^nX_i\\
+\beta_1 ( \sum_{i=1}^n X_i^2 - \bar{X}_n\sum_{i=1}^nX_i ) &amp; = \sum_{i=1}^n Y_iX_i  - \bar{Y}_n \sum_{i=1}^nX_i\\
+\hat \beta_1 &amp; = \dfrac{ \sum_{i=1}^n Y_iX_i  - \bar{Y}_n \sum_{i=1}^nX_i}{ \sum_{i=1}^n X_i^2 - \bar{X}_n\sum_{i=1}^nX_i}\\
+\hat \beta_0 &amp; = \bar{Y}_n - \hat{\beta}_1 \bar{X}_n
+\end{aligned}
+\]</span></p>
+<p>Recall that we also need an estimate for <span class="math inline">\(\sigma^2\)</span>. An unbiased estimate turns out to be</p>
+<p><span class="math display">\[\hat{\sigma}^2 = \left( \frac{1}{n - 2} \right) \sum_{i=1}^n \hat{\epsilon}_i^2\]</span></p>
+<p><img src="13-mle-ols_files/figure-html/sim-lm-1.png" width="90%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="maximum-likelihood-estimation" class="section level3 hasAnchor" number="13.2.4">
+<h3><span class="header-section-number">13.2.4</span> Maximum likelihood estimation<a href="mle-ols.html#maximum-likelihood-estimation" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Suppose we add the assumption that <span class="math inline">\(\epsilon_i | X_i \sim N(0, \sigma^2)\)</span>, that is,</p>
+<p><span class="math display">\[Y_i | X_i \sim N(\mu_i, \sigma^2)\]</span></p>
+<p>where <span class="math inline">\(\mu_i = \beta_0 + \beta_1 X_i\)</span>. This means each <span class="math inline">\(i\)</span>th observation has a <strong>systematic</strong> mean that varies based on the value of <span class="math inline">\(X_i\)</span>. The likelihood function is</p>
+<p><span class="math display">\[
+\begin{align}
+\prod_{i=1}^n f(X_i, Y_i) &amp;= \prod_{i=1}^n f_X(X_i) f_{Y | X} (Y_i | X_i) \\
+&amp;= \prod_{i=1}^n f_X(X_i) \times \prod_{i=1}^n f_{Y | X} (Y_i | X_i) \\
+&amp;= \Lagr_1 \times \Lagr_2
+\end{align}
+\]</span></p>
+<p>where</p>
+<p><span class="math display">\[
+\begin{align}
+\Lagr_1 &amp;= \prod_{i=1}^n f_X(X_i) \\
+\Lagr_2 &amp;= \prod_{i=1}^n f_{Y | X} (Y_i | X_i)
+\end{align}
+\]</span></p>
+<p><span class="math inline">\(\Lagr_1\)</span> does not involve the parameters <span class="math inline">\(\beta_0, \beta_1\)</span>. Instead we can focus on the second term <span class="math inline">\(\Lagr_2\)</span> which is called the <strong>conditional likelihood</strong>, given by</p>
+<p><span class="math display">\[
+\begin{align}
+\Lagr_2 &amp;\equiv \Lagr(\beta_0, \beta_1, \sigma^2) \\
+&amp;= \prod_{i=1}^n f_{Y | X}(Y_i | X_i) \\
+&amp;\propto \frac{1}{\sigma} \exp \left\{ -\frac{1}{2\sigma^2} \sum_{i=1}^n (Y_i - \mu_i)^2 \right\}
+\end{align}
+\]</span></p>
+<p>The conditional <strong>log-likelihood</strong> is</p>
+<p><span class="math display">\[\lagr(\beta_0, \beta_1, \sigma^2) = -n \log(\sigma) - \frac{1}{2\sigma^2} \left( Y_i - (\beta_0 + \beta_1 X_i) \right)^2\]</span></p>
+<p>To find the MLE of <span class="math inline">\((\beta_0, \beta_1)\)</span>, we maximize <span class="math inline">\(\lagr(\beta_0, \beta_1, \sigma^2)\)</span>. This is equivalent to minimizing the RSS</p>
+<p><span class="math display">\[RSS = \sum_{i=1}^n \hat{\epsilon}_i^2 = \sum_{i=1}^n \left( Y_i - (\hat{\beta}_0 + \hat{\beta}_1 x) \right)\]</span></p>
+<p>Therefore, under the assumption that the residuals are distributed normally, the least squares estimator is also the maximum likelihood estimator.</p>
+</div>
+<div id="properties-of-the-least-squares-estimator" class="section level3 hasAnchor" number="13.2.5">
+<h3><span class="header-section-number">13.2.5</span> Properties of the least squares estimator<a href="mle-ols.html#properties-of-the-least-squares-estimator" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>In regression problems, we usually focus on the properties of the estimators conditional on <span class="math inline">\(X^n = (X_1, \ldots, X_n)\)</span>. Thus we state the means and variances as conditional means and variances.</p>
+<p>Let <span class="math inline">\(\hat{\beta}^T = (\hat{\beta}_0, \hat{\beta}_1)^T\)</span> denote the least squares estimators (<span class="math inline">\(^T\)</span>) simply indicates the vector is transposed to be a column vector. Then</p>
+<p><span class="math display">\[
+\begin{align}
+\E (\hat{\beta} | X^n) &amp;= \begin{pmatrix}
+  \beta_0 \\
+  \beta_1
+\end{pmatrix} \\
+\Var (\hat{\beta} | X^n) &amp;= \frac{\sigma^2}{n s_X^2}  \begin{pmatrix}
+  \frac{1}{n} \sum_{i=1}^n X_i^2 &amp; -\bar{X}^n \\
+  -\bar{X}^n &amp; 1
+\end{pmatrix}
+\end{align}
+\]</span></p>
+<p>where</p>
+<p><span class="math display">\[s_X^2 = \frac{1}{n} \sum_{i=1}^n (X_i - \bar{X}_n)^2\]</span></p>
+<p>The estimated standard errors of <span class="math inline">\(\hat{\beta}_0, \hat{\beta}_1\)</span> are obtained by taking the square roots of the corresponding diagonal terms of <span class="math inline">\(\Var (\hat{\beta} | X^n)\)</span> and inserting the estimate <span class="math inline">\(\hat{\sigma}\)</span> for <span class="math inline">\(\sigma\)</span>. Thus,</p>
+<p><span class="math display">\[
+\begin{align}
+\widehat{\se} (\hat{\beta}_0) &amp;= \frac{\hat{\sigma}}{s_X \sqrt{n}} \sqrt{\frac{ \sum_{i=1}^n X_i^2}{n}} \\
+\widehat{\se} (\hat{\beta}_1) &amp;= \frac{\hat{\sigma}}{s_X \sqrt{n}}
+\end{align}
+\]</span></p>
+<p>Under appropriate conditions, these estimators meet the criteria for maximum likelihood estimators.</p>
+</div>
+</div>
+<div id="assumptions-of-linear-regression-models" class="section level2 hasAnchor" number="13.3">
+<h2><span class="header-section-number">13.3</span> Assumptions of linear regression models<a href="mle-ols.html#assumptions-of-linear-regression-models" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Basic linear regression follows the functional form:</p>
+<p><span class="math display">\[Y_i = \beta_0 + \beta_1 X_i + \epsilon_i\]</span></p>
+<p>where <span class="math inline">\(Y_i\)</span> is the value of the response variable <span class="math inline">\(Y\)</span> for the <span class="math inline">\(i\)</span>th observation, <span class="math inline">\(X_i\)</span> is the value for the explanatory variable <span class="math inline">\(X\)</span> for the <span class="math inline">\(i\)</span>th observation. The coefficients <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> are <strong>population regression coefficients</strong> - our goal is to estimate these population parameters given the observed data. <span class="math inline">\(\epsilon_i\)</span> is the error representing the aggregated omitted causes of <span class="math inline">\(Y\)</span>, other explanatory variables that could be included in the model, measurement error in <span class="math inline">\(Y\)</span>, and any inherently random component of <span class="math inline">\(Y\)</span>.</p>
+<p>The key assumptions of linear regression concern the behavior of the errors.</p>
+<div id="linearity" class="section level3 hasAnchor" number="13.3.1">
+<h3><span class="header-section-number">13.3.1</span> Linearity<a href="mle-ols.html#linearity" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The expectation of the error is 0:</p>
+<p><span class="math display">\[\E(\epsilon_i) \equiv E(\epsilon_i | X_i) = 0\]</span></p>
+<p>This allows us to recover the expected value of the response variable as a linear function of the explanatory variable:</p>
+<p><span class="math display">\[
+\begin{aligned}
+\mu_i \equiv E(Y_i) \equiv E(Y | X_i) &amp;= E(\beta_0 + \beta_1 X_i + \epsilon_i) \\
+\mu_i &amp;= \beta_0 + \beta_1 X_i + E(\epsilon_i) \\
+\mu_i &amp;= \beta_0 + \beta_1 X_i + 0 \\
+\mu_i &amp;= \beta_0 + \beta_1 X_i
+\end{aligned}
+\]</span></p>
+
+<div class="rmdnote">
+Because <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> are fixed parameters in the population, we can remove them from the expectation operator.
+</div>
+</div>
+<div id="constant-variance" class="section level3 hasAnchor" number="13.3.2">
+<h3><span class="header-section-number">13.3.2</span> Constant variance<a href="mle-ols.html#constant-variance" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The variance of the errors is the same regardless of the values of <span class="math inline">\(X\)</span>:</p>
+<p><span class="math display">\[\Var(\epsilon_i | X_i) = \sigma^2\]</span></p>
+</div>
+<div id="normality" class="section level3 hasAnchor" number="13.3.3">
+<h3><span class="header-section-number">13.3.3</span> Normality<a href="mle-ols.html#normality" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The errors are assumed to be normally distributed:</p>
+<p><span class="math display">\[\epsilon_i \mid X_i \sim N(0, \sigma^2)\]</span></p>
+</div>
+<div id="independence" class="section level3 hasAnchor" number="13.3.4">
+<h3><span class="header-section-number">13.3.4</span> Independence<a href="mle-ols.html#independence" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Observations are sampled independently from one another. Any pair of errors <span class="math inline">\(\epsilon_i\)</span> and <span class="math inline">\(\epsilon_j\)</span> are independent for <span class="math inline">\(i \neq j\)</span>. Simple random sampling from a large population will ensure this assumption is met. However data collection procedures frequently (and explicitly) violate this assumption (e.g. time series data, panel survey data).</p>
+</div>
+<div id="fixed-x-or-x-measured-without-error-and-independent-of-the-error" class="section level3 hasAnchor" number="13.3.5">
+<h3><span class="header-section-number">13.3.5</span> Fixed <span class="math inline">\(X\)</span>, or <span class="math inline">\(X\)</span> measured without error and independent of the error<a href="mle-ols.html#fixed-x-or-x-measured-without-error-and-independent-of-the-error" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><span class="math inline">\(X\)</span> is assumed to be fixed or measured without error and independent of the error. With a fixed <span class="math inline">\(X\)</span>, the researcher controls the precise value of <span class="math inline">\(X\)</span> for a given observation (think experimental design with treatment/control). In observational study, we assume <span class="math inline">\(X\)</span> is measured without error and that the explanatory variable and the error are independent in the population from which the sample is drawn.</p>
+<p><span class="math display">\[\epsilon_i \sim N(0, \sigma^2), \text{for } i = 1, \dots, n\]</span></p>
+</div>
+<div id="x-is-not-invariant" class="section level3 hasAnchor" number="13.3.6">
+<h3><span class="header-section-number">13.3.6</span> <span class="math inline">\(X\)</span> is not invariant<a href="mle-ols.html#x-is-not-invariant" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>If <span class="math inline">\(X\)</span> is fixed, it must vary (i.e. it’s values cannot all be the same). If <span class="math inline">\(X\)</span> is random, then in the population <span class="math inline">\(X\)</span> must vary. You cannot estimate a regression line for an invariant <span class="math inline">\(X\)</span>.</p>
+<p><img src="13-mle-ols_files/figure-html/invariant-1.png" width="90%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="handling-violations-of-assumptions" class="section level3 hasAnchor" number="13.3.7">
+<h3><span class="header-section-number">13.3.7</span> Handling violations of assumptions<a href="mle-ols.html#handling-violations-of-assumptions" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>If these assumptions are violated, conducting inference from linear regression becomes tricky, biased, inefficient, and/or error prone. You could move to a more robust inferential method such as nonparametric regression, decision trees, support vector machines, etc., but these methods are more tricky to generate inference about the explanatory variables. Instead, we can attempt to diagnose assumption violations and impose solutions while still constraining ourselves to a linear regression framework.</p>
+</div>
+</div>
+<div id="unusual-and-influential-data" class="section level2 hasAnchor" number="13.4">
+<h2><span class="header-section-number">13.4</span> Unusual and influential data<a href="mle-ols.html#unusual-and-influential-data" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><strong>Outliers</strong> are observations that are somehow unusual, either in their value of <span class="math inline">\(Y_i\)</span>, of one or more <span class="math inline">\(X_i\)</span>s, or some combination thereof. Outliers have the potential to have a disproportionate influence on a regression model.</p>
+<div id="terms" class="section level3 hasAnchor" number="13.4.1">
+<h3><span class="header-section-number">13.4.1</span> Terms<a href="mle-ols.html#terms" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li><p><strong>Outlier</strong> - an observation that has an unusual value on the dependent variable <span class="math inline">\(Y\)</span> given its particular combination of values on <span class="math inline">\(X\)</span></p></li>
+<li><p><strong>Leverage</strong> - degree of potential influence on the coefficient estimates that a given observation can (but not necessarily does) have</p></li>
+<li><p><strong>Discrepancy</strong> - extent to which an observation is “unusual” or “different” from the rest of the data</p></li>
+<li><p><strong>Influence</strong> - how much effect a particular observation’s value(s) on <span class="math inline">\(Y\)</span> and <span class="math inline">\(X\)</span> have on the coefficient estimates. Influence is a function of leverage and discrepancy:</p>
+<p><span class="math display">\[\text{Influence} = \text{Leverage} \times \text{Discrepancy}\]</span></p></li>
+</ul>
+<p><img src="13-mle-ols_files/figure-html/flintstones-sim-1.png" width="90%" style="display: block; margin: auto;" /></p>
+<ul>
+<li>Dino is an observation with high leverage but low discrepancy (close to the regression line defined by Betty, Fred, and Wilma). Therefore he has little impact on the regression line (long dashed line); his influence is low because his discrepancy is low.</li>
+<li>Barney has high leverage (though lower than Dino) and high discrepancy, so he substantially influences the regression results (short-dashed line).</li>
+</ul>
+</div>
+<div id="measuring-leverage" class="section level3 hasAnchor" number="13.4.2">
+<h3><span class="header-section-number">13.4.2</span> Measuring leverage<a href="mle-ols.html#measuring-leverage" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Leverage is typically assessed using the <strong>leverage</strong> (<strong>hat</strong>) <strong>statistic</strong>:</p>
+<p><span class="math display">\[h_i = \frac{1}{n} + \frac{(X_i - \bar{X})^2}{\sum_{j=1}^{n} (X_{j} - \bar{X})^2}\]</span></p>
+<ul>
+<li>Measures the contribution of observation <span class="math inline">\(Y_i\)</span> to the fitted value <span class="math inline">\(\hat{Y}_j\)</span> (the other values in the dataset)</li>
+<li>It is solely a function of <span class="math inline">\(X\)</span></li>
+<li>Larger values indicate higher leverage</li>
+<li><span class="math inline">\(\frac{1}{n} \leq h_i \leq 1\)</span></li>
+<li><span class="math inline">\(\bar{h} = \frac{(p + 1)}{n}\)</span></li>
+</ul>
+<p>Observations with a leverage statistic greater than the average could have high leverage.</p>
+</div>
+<div id="measuring-discrepancy" class="section level3 hasAnchor" number="13.4.3">
+<h3><span class="header-section-number">13.4.3</span> Measuring discrepancy<a href="mle-ols.html#measuring-discrepancy" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Residuals are a natural way to look for discrepant or outlying observations (discrepant observations typically have large residuals, or differences between actual and fitted values for <span class="math inline">\(y_i\)</span>.) The problem is that variability of the errors <span class="math inline">\(\hat{\epsilon}_i\)</span> do not have equal variances, even if the actual errors <span class="math inline">\(\epsilon_i\)</span> do have equal variances:</p>
+<p><span class="math display">\[\Var(\hat{\epsilon}_i) = \sigma^2 (1 - h_i)\]</span></p>
+<p>High leverage observations tend to have small residuals, which makes sense because they pull the regression line towards them. Alternatively we can calculate a <strong>standardized residual</strong> which parses out the variability in <span class="math inline">\(X_i\)</span> for <span class="math inline">\(\hat{\epsilon}_i\)</span>:</p>
+<p><span class="math display">\[\hat{\epsilon}_i &#39; \equiv \frac{\hat{\epsilon}_i}{S_{E} \sqrt{1 - h_i}}\]</span></p>
+<p>where <span class="math inline">\(S_E\)</span> is the standard error of the regression:</p>
+<p><span class="math display">\[S_E = \sqrt{\frac{\hat{\epsilon}_i^2}{(n - k - 1)}}\]</span></p>
+<p>The problem is that the numerator and the denominator are not independent - they both contain <span class="math inline">\(\hat{\epsilon}_i\)</span>, so <span class="math inline">\(\hat{\epsilon}_i &#39;\)</span> does not follow a <span class="math inline">\(t\)</span>-distribution. Instead, we can modify this measure by calculating <span class="math inline">\(S_{E(-i)}\)</span>; that is, refit the model deleting each <span class="math inline">\(i\)</span>th observation, estimating the standard error of the regression <span class="math inline">\(S_{E(-i)}\)</span> based on the remaining <span class="math inline">\(i-1\)</span> observations. We then calculate the <strong>studentized residual</strong>:</p>
+<p><span class="math display">\[\hat{\epsilon}_i^{\ast} \equiv \frac{\hat{\epsilon}_i}{S_{E(-i)} \sqrt{1 - h_i}}\]</span></p>
+<p>which now has an independent numerator and denominator and follows a <span class="math inline">\(t\)</span>-distribution with <span class="math inline">\(n-k-2\)</span> degrees of freedom. They are on a common scale and we should expect roughly 95% of the studentized residuals to fall within the interval <span class="math inline">\([-2,2]\)</span>.</p>
+</div>
+<div id="measuring-influence" class="section level3 hasAnchor" number="13.4.4">
+<h3><span class="header-section-number">13.4.4</span> Measuring influence<a href="mle-ols.html#measuring-influence" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>As described previously, influence is the a combination of an observation’s leverage and discrepancy. In other words, influence is the effect of a particular observation on the coefficient estimates. A simple measure of that influence is the difference between the coefficient estimate with and without the observation in question:</p>
+<p><span class="math display">\[D_{ij} = \hat{\beta_1j} - \hat{\beta}_{1j(-i)}, \text{for } i=1, \dots, n \text{ and } j = 0, \dots, k\]</span></p>
+<p>This measure is called <span class="math inline">\(\text{DFBETA}_{ij}\)</span>. Since coefficient estimates are scaled differently depending on how the variables are scaled, we can rescale <span class="math inline">\(\text{DFBETA}_{ij}\)</span> by the coefficient’s standard error to account for this fact:</p>
+<p><span class="math display">\[D^{\ast}_{ij} = \frac{D_{ij}}{SE_{-i}(\beta_{1j})}\]</span></p>
+<p>This measure is called <span class="math inline">\(\text{DFBETAS}_{ij}\)</span>.</p>
+<ul>
+<li>Positive values of <span class="math inline">\(\text{DFBETAS}_{ij}\)</span> correspond to observations which <strong>decrease</strong> the estimate of <span class="math inline">\(\hat{\beta}_{1j}\)</span></li>
+<li>Negative values of <span class="math inline">\(\text{DFBETAS}_{ij}\)</span> correspond to observations which <strong>increase</strong> the estimate of <span class="math inline">\(\hat{\beta}_{1j}\)</span></li>
+</ul>
+<p>Frequently <span class="math inline">\(\text{DFBETA}\)</span>s are used to construct summary statistics of each observation’s influence on the regression model. <strong>Cook’s D</strong> is based on the theory that one could conduct an <span class="math inline">\(F\)</span>-test on each observation for the hypothesis that <span class="math inline">\(\beta_{1j} = \hat{\beta}_{1k(-i)} \forall j \in J\)</span>. The formula for this measure is:</p>
+<p><span class="math display">\[D_i = \frac{\hat{\epsilon}^{&#39;2}_i}{k + 1} \times \frac{h_i}{1 - h_i}\]</span></p>
+<p>where <span class="math inline">\(\hat{\epsilon}^{&#39;2}_i\)</span> is the squared standardized residual, <span class="math inline">\(k\)</span> is the number of parameters in the model, and <span class="math inline">\(\frac{h_i}{1 - h_i}\)</span> is the hat value. We look for values of <span class="math inline">\(D_i\)</span> that stand out from the rest.</p>
+</div>
+<div id="visualizing-leverage-discrepancy-and-influence" class="section level3 hasAnchor" number="13.4.5">
+<h3><span class="header-section-number">13.4.5</span> Visualizing leverage, discrepancy, and influence<a href="mle-ols.html#visualizing-leverage-discrepancy-and-influence" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>For example, here are the results of a basic model of the number of federal laws struck down by the U.S. Supreme Court in each Congress, based on:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Age</strong> - the mean age of the members of the Supreme Court</li>
+<li><strong>Tenure</strong> - mean tenure of the members of the Court</li>
+<li><strong>Unified</strong> - a dummy variable indicating whether or not the Congress was controlled by the same party in that period</li>
+</ol>
+<pre><code>## # A tibble: 4 × 5
+##   term        estimate std.error statistic    p.value
+##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt;
+## 1 (Intercept) -12.1       2.54       -4.76 0.00000657
+## 2 age           0.219     0.0448      4.88 0.00000401
+## 3 tenure       -0.0669    0.0643     -1.04 0.300     
+## 4 unified       0.718     0.458       1.57 0.121</code></pre>
+<p>A major concern with regression analysis of this data is that the results are being driven by outliers in the data.</p>
+<p><img src="13-mle-ols_files/figure-html/dahl-time-1.png" width="90%" style="display: block; margin: auto;" /><img src="13-mle-ols_files/figure-html/dahl-time-2.png" width="90%" style="display: block; margin: auto;" /></p>
+<p>During the 74th Congress (1935-36), the New Deal/Court-packing crisis was associated with an abnormally large number of laws struck down by the court. We should determine whether or not this observation is driving our results.</p>
+<p>By combining all three variables into a “bubble plot”, we can visualize all three variables simultaneously.</p>
+<ul>
+<li>Each observation’s leverage (<span class="math inline">\(h_i\)</span>) is plotted on the <span class="math inline">\(x\)</span> axis</li>
+<li>Each observation’s discrepancy (i.e. Studentized residual) is plotted on the <span class="math inline">\(y\)</span> axis</li>
+<li>Each symbol is drawn proportional to the observation’s Cook’s <span class="math inline">\(D_i\)</span></li>
+</ul>
+<p><img src="13-mle-ols_files/figure-html/bubble-1.png" width="90%" style="display: block; margin: auto;" /></p>
+<p>The bubble plot tells us several things:</p>
+<ul>
+<li>The size/color of the symbols is proportional to Cook’s D, which is in turn a multiplicative function of the square of the Studentized residuals (Y axis) and the leverage (X axis), so observations farther away from <span class="math inline">\(Y=0\)</span> and/or have higher values of <span class="math inline">\(X\)</span> will have larger symbols.</li>
+<li>The plot tells us whether the large influence of an observation is due to high discrepancy, high leverage, or both
+<ul>
+<li>The 104th Congress has relatively low leverage but is very discrepant</li>
+<li>The 74th and 98th Congresses demonstrate both high discrepancy and high leverage</li>
+</ul></li>
+</ul>
+</div>
+<div id="numerical-rules-of-thumb" class="section level3 hasAnchor" number="13.4.6">
+<h3><span class="header-section-number">13.4.6</span> Numerical rules of thumb<a href="mle-ols.html#numerical-rules-of-thumb" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>These are not hard and fast rules rigorously defended by mathematical proofs; they are simply potential rules of thumb to follow when interpreting the above statistics.</p>
+<div id="hat-values" class="section level4 hasAnchor" number="13.4.6.1">
+<h4><span class="header-section-number">13.4.6.1</span> Hat-values<a href="mle-ols.html#hat-values" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Anything exceeding twice the average <span class="math inline">\(\bar{h} = \frac{k + 1}{n}\)</span> is noteworthy. In our example that would be the following observations:</p>
+<pre><code>## # A tibble: 9 × 10
+##   Congress congress nulls   age tenure unified  year    hat student  cooksd
+##   &lt;chr&gt;       &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
+## 1 1st             1     0  49.8  0.800       1  1789 0.0974   0.330 0.00296
+## 2 3rd             3     0  52.8  4.20        0  1793 0.113    0.511 0.00841
+## 3 12th           12     0  49    6.60        1  1811 0.0802   0.669 0.00980
+## 4 17th           17     0  59   16.6         1  1821 0.0887  -0.253 0.00157
+## 5 20th           20     0  61.7 17.4         1  1827 0.0790  -0.577 0.00719
+## 6 23rd           23     0  64   18.4         1  1833 0.0819  -0.844 0.0159 
+## 7 34th           34     0  64   14.6         0  1855 0.0782  -0.561 0.00671
+## 8 36th           36     0  68.7 17.8         0  1859 0.102   -1.07  0.0326 
+## 9 99th           99     3  71.9 16.7         0  1985 0.0912   0.295 0.00221</code></pre>
+</div>
+<div id="studentized-residuals" class="section level4 hasAnchor" number="13.4.6.2">
+<h4><span class="header-section-number">13.4.6.2</span> Studentized residuals<a href="mle-ols.html#studentized-residuals" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Anything outside of the range <span class="math inline">\([-2,2]\)</span> is discrepant.</p>
+<pre><code>## # A tibble: 7 × 10
+##   Congress congress nulls   age tenure unified  year    hat student cooksd
+##   &lt;chr&gt;       &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;
+## 1 67th           67     6  66     9          1  1921 0.0361    2.14 0.0415
+## 2 74th           74    10  71.1  14.2        1  1935 0.0514    4.42 0.223 
+## 3 90th           90     6  64.7  13.3        1  1967 0.0195    2.49 0.0292
+## 4 91st           91     6  65.1  13          1  1969 0.0189    2.42 0.0269
+## 5 92nd           92     5  62     9.20       1  1971 0.0146    2.05 0.0150
+## 6 98th           98     7  69.9  14.7        0  1983 0.0730    3.02 0.165 
+## 7 104th         104     8  60.6  12.5        1  1995 0.0208    4.48 0.0897</code></pre>
+</div>
+<div id="influence" class="section level4 hasAnchor" number="13.4.6.3">
+<h4><span class="header-section-number">13.4.6.3</span> Influence<a href="mle-ols.html#influence" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p><span class="math display">\[D_i &gt; \frac{4}{n - k - 1}\]</span></p>
+<p>where <span class="math inline">\(n\)</span> is the number of observations and <span class="math inline">\(k\)</span> is the number of coefficients in the regression model.</p>
+<pre><code>## # A tibble: 4 × 10
+##   Congress congress nulls   age tenure unified  year    hat student cooksd
+##   &lt;chr&gt;       &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;
+## 1 67th           67     6  66      9         1  1921 0.0361    2.14 0.0415
+## 2 74th           74    10  71.1   14.2       1  1935 0.0514    4.42 0.223 
+## 3 98th           98     7  69.9   14.7       0  1983 0.0730    3.02 0.165 
+## 4 104th         104     8  60.6   12.5       1  1995 0.0208    4.48 0.0897</code></pre>
+</div>
+</div>
+<div id="how-to-treat-unusual-observations" class="section level3 hasAnchor" number="13.4.7">
+<h3><span class="header-section-number">13.4.7</span> How to treat unusual observations<a href="mle-ols.html#how-to-treat-unusual-observations" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="mistakes" class="section level4 hasAnchor" number="13.4.7.1">
+<h4><span class="header-section-number">13.4.7.1</span> Mistakes<a href="mle-ols.html#mistakes" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>If the data is just wrong (miscoded, mismeasured, misentered, etc.), then either fix the error, impute a plausible value for the observation, or omit the offending observation.</p>
+</div>
+<div id="weird-observations" class="section level4 hasAnchor" number="13.4.7.2">
+<h4><span class="header-section-number">13.4.7.2</span> Weird observations<a href="mle-ols.html#weird-observations" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>If the data for a particular observation is just strange, then you may want to ask “why is it so strange?”</p>
+<ol style="list-style-type: decimal">
+<li>The data are strange because something unusual/weird/singular happened to that data point
+<ul>
+<li>If that “something” is important to the theory being tested, then you may want to respecify your model</li>
+<li>If the answer is no, then you can drop the offending observation from the analysis</li>
+</ul></li>
+<li>The data are strange for no apparent reason
+<ul>
+<li>Not really a good answer here. Try digging into the history of the observation to find out what is going on.</li>
+<li>Dropping the observation is a judgment call</li>
+<li>You could always rerun the model omitting the observation and including the results as a footnote (i.e. a robustness check)</li>
+</ul></li>
+</ol>
+<p>For example, let’s re-estimate the SCOTUS model and omit observations that were commonly identified as outliers:<a href="#fn23" class="footnote-ref" id="fnref23"><sup>23</sup></a></p>
+<pre><code>## [1] 0.232
+## [1] 0.258
+## [1] 1.68
+## [1] 1.29</code></pre>
+<p><img src="13-mle-ols_files/figure-html/dahl-reestimate-1.png" width="90%" style="display: block; margin: auto;" /></p>
+<ul>
+<li>Not much has changed from the original model
+<ul>
+<li>Estimate for age is a bit smaller, as well as a smaller standard error</li>
+<li>Tenure is also smaller, but only fractionally</li>
+<li>Unified is a bit larger and with a smaller standard error</li>
+</ul></li>
+<li><span class="math inline">\(R^2\)</span> is larger for the omitted observation model, and the RMSE is smaller</li>
+<li>These three observations mostly influenced the precision of the estimates (i.e. standard errors), not the accuracy of them</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="non-normally-distributed-errors" class="section level2 hasAnchor" number="13.5">
+<h2><span class="header-section-number">13.5</span> Non-normally distributed errors<a href="mle-ols.html#non-normally-distributed-errors" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Recall that OLS assumes errors are distributed normally:</p>
+<p><span class="math display">\[\epsilon_i | X_i \sim N(0, \sigma^2)\]</span></p>
+<p>However according to the central limit theorem, inference based on the least-squares estimator is approximately valid under broad conditions.<a href="#fn24" class="footnote-ref" id="fnref24"><sup>24</sup></a> So while the <strong>validity</strong> of the estimates is robust to violating this assumption, the <strong>efficiency</strong> of the estimates is not robust. Recall that efficiency guarantees us the smallest possible sampling variance and therefore the smallest possible mean squared error (MSE). Heavy-tailed or skewed distributions of the errors will therefore give rise to outliers (which we just recognized as a problem). Alternatively, we interpret the least-squares fit as a conditional mean <span class="math inline">\(Y | X\)</span>. But arithmetic means are not good measures of the center of a highly skewed distribution.</p>
+<div id="detecting-non-normally-distributed-errors" class="section level3 hasAnchor" number="13.5.1">
+<h3><span class="header-section-number">13.5.1</span> Detecting non-normally distributed errors<a href="mle-ols.html#detecting-non-normally-distributed-errors" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Graphical interpretations are easiest to detect non-normality in the errors. Consider a regression model using survey data from the 1994 wave of Statistics Canada’s Survey of Labour and Income Dynamics (SLID), explaining hourly wages as an outcome of sex, education, and age:</p>
+<pre><code>## # A tibble: 3,997 × 4
+##      age sex    compositeHourlyWages yearsEducation
+##    &lt;dbl&gt; &lt;chr&gt;                 &lt;dbl&gt;          &lt;dbl&gt;
+##  1    40 Male                  10.6              15
+##  2    19 Male                  11                13
+##  3    46 Male                  17.8              14
+##  4    50 Female                14                16
+##  5    31 Male                   8.2              15
+##  6    30 Female                17.0              13
+##  7    61 Female                 6.7              12
+##  8    46 Female                14                14
+##  9    43 Male                  19.2              18
+## 10    17 Male                   7.25             11
+## # … with 3,987 more rows
+## # A tibble: 4 × 5
+##   term           estimate std.error statistic   p.value
+##   &lt;chr&gt;             &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+## 1 (Intercept)      -8.12    0.599       -13.6 5.27e- 41
+## 2 sexMale           3.47    0.207        16.8 4.04e- 61
+## 3 yearsEducation    0.930   0.0343       27.1 5.47e-149
+## 4 age               0.261   0.00866      30.2 3.42e-180
+## [1]  967 3911</code></pre>
+<p><img src="13-mle-ols_files/figure-html/slid-1.png" width="90%" style="display: block; margin: auto;" /></p>
+<p>The above figure is a <strong>quantile-comparison plot</strong>, graphing for each observation its studentized residual on the <span class="math inline">\(y\)</span> axis and the corresponding quantile in the <span class="math inline">\(t\)</span>-distribution on the <span class="math inline">\(x\)</span> axis. The dashed lines indicate 95% confidence intervals calculated under the assumption that the errors are normally distributed. If any observations fall outside this range, this is an indication that the assumption has been violated. Clearly, here that is the case.</p>
+<p><img src="13-mle-ols_files/figure-html/slid-density-1.png" width="90%" style="display: block; margin: auto;" /></p>
+<p>From the density plot of the studentized residuals, we can also see that the residuals are positively skewed.</p>
+</div>
+<div id="fixing-non-normally-distributed-errors" class="section level3 hasAnchor" number="13.5.2">
+<h3><span class="header-section-number">13.5.2</span> Fixing non-normally distributed errors<a href="mle-ols.html#fixing-non-normally-distributed-errors" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Power and log transformations are typically used to correct this problem. Here, trial and error reveals that by log transforming the wage variable, the distribution of the residuals becomes much more symmetric:</p>
+<pre><code>## # A tibble: 4 × 5
+##   term           estimate std.error statistic   p.value
+##   &lt;chr&gt;             &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+## 1 (Intercept)      1.10    0.0380        28.9 1.97e-167
+## 2 sexMale          0.224   0.0131        17.1 2.16e- 63
+## 3 yearsEducation   0.0559  0.00217       25.7 2.95e-135
+## 4 age              0.0182  0.000549      33.1 4.50e-212
+## [1] 2760 3267</code></pre>
+<p><img src="13-mle-ols_files/figure-html/slid-log-1.png" width="90%" style="display: block; margin: auto;" /><img src="13-mle-ols_files/figure-html/slid-log-2.png" width="90%" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="non-constant-error-variance" class="section level2 hasAnchor" number="13.6">
+<h2><span class="header-section-number">13.6</span> Non-constant error variance<a href="mle-ols.html#non-constant-error-variance" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Recall that linear regression assumes the error terms <span class="math inline">\(\epsilon_i\)</span> have a constant variance, <span class="math inline">\(\text{Var}(\epsilon_i) = \sigma^2\)</span>. This is called <strong>homoscedasticity</strong>. Remember that the standard errors directly rely upon the estimate of this value:</p>
+<p><span class="math display">\[\widehat{\se}(\hat{\beta}_{1j}) = \sqrt{\hat{\sigma}^{2} (X&#39;X)^{-1}_{jj}}\]</span></p>
+<p>If the variances of the error terms are non-constant (aka <strong>heteroscedastic</strong>), our estimates of the parameters <span class="math inline">\(\hat{\beta}_1\)</span> will still be unbiased because they do not depend on <span class="math inline">\(\sigma^2\)</span>. However our estimates of the standard errors will be inaccurate - they will either be inflated or deflated, leading to incorrect inferences about the statistical significance of predictor variables.</p>
+<div id="detecting-heteroscedasticity" class="section level3 hasAnchor" number="13.6.1">
+<h3><span class="header-section-number">13.6.1</span> Detecting heteroscedasticity<a href="mle-ols.html#detecting-heteroscedasticity" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="graphically" class="section level4 hasAnchor" number="13.6.1.1">
+<h4><span class="header-section-number">13.6.1.1</span> Graphically<a href="mle-ols.html#graphically" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>We can uncover homo- or heteroscedasticity through the use of the residual plot. Below is data generated from the process:</p>
+<p><span class="math display">\[Y_i = 2 + 3X_i + \epsilon\]</span></p>
+<p>where <span class="math inline">\(\epsilon_i\)</span> is random error distributed normally <span class="math inline">\(N(0,1)\)</span>.</p>
+<p><img src="13-mle-ols_files/figure-html/sim-homo-1.png" width="90%" style="display: block; margin: auto;" /></p>
+<p>Compare this to a linear model fit to the data generating process:</p>
+<p><span class="math display">\[Y_i = 2 + 3X_i + \epsilon_i\]</span></p>
+<p>where <span class="math inline">\(\epsilon_i\)</span> is random error distributed normally <span class="math inline">\(N(0,\frac{X}{2})\)</span>. Note that the variance for the error term of each observation <span class="math inline">\(\epsilon_i\)</span> is not constant, and is itself a function of <span class="math inline">\(X\)</span>.</p>
+<p><img src="13-mle-ols_files/figure-html/sim-hetero-1.png" width="90%" style="display: block; margin: auto;" /></p>
+<p>We see a distinct funnel-shape to the relationship between the predicted values and the residuals. This is because by assuming the variance is constant, we substantially over or underestimate the actual response <span class="math inline">\(Y_i\)</span> as <span class="math inline">\(X_i\)</span> increases.</p>
+</div>
+<div id="statistical-tests" class="section level4 hasAnchor" number="13.6.1.2">
+<h4><span class="header-section-number">13.6.1.2</span> Statistical tests<a href="mle-ols.html#statistical-tests" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>There are formal statistical tests to check for heteroscedasticity. One such test is the <strong>Breusch-Pagan test</strong>. The procedure is:</p>
+<ul>
+<li>Estimate an OLS model and obtain the squared residuals <span class="math inline">\(\hat{\epsilon}^2\)</span></li>
+<li>Regress <span class="math inline">\(\hat{\epsilon}^2\)</span> against:
+<ul>
+<li>All the <span class="math inline">\(k\)</span> variables you think might be causing the heteroscedasticity</li>
+<li>By default, include the same explanatory variables as the original model</li>
+</ul></li>
+<li>Calculate the coefficient of determination (<span class="math inline">\(R^2_{\hat{\epsilon}^2}\)</span>) for the residual model and multiply it by the number of observations <span class="math inline">\(n\)</span>
+<ul>
+<li>The resulting statistic follows a <span class="math inline">\(\chi^2_{(k-1)}\)</span> distribution</li>
+<li>Rejecting the null hypothesis indicates heteroscedasticity is present</li>
+</ul></li>
+</ul>
+<p>The <code>lmtest</code> library contains a function for the Breusch-Pagan test:</p>
+<pre><code>## 
+##  studentized Breusch-Pagan test
+## 
+## data:  sim_homo_mod
+## BP = 1e-04, df = 1, p-value = 1
+## 
+##  studentized Breusch-Pagan test
+## 
+## data:  sim_hetero_mod
+## BP = 168, df = 1, p-value &lt;2e-16</code></pre>
+</div>
+</div>
+<div id="accounting-for-heteroscedasticity" class="section level3 hasAnchor" number="13.6.2">
+<h3><span class="header-section-number">13.6.2</span> Accounting for heteroscedasticity<a href="mle-ols.html#accounting-for-heteroscedasticity" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="weighted-least-squares-regression" class="section level4 hasAnchor" number="13.6.2.1">
+<h4><span class="header-section-number">13.6.2.1</span> Weighted least squares regression<a href="mle-ols.html#weighted-least-squares-regression" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Instead of assuming the errors have a constant variance <span class="math inline">\(\text{Var}(\epsilon_i) = \sigma^2\)</span>, instead we can assume that the errors are independent and normally distributed with mean zero and different variances <span class="math inline">\(\epsilon_i \sim N(0, \sigma_i^2)\)</span>:</p>
+<p><span class="math display">\[
+\begin{bmatrix}
+    \sigma_1^2       &amp; 0 &amp; 0 &amp; 0 \\
+    0       &amp; \sigma_2^2 &amp; 0 &amp; 0 \\
+    0       &amp; 0 &amp; \ddots &amp; 0 \\
+    0       &amp; 0 &amp; 0 &amp; \sigma_n^2 \\
+\end{bmatrix}
+\]</span></p>
+<p>We can define the reciprocal of each variance <span class="math inline">\(\sigma_i^2\)</span> as the weight <span class="math inline">\(w_i = \frac{1}{\sigma_i^2}\)</span>, then let matrix <span class="math inline">\(\mathbf{W}\)</span> be a diagonal matrix containing these weights:</p>
+<p><span class="math display">\[
+\mathbf{W} =
+\begin{bmatrix}
+    \frac{1}{\sigma_1^2}       &amp; 0 &amp; 0 &amp; 0 \\
+    0       &amp; \frac{1}{\sigma_2^2} &amp; 0 &amp; 0 \\
+    0       &amp; 0 &amp; \ddots &amp; 0 \\
+    0       &amp; 0 &amp; 0 &amp; \frac{1}{\sigma_n^2} \\
+\end{bmatrix}
+\]</span></p>
+<p>So rather than following the traditional linear regression estimator</p>
+<p><span class="math display">\[\hat{\mathbf{\beta_1}} = (\mathbf{X}&#39;\mathbf{X})^{-1} \mathbf{X}&#39;\mathbf{y}\]</span></p>
+<p>we can substitute in the weighting matrix <span class="math inline">\(\mathbf{W}\)</span>:</p>
+<p><span class="math display">\[\hat{\mathbf{\beta_1}} = (\mathbf{X}&#39; \mathbf{W} \mathbf{X})^{-1} \mathbf{X}&#39; \mathbf{W} \mathbf{y}\]</span></p>
+<p><span class="math display">\[\sigma_{i}^2 = \frac{\sum(w_i \hat{\epsilon}_i^2)}{n}\]</span></p>
+<p>This is equivalent to minimizing the weighted sum of squares, according greater weight to observations with smaller variance.</p>
+<p>How do we estimate the weights <span class="math inline">\(W_i\)</span>?</p>
+<ol style="list-style-type: decimal">
+<li>Use the residuals from a preliminary OLS regression to obtain estimates of the error variance within different subsets of observations.</li>
+<li>Model the weights as a function of observable variables in the model.</li>
+</ol>
+<p>For example, using the first approach on our original SLID model:</p>
+<pre><code>## # A tibble: 4 × 5
+##   term           estimate std.error statistic   p.value
+##   &lt;chr&gt;             &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+## 1 (Intercept)      -8.12    0.599       -13.6 5.27e- 41
+## 2 sexMale           3.47    0.207        16.8 4.04e- 61
+## 3 yearsEducation    0.930   0.0343       27.1 5.47e-149
+## 4 age               0.261   0.00866      30.2 3.42e-180
+## # A tibble: 4 × 5
+##   term           estimate std.error statistic p.value
+##   &lt;chr&gt;             &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
+## 1 (Intercept)      -8.10   0.0160       -506.       0
+## 2 sexMale           3.47   0.00977       356.       0
+## 3 yearsEducation    0.927  0.00142       653.       0
+## 4 age               0.261  0.000170     1534.       0</code></pre>
+<p><img src="13-mle-ols_files/figure-html/wls-1.png" width="90%" style="display: block; margin: auto;" /></p>
+<p>We see some mild changes in the estimated parameters, but drastic reductions in the standard errors. The problem is that this reduction is potentially biased through the estimated covariance matrix because the sampling error in the estimates should reflect the additional source of uncertainty, which is not explicitly accounted for just basing it on the original residuals. Instead, it would be better to model the weights as a function of relevant explanatory variables.<a href="#fn25" class="footnote-ref" id="fnref25"><sup>25</sup></a></p>
+</div>
+<div id="corrections-for-the-variance-covariance-estimates" class="section level4 hasAnchor" number="13.6.2.2">
+<h4><span class="header-section-number">13.6.2.2</span> Corrections for the variance-covariance estimates<a href="mle-ols.html#corrections-for-the-variance-covariance-estimates" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Alternatively, we could instead attempt to correct for heteroscedasticity only in the standard error estimates. This produces the same estimated parameters, but adjusts the standard errors to account for the violation of the constant error variance assumption (we won’t falsely believe our estimates are more precise than they really are.) One major estimation procedure are <strong>Huber-White standard errors</strong> (also called <strong>robust standard errors</strong>) which can be recovered using the <code>car::hccm()</code> function:<a href="#fn26" class="footnote-ref" id="fnref26"><sup>26</sup></a></p>
+<pre><code>## # A tibble: 4 × 6
+##   term           estimate std.error statistic   p.value std.error.rob
+##   &lt;chr&gt;             &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;         &lt;dbl&gt;
+## 1 (Intercept)      -8.12    0.599       -13.6 5.27e- 41       0.636  
+## 2 sexMale           3.47    0.207        16.8 4.04e- 61       0.207  
+## 3 yearsEducation    0.930   0.0343       27.1 5.47e-149       0.0385 
+## 4 age               0.261   0.00866      30.2 3.42e-180       0.00881</code></pre>
+<p>Notice that these new standard errors are a bit larger than the original model, accounting for the increased uncertainty of our parameter estimates due to heteroscedasticity.</p>
+</div>
+</div>
+</div>
+<div id="non-linearity-in-the-data" class="section level2 hasAnchor" number="13.7">
+<h2><span class="header-section-number">13.7</span> Non-linearity in the data<a href="mle-ols.html#non-linearity-in-the-data" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>By assuming the average error <span class="math inline">\(\E (\epsilon_i)\)</span> is 0 everywhere implies that the regression line (surface) accurately reflects the relationship between <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>. Violating this assumption means that the model fails to capture the systematic relationship between the response and explanatory variables. Therefore here, the term <strong>nonlinearity</strong> could mean a couple different things:</p>
+<ul>
+<li>The relationship between <span class="math inline">\(X_1\)</span> and <span class="math inline">\(Y\)</span> is nonlinear - that is, it is not constant and monotonic</li>
+<li>The relationship between <span class="math inline">\(X_1\)</span> and <span class="math inline">\(Y\)</span> is conditional on <span class="math inline">\(X_2\)</span> - that is, the relationship is interactive rather than purely additive</li>
+</ul>
+<p>Detecting nonlinearity can be tricky in higher-dimensional regression models with multiple explanatory variables.</p>
+<div id="partial-residual-plots" class="section level3 hasAnchor" number="13.7.1">
+<h3><span class="header-section-number">13.7.1</span> Partial residual plots<a href="mle-ols.html#partial-residual-plots" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Define the <strong>partial residual</strong> for the <span class="math inline">\(j\)</span>th explanatory variable:</p>
+<p><span class="math display">\[\hat{\epsilon}_i^{(j)} = \hat{\epsilon}_i + \hat{\beta}_j X_{ij}\]</span></p>
+<p>In essence, calculate the least-squares residual (<span class="math inline">\(\hat{\epsilon}_i\)</span>) and add to it the linear component of the partial relationship between <span class="math inline">\(Y\)</span> and <span class="math inline">\(X_j\)</span>. Finally, we can plot <span class="math inline">\(X_j\)</span> versus <span class="math inline">\(\hat{\epsilon}_i^{(j)}\)</span> and assess the relationship. For instance, consider the results of the logged wage model from earlier:</p>
+<p><img src="13-mle-ols_files/figure-html/part-resid-plot-1.png" width="90%" style="display: block; margin: auto;" /><img src="13-mle-ols_files/figure-html/part-resid-plot-2.png" width="90%" style="display: block; margin: auto;" /></p>
+<p>The solid lines are <strong>generalized additive models</strong> (GAMs), while the dashed lines are linear least-squares fits. For age, the partial relationship with logged wages is not linear - some transformation of age is necessary to correct this. For education, the relationship is more approximately linear except for the discrepancy for individual with very low education levels.</p>
+<p>We can correct this by adding a squared polynomial term for age, and square the education term. The resulting regression model is:</p>
+<p><span class="math display">\[\log(\text{Wage}) = \beta_0 + \beta_1(\text{Male}) + \beta_2 \text{Age} + \beta_3 \text{Age}^2 + \beta_4 \text{Education}^2\]</span></p>
+<pre><code>## # A tibble: 5 × 5
+##   term                 estimate std.error statistic   p.value
+##   &lt;chr&gt;                   &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+## 1 (Intercept)          0.397    0.0578         6.87 7.62e- 12
+## 2 sexMale              0.221    0.0124        17.8  3.21e- 68
+## 3 I(yearsEducation^2)  0.00181  0.0000786     23.0  1.19e-109
+## 4 age                  0.0830   0.00319       26.0  2.93e-138
+## 5 I(age^2)            -0.000852 0.0000410    -20.8  3.85e- 91</code></pre>
+<p>Because the model is now nonlinear in both age and education, we need to rethink how to draw the partial residuals plot. The easiest approach is to plot the partial residuals for both age and education against the original explanatory variable. For age, that is</p>
+<p><span class="math display">\[\hat{\epsilon}_i^{\text{Age}} = 0.083 \times \text{Age}_i -0.0008524 \times \text{Age}^2_i + \hat{\epsilon}_i\]</span></p>
+<p>and for education,</p>
+<p><span class="math display">\[\hat{\epsilon}_i^{\text{Education}} = 0.002 \times \text{Education}^2_i + \hat{\epsilon}_i\]</span></p>
+<p>On the same graph, we also plot the <strong>partial fits</strong> for the two explanatory variables:</p>
+<p><span class="math display">\[\hat{Y}_i^{(\text{Age})} = 0.083 \times \text{Age}_i -0.0008524 \times \text{Age}^2_i\]</span></p>
+<p>and for education,</p>
+<p><span class="math display">\[\hat{Y}_i^{(\text{Education})} = 0.002 \times \text{Education}^2_i\]</span></p>
+<p>On the graphs, the solid lines represent the partial fits and the dashed lines represent the partial residuals. If the two lines overlap significantly, then the revised model does a good job accounting for the nonlinearity.</p>
+<p><img src="13-mle-ols_files/figure-html/slid-part-trans-plot-1.png" width="90%" style="display: block; margin: auto;" /><img src="13-mle-ols_files/figure-html/slid-part-trans-plot-2.png" width="90%" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="collinearity" class="section level2 hasAnchor" number="13.8">
+<h2><span class="header-section-number">13.8</span> Collinearity<a href="mle-ols.html#collinearity" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><strong>Collinearity</strong> (or <strong>multicollinearity</strong>) is a state of a model where explanatory variables are correlated with one another.</p>
+<div id="perfect-collinearity" class="section level3 hasAnchor" number="13.8.1">
+<h3><span class="header-section-number">13.8.1</span> Perfect collinearity<a href="mle-ols.html#perfect-collinearity" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Perfect collinearity is incredibly rare, and typically involves using transformed versions of a variable in the model <strong>along with the original variable</strong>. For example, let’s estimate a regression model explaining <code>mpg</code> as a function of <code>displ</code>, <code>wt</code>, and <code>cyl</code>:</p>
+<pre><code>## 
+## Call:
+## lm(formula = mpg ~ disp + wt + cyl, data = mtcars)
+## 
+## Residuals:
+##    Min     1Q Median     3Q    Max 
+## -4.403 -1.403 -0.495  1.339  6.072 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) 41.10768    2.84243   14.46  1.6e-14 ***
+## disp         0.00747    0.01184    0.63   0.5332    
+## wt          -3.63568    1.04014   -3.50   0.0016 ** 
+## cyl         -1.78494    0.60711   -2.94   0.0065 ** 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 2.59 on 28 degrees of freedom
+## Multiple R-squared:  0.833,  Adjusted R-squared:  0.815 
+## F-statistic: 46.4 on 3 and 28 DF,  p-value: 5.4e-11</code></pre>
+<p>Now let’s say we want to recode <code>displ</code> so it is centered around it’s mean and re-estimate the model:</p>
+<pre><code>## 
+## Call:
+## lm(formula = mpg ~ disp + wt + cyl + disp_mean, data = mtcars)
+## 
+## Residuals:
+##    Min     1Q Median     3Q    Max 
+## -4.403 -1.403 -0.495  1.339  6.072 
+## 
+## Coefficients: (1 not defined because of singularities)
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) 41.10768    2.84243   14.46  1.6e-14 ***
+## disp         0.00747    0.01184    0.63   0.5332    
+## wt          -3.63568    1.04014   -3.50   0.0016 ** 
+## cyl         -1.78494    0.60711   -2.94   0.0065 ** 
+## disp_mean         NA         NA      NA       NA    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 2.59 on 28 degrees of freedom
+## Multiple R-squared:  0.833,  Adjusted R-squared:  0.815 
+## F-statistic: 46.4 on 3 and 28 DF,  p-value: 5.4e-11</code></pre>
+<p>Oops. What’s the problem? <code>disp</code> and <code>disp_mean</code> are perfectly correlated with each other:</p>
+<p><img src="13-mle-ols_files/figure-html/mtcars-cor-1.png" width="90%" style="display: block; margin: auto;" /></p>
+<p>Because they perfectly explain each other, we cannot estimate a linear regression model that contains both variables.<a href="#fn27" class="footnote-ref" id="fnref27"><sup>27</sup></a> Fortunately R automatically drops the second variable so it can estimate the model. Because of this, perfect multicollinearity is rarely problematic in social science.</p>
+</div>
+<div id="less-than-perfect-collinearity" class="section level3 hasAnchor" number="13.8.2">
+<h3><span class="header-section-number">13.8.2</span> Less-than-perfect collinearity<a href="mle-ols.html#less-than-perfect-collinearity" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Instead consider the credit dataset:</p>
+<p><img src="13-mle-ols_files/figure-html/credit-1.png" width="90%" style="display: block; margin: auto;" /></p>
+<p>Age and limit are not strongly correlated with one another, so estimating a linear regression model to predict an individual’s balance as a function of age and limit is not a problem:</p>
+<pre><code>## # A tibble: 3 × 5
+##   term        estimate std.error statistic   p.value
+##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+## 1 (Intercept) -173.     43.8         -3.96 9.01e-  5
+## 2 age           -2.29    0.672       -3.41 7.23e-  4
+## 3 limit          0.173   0.00503     34.5  1.63e-121</code></pre>
+<p>But what about using an individual’s credit card rating instead of age? It is likely a good predictor of balance as well:</p>
+<pre><code>## # A tibble: 3 × 5
+##   term         estimate std.error statistic  p.value
+##   &lt;chr&gt;           &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+## 1 (Intercept) -378.       45.3       -8.34  1.21e-15
+## 2 limit          0.0245    0.0638     0.384 7.01e- 1
+## 3 rating         2.20      0.952      2.31  2.13e- 2</code></pre>
+<p><img src="13-mle-ols_files/figure-html/add-rating-1.png" width="90%" style="display: block; margin: auto;" /><img src="13-mle-ols_files/figure-html/add-rating-2.png" width="90%" style="display: block; margin: auto;" /></p>
+<p>By replacing age with rating, we developed a problem in our model. The problem is that limit and rating are strongly correlated with one another:</p>
+<p><img src="13-mle-ols_files/figure-html/limit-rate-1.png" width="90%" style="display: block; margin: auto;" /><img src="13-mle-ols_files/figure-html/limit-rate-2.png" width="90%" style="display: block; margin: auto;" /></p>
+<p>In the regression model, it is difficult to parse out the independent effects of limit and rating on balance, because limit and rating tend to increase and decrease in association with one another. Because the accuracy of our estimates of the parameters is reduced, the standard errors increase. This is why you can see above that the standard error for limit is much larger in the second model compared to the first model.</p>
+<div id="detecting-collinearity" class="section level4 hasAnchor" number="13.8.2.1">
+<h4><span class="header-section-number">13.8.2.1</span> Detecting collinearity<a href="mle-ols.html#detecting-collinearity" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div id="scatterplot-matrix" class="section level5 hasAnchor" number="13.8.2.1.1">
+<h5><span class="header-section-number">13.8.2.1.1</span> Scatterplot matrix<a href="mle-ols.html#scatterplot-matrix" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>A correlation or scatterplot matrix would help to reveal any strongly correlated variables:</p>
+<p><img src="13-mle-ols_files/figure-html/credit-cor-mat-1.png" width="90%" style="display: block; margin: auto;" /><img src="13-mle-ols_files/figure-html/credit-cor-mat-2.png" width="90%" style="display: block; margin: auto;" /></p>
+<p>Here it is very clear that limit and rating are strongly correlated with one another.</p>
+</div>
+<div id="variance-inflation-factor-vif" class="section level5 hasAnchor" number="13.8.2.1.2">
+<h5><span class="header-section-number">13.8.2.1.2</span> Variance inflation factor (VIF)<a href="mle-ols.html#variance-inflation-factor-vif" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>Unfortunately correlation matrices may not be sufficient to detect collinearity if the correlation exists between three or more variables (aka <strong>multicollinearity</strong>) <em>while not existing between any two pairs of these variables</em>. Instead, we can calculate the variance inflation factor (VIF) which is the ratio of the variance of <span class="math inline">\(\hat{\beta}_{1j}\)</span> when fitting the full model divided by the variance of <span class="math inline">\(\hat{\beta}_{1j}\)</span> if fit on its own model. We can use the <code>car::vif()</code> function in R to calculate this statistic for each coefficient. A good rule of thumb is that a VIF statistic greater than 10 indicates potential multicollinearity in the model. Applied to the <code>credit</code> regression models above:</p>
+<pre><code>##   age limit 
+##  1.01  1.01
+##  limit rating 
+##    160    160</code></pre>
+</div>
+</div>
+</div>
+<div id="fixing-multicollinearity" class="section level3 hasAnchor" number="13.8.3">
+<h3><span class="header-section-number">13.8.3</span> Fixing multicollinearity<a href="mle-ols.html#fixing-multicollinearity" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="what-not-to-do" class="section level4 hasAnchor" number="13.8.3.1">
+<h4><span class="header-section-number">13.8.3.1</span> What not to do<a href="mle-ols.html#what-not-to-do" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<blockquote>
+<p>Drop one or more of the collinear variables from the model</p>
+</blockquote>
+<p>This is not a good idea, even if it makes your results “significant”. By omitting the variable, you are completely re-specifying your model <strong>in direct contradiction to your theory</strong>. If your theory suggests that a variable can be dropped, go ahead. But if not, then don’t do it.</p>
+</div>
+<div id="what-you-could-do-instead" class="section level4 hasAnchor" number="13.8.3.2">
+<h4><span class="header-section-number">13.8.3.2</span> What you could do instead<a href="mle-ols.html#what-you-could-do-instead" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div id="add-data" class="section level5 hasAnchor" number="13.8.3.2.1">
+<h5><span class="header-section-number">13.8.3.2.1</span> Add data<a href="mle-ols.html#add-data" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>The more observations, the better. It could at least decrease your standard errors and give you more precise estimates. And if you add “odd” or unusual observations, it could also reduce the degree of multicollinearity.</p>
+</div>
+<div id="transform-the-covariates" class="section level5 hasAnchor" number="13.8.3.2.2">
+<h5><span class="header-section-number">13.8.3.2.2</span> Transform the covariates<a href="mle-ols.html#transform-the-covariates" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>If the variables are indicators of the same underlying concept, you can combine them into an index variable. This could be an <strong>additive index</strong> where you sum up comparable covariates or binary indicators. Alternatively, you could create an index via <strong>principal components analysis</strong>.</p>
+</div>
+<div id="shrinkage-methods" class="section level5 hasAnchor" number="13.8.3.2.3">
+<h5><span class="header-section-number">13.8.3.2.3</span> Shrinkage methods<a href="mle-ols.html#shrinkage-methods" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p><strong>Shrinkage methods</strong> involve fitting a model involving all <span class="math inline">\(p\)</span> predictors and shrinking the estimated coefficients towards zero. This shrinkage reduces variance in the model. When multicollinearity is high, the variance of the estimator <span class="math inline">\(\hat{\beta}_1\)</span> is also high. By shrinking the estimated coefficient towards zero, we may increase <strong>bias</strong> in exchange for smaller variance in our estimates.</p>
+
+</div>
+</div>
+</div>
+</div>
+</div>
+<h3>References<a href="references.html#references" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-bertsekas2008" class="csl-entry">
+Bertsekas, Dimitri P, and John N Tsitsiklis. 2008. <span>“Introduction to Probability.”</span>
+</div>
+<div id="ref-wasserman2013" class="csl-entry">
+Wasserman, Larry. 2013. <em>All of Statistics: A Concise Course in Statistical Inference</em>. Springer Science &amp; Business Media. <a href="https://link-springer-com.proxy.uchicago.edu/book/10.1007/978-0-387-21736-9">https://link-springer-com.proxy.uchicago.edu/book/10.1007/978-0-387-21736-9</a>.
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol start="23">
+<li id="fn23"><p>74th (1935-36), 98th (1983-84), and 104th (1995-96).<a href="mle-ols.html#fnref23" class="footnote-back">↩︎</a></p></li>
+<li id="fn24"><p>Assuming the sample size is sufficiently large.<a href="mle-ols.html#fnref24" class="footnote-back">↩︎</a></p></li>
+<li id="fn25"><p>Omitted here for time purposes. You can find details on this estimation procedure on the internet.<a href="mle-ols.html#fnref25" class="footnote-back">↩︎</a></p></li>
+<li id="fn26"><p>This function really returns the “sandwich” estimator of the variance-covariance matrix, so we need to further take the square root of the diagonal of this matrix.<a href="mle-ols.html#fnref26" class="footnote-back">↩︎</a></p></li>
+<li id="fn27"><p>Basically we cannot invert the variance-covariance matrix of <span class="math inline">\(\mathbf{X}\)</span> because the collinear columns in <span class="math inline">\(\mathbf{X}\)</span> are perfectly linearly dependent on each other. Because of this, we cannot get parameter estimates or standard errors for the model.<a href="mle-ols.html#fnref27" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="classic-inference.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="bayesian-inference.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/math-camp/notes/edit/master/13-mle-ols.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "section"
+},
+"theme": "readable",
+"highlight": "pygment"
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

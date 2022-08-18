@@ -1,0 +1,1819 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Lecture 2 Sequences, limits, continuity, and derivatives | Computational Math Camp</title>
+  <meta name="description" content="Contains lecture notes for the 2022 Computational Math Camp." />
+  <meta name="generator" content="bookdown 0.26 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Lecture 2 Sequences, limits, continuity, and derivatives | Computational Math Camp" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="Contains lecture notes for the 2022 Computational Math Camp." />
+  <meta name="github-repo" content="math-camp/notes" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Lecture 2 Sequences, limits, continuity, and derivatives | Computational Math Camp" />
+  
+  <meta name="twitter:description" content="Contains lecture notes for the 2022 Computational Math Camp." />
+  
+
+<meta name="author" content="Yanyan Sheng" />
+
+
+<meta name="date" content="2022-08-17" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="sets-functions.html"/>
+<link rel="next" href="critical-points.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<script src="libs/plotly-binding-4.10.0/plotly.js"></script>
+<script src="libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
+<link href="libs/plotly-htmlwidgets-css-2.5.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="libs/plotly-main-2.5.1/plotly-latest.min.js"></script>
+\[
+\newcommand{\E}{\mathrm{E}}
+\newcommand{\Var}{\mathrm{Var}}
+\newcommand{\Cov}{\mathrm{Cov}}
+\newcommand{\se}{\text{se}}
+\newcommand{\sd}{\text{sd}}
+\newcommand{\Cor}{\mathrm{Cor}}
+\newcommand{\Lagr}{\mathcal{L}}
+\newcommand{\lagr}{\mathcal{l}}
+\]
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="css/style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Overview</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#meeting-information"><i class="fa fa-check"></i>Meeting information</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#instructional-staff"><i class="fa fa-check"></i>Instructional staff</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#teaching-assistants"><i class="fa fa-check"></i>Teaching assistants</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#course-description"><i class="fa fa-check"></i>Course description</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#who-should-take-this-course"><i class="fa fa-check"></i>Who should take this course</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#grades"><i class="fa fa-check"></i>Grades</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#disability-services"><i class="fa fa-check"></i>Disability services</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#core-texts"><i class="fa fa-check"></i>Core texts</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#course-format"><i class="fa fa-check"></i>Course format</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#problem-sets"><i class="fa fa-check"></i>Problem sets</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#course-schedule"><i class="fa fa-check"></i>Course schedule</a></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="sets-functions.html"><a href="sets-functions.html"><i class="fa fa-check"></i><b>1</b> Linear equations, inequalities, sets and functions, quadratics, and logarithms</a>
+<ul>
+<li class="chapter" data-level="" data-path="sets-functions.html"><a href="sets-functions.html#learning-objectives"><i class="fa fa-check"></i>Learning objectives</a></li>
+<li class="chapter" data-level="" data-path="sets-functions.html"><a href="sets-functions.html#supplemental-readings"><i class="fa fa-check"></i>Supplemental readings</a></li>
+<li class="chapter" data-level="1.1" data-path="sets-functions.html"><a href="sets-functions.html#what-is-computational-social-science"><i class="fa fa-check"></i><b>1.1</b> What is computational social science?</a>
+<ul>
+<li class="chapter" data-level="1.1.1" data-path="sets-functions.html"><a href="sets-functions.html#disciplines-within-social-science"><i class="fa fa-check"></i><b>1.1.1</b> Disciplines within social science</a></li>
+<li class="chapter" data-level="1.1.2" data-path="sets-functions.html"><a href="sets-functions.html#computational-social-science"><i class="fa fa-check"></i><b>1.1.2</b> Computational social science</a></li>
+<li class="chapter" data-level="1.1.3" data-path="sets-functions.html"><a href="sets-functions.html#acquiring-css-skills"><i class="fa fa-check"></i><b>1.1.3</b> Acquiring CSS skills</a></li>
+</ul></li>
+<li class="chapter" data-level="1.2" data-path="sets-functions.html"><a href="sets-functions.html#difference-between-math-probability-and-statistics"><i class="fa fa-check"></i><b>1.2</b> Difference between math, probability, and statistics</a>
+<ul>
+<li class="chapter" data-level="1.2.1" data-path="sets-functions.html"><a href="sets-functions.html#mathematics"><i class="fa fa-check"></i><b>1.2.1</b> Mathematics</a></li>
+<li class="chapter" data-level="1.2.2" data-path="sets-functions.html"><a href="sets-functions.html#probability"><i class="fa fa-check"></i><b>1.2.2</b> Probability</a></li>
+<li class="chapter" data-level="1.2.3" data-path="sets-functions.html"><a href="sets-functions.html#statistics"><i class="fa fa-check"></i><b>1.2.3</b> Statistics</a></li>
+<li class="chapter" data-level="1.2.4" data-path="sets-functions.html"><a href="sets-functions.html#their-uses"><i class="fa fa-check"></i><b>1.2.4</b> Their uses</a></li>
+</ul></li>
+<li class="chapter" data-level="1.3" data-path="sets-functions.html"><a href="sets-functions.html#goals-for-this-camp"><i class="fa fa-check"></i><b>1.3</b> Goals for this camp</a></li>
+<li class="chapter" data-level="1.4" data-path="sets-functions.html"><a href="sets-functions.html#course-logistics"><i class="fa fa-check"></i><b>1.4</b> Course logistics</a>
+<ul>
+<li class="chapter" data-level="1.4.1" data-path="sets-functions.html"><a href="sets-functions.html#course-staff"><i class="fa fa-check"></i><b>1.4.1</b> Course staff</a></li>
+<li class="chapter" data-level="1.4.2" data-path="sets-functions.html"><a href="sets-functions.html#teaching-assistants-1"><i class="fa fa-check"></i><b>1.4.2</b> Teaching assistants</a></li>
+<li class="chapter" data-level="1.4.3" data-path="sets-functions.html"><a href="sets-functions.html#prerequisites-for-the-math-camp"><i class="fa fa-check"></i><b>1.4.3</b> Prerequisites for the math camp</a></li>
+<li class="chapter" data-level="1.4.4" data-path="sets-functions.html"><a href="sets-functions.html#alternatives-to-this-camp"><i class="fa fa-check"></i><b>1.4.4</b> Alternatives to this camp</a></li>
+<li class="chapter" data-level="1.4.5" data-path="sets-functions.html"><a href="sets-functions.html#evaluation"><i class="fa fa-check"></i><b>1.4.5</b> Evaluation</a></li>
+<li class="chapter" data-level="1.4.6" data-path="sets-functions.html"><a href="sets-functions.html#why-are-we-doing-this"><i class="fa fa-check"></i><b>1.4.6</b> Why are we doing this</a></li>
+</ul></li>
+<li class="chapter" data-level="1.5" data-path="sets-functions.html"><a href="sets-functions.html#mathematical-notation"><i class="fa fa-check"></i><b>1.5</b> Mathematical notation</a>
+<ul>
+<li class="chapter" data-level="1.5.1" data-path="sets-functions.html"><a href="sets-functions.html#why-math-is-important-to-social-science"><i class="fa fa-check"></i><b>1.5.1</b> Why math is important to social science</a></li>
+<li class="chapter" data-level="1.5.2" data-path="sets-functions.html"><a href="sets-functions.html#example-paradox-of-voting"><i class="fa fa-check"></i><b>1.5.2</b> Example: Paradox of voting</a></li>
+</ul></li>
+<li class="chapter" data-level="1.6" data-path="sets-functions.html"><a href="sets-functions.html#sets"><i class="fa fa-check"></i><b>1.6</b> Sets</a>
+<ul>
+<li class="chapter" data-level="1.6.1" data-path="sets-functions.html"><a href="sets-functions.html#set-builder-notation"><i class="fa fa-check"></i><b>1.6.1</b> Set builder notation</a></li>
+<li class="chapter" data-level="1.6.2" data-path="sets-functions.html"><a href="sets-functions.html#set-operations"><i class="fa fa-check"></i><b>1.6.2</b> Set operations</a></li>
+<li class="chapter" data-level="1.6.3" data-path="sets-functions.html"><a href="sets-functions.html#some-facts-about-sets"><i class="fa fa-check"></i><b>1.6.3</b> Some facts about sets</a></li>
+</ul></li>
+<li class="chapter" data-level="1.7" data-path="sets-functions.html"><a href="sets-functions.html#functions"><i class="fa fa-check"></i><b>1.7</b> Functions</a>
+<ul>
+<li class="chapter" data-level="1.7.1" data-path="sets-functions.html"><a href="sets-functions.html#ordered-pairs"><i class="fa fa-check"></i><b>1.7.1</b> Ordered pairs</a></li>
+<li class="chapter" data-level="1.7.2" data-path="sets-functions.html"><a href="sets-functions.html#relation"><i class="fa fa-check"></i><b>1.7.2</b> Relation</a></li>
+<li class="chapter" data-level="1.7.3" data-path="sets-functions.html"><a href="sets-functions.html#relation-vs.-function"><i class="fa fa-check"></i><b>1.7.3</b> Relation vs. function</a></li>
+<li class="chapter" data-level="1.7.4" data-path="sets-functions.html"><a href="sets-functions.html#two-major-properties-of-functions"><i class="fa fa-check"></i><b>1.7.4</b> Two major properties of functions</a></li>
+</ul></li>
+<li class="chapter" data-level="1.8" data-path="sets-functions.html"><a href="sets-functions.html#quadratic-functions"><i class="fa fa-check"></i><b>1.8</b> Quadratic functions</a>
+<ul>
+<li class="chapter" data-level="1.8.1" data-path="sets-functions.html"><a href="sets-functions.html#quadratic-equation"><i class="fa fa-check"></i><b>1.8.1</b> Quadratic equation</a></li>
+<li class="chapter" data-level="1.8.2" data-path="sets-functions.html"><a href="sets-functions.html#quadratic-formula"><i class="fa fa-check"></i><b>1.8.2</b> Quadratic formula</a></li>
+</ul></li>
+<li class="chapter" data-level="1.9" data-path="sets-functions.html"><a href="sets-functions.html#systems-of-linear-equations"><i class="fa fa-check"></i><b>1.9</b> Systems of linear equations</a>
+<ul>
+<li class="chapter" data-level="1.9.1" data-path="sets-functions.html"><a href="sets-functions.html#one-solution"><i class="fa fa-check"></i><b>1.9.1</b> One solution</a></li>
+<li class="chapter" data-level="1.9.2" data-path="sets-functions.html"><a href="sets-functions.html#no-solution"><i class="fa fa-check"></i><b>1.9.2</b> No solution</a></li>
+<li class="chapter" data-level="1.9.3" data-path="sets-functions.html"><a href="sets-functions.html#infinite-solutions"><i class="fa fa-check"></i><b>1.9.3</b> Infinite solutions</a></li>
+<li class="chapter" data-level="1.9.4" data-path="sets-functions.html"><a href="sets-functions.html#three-equations-in-three-unknowns"><i class="fa fa-check"></i><b>1.9.4</b> Three equations in three unknowns</a></li>
+<li class="chapter" data-level="1.9.5" data-path="sets-functions.html"><a href="sets-functions.html#gaussian-elimination"><i class="fa fa-check"></i><b>1.9.5</b> Gaussian elimination</a></li>
+</ul></li>
+<li class="chapter" data-level="1.10" data-path="sets-functions.html"><a href="sets-functions.html#logarithms-and-exponential-functions"><i class="fa fa-check"></i><b>1.10</b> Logarithms and exponential functions</a>
+<ul>
+<li class="chapter" data-level="1.10.1" data-path="sets-functions.html"><a href="sets-functions.html#functions-with-exponents"><i class="fa fa-check"></i><b>1.10.1</b> Functions with exponents</a></li>
+<li class="chapter" data-level="1.10.2" data-path="sets-functions.html"><a href="sets-functions.html#common-rules-of-exponents"><i class="fa fa-check"></i><b>1.10.2</b> Common rules of exponents</a></li>
+<li class="chapter" data-level="1.10.3" data-path="sets-functions.html"><a href="sets-functions.html#logarithms"><i class="fa fa-check"></i><b>1.10.3</b> Logarithms</a></li>
+</ul></li>
+<li class="chapter" data-level="1.11" data-path="sets-functions.html"><a href="sets-functions.html#bonus-content-computational-tools-for-the-future"><i class="fa fa-check"></i><b>1.11</b> Bonus content: Computational tools for the future</a>
+<ul>
+<li class="chapter" data-level="1.11.1" data-path="sets-functions.html"><a href="sets-functions.html#programming-languages-for-statistical-learning"><i class="fa fa-check"></i><b>1.11.1</b> Programming languages for statistical learning</a></li>
+<li class="chapter" data-level="1.11.2" data-path="sets-functions.html"><a href="sets-functions.html#version-control-git"><i class="fa fa-check"></i><b>1.11.2</b> Version control (Git)</a></li>
+<li class="chapter" data-level="1.11.3" data-path="sets-functions.html"><a href="sets-functions.html#publishing"><i class="fa fa-check"></i><b>1.11.3</b> Publishing</a></li>
+<li class="chapter" data-level="1.11.4" data-path="sets-functions.html"><a href="sets-functions.html#how-will-you-acquire-these-skills"><i class="fa fa-check"></i><b>1.11.4</b> How will you acquire these skills?</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html"><i class="fa fa-check"></i><b>2</b> Sequences, limits, continuity, and derivatives</a>
+<ul>
+<li class="chapter" data-level="" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#learning-objectives-1"><i class="fa fa-check"></i>Learning objectives</a></li>
+<li class="chapter" data-level="" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#supplemental-readings-1"><i class="fa fa-check"></i>Supplemental readings</a></li>
+<li class="chapter" data-level="2.1" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#sequence"><i class="fa fa-check"></i><b>2.1</b> Sequence</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#definition"><i class="fa fa-check"></i><b>2.1.1</b> Definition</a></li>
+<li class="chapter" data-level="2.1.2" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#examples"><i class="fa fa-check"></i><b>2.1.2</b> Examples</a></li>
+<li class="chapter" data-level="2.1.3" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#arithmetic-and-geometric-progressions"><i class="fa fa-check"></i><b>2.1.3</b> Arithmetic and geometric progressions</a></li>
+<li class="chapter" data-level="2.1.4" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#convergence"><i class="fa fa-check"></i><b>2.1.4</b> Convergence</a></li>
+<li class="chapter" data-level="2.1.5" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#algebra-of-sequences"><i class="fa fa-check"></i><b>2.1.5</b> Algebra of sequences</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#limits"><i class="fa fa-check"></i><b>2.2</b> Limits</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#sequences-leadsto-limits-of-functions"><i class="fa fa-check"></i><b>2.2.1</b> Sequences <span class="math inline">\(\leadsto\)</span> limits of functions</a></li>
+<li class="chapter" data-level="2.2.2" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#limits-of-functions"><i class="fa fa-check"></i><b>2.2.2</b> Limits of functions</a></li>
+<li class="chapter" data-level="2.2.3" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#examples-of-limits"><i class="fa fa-check"></i><b>2.2.3</b> Examples of limits</a></li>
+<li class="chapter" data-level="2.2.4" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#not-all-functions-have-limits"><i class="fa fa-check"></i><b>2.2.4</b> Not all functions have limits</a></li>
+<li class="chapter" data-level="2.2.5" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#intuitive-definition-of-a-limit"><i class="fa fa-check"></i><b>2.2.5</b> Intuitive definition of a limit</a></li>
+<li class="chapter" data-level="2.2.6" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#algebra-of-limits"><i class="fa fa-check"></i><b>2.2.6</b> Algebra of limits</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#continuity"><i class="fa fa-check"></i><b>2.3</b> Continuity</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#defining-continuity"><i class="fa fa-check"></i><b>2.3.1</b> Defining continuity</a></li>
+<li class="chapter" data-level="2.3.2" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#a-real-world-example-of-limits-measuring-incumbency-advantage"><i class="fa fa-check"></i><b>2.3.2</b> A real-world example of limits: Measuring incumbency advantage</a></li>
+<li class="chapter" data-level="2.3.3" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#continuity-and-limits"><i class="fa fa-check"></i><b>2.3.3</b> Continuity and limits</a></li>
+<li class="chapter" data-level="2.3.4" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#algebra-of-continuous-functions"><i class="fa fa-check"></i><b>2.3.4</b> Algebra of continuous functions</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#what-is-calculus"><i class="fa fa-check"></i><b>2.4</b> What is calculus?</a></li>
+<li class="chapter" data-level="2.5" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#derivatives"><i class="fa fa-check"></i><b>2.5</b> Derivatives</a>
+<ul>
+<li class="chapter" data-level="2.5.1" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#how-functions-change"><i class="fa fa-check"></i><b>2.5.1</b> How functions change</a></li>
+<li class="chapter" data-level="2.5.2" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#the-tangent-as-a-limit"><i class="fa fa-check"></i><b>2.5.2</b> The tangent as a limit</a></li>
+<li class="chapter" data-level="2.5.3" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#derivative"><i class="fa fa-check"></i><b>2.5.3</b> Derivative</a></li>
+<li class="chapter" data-level="2.5.4" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#rates-of-change-in-a-function"><i class="fa fa-check"></i><b>2.5.4</b> Rates of change in a function</a></li>
+<li class="chapter" data-level="2.5.5" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#examples-of-derivatives"><i class="fa fa-check"></i><b>2.5.5</b> Examples of derivatives</a></li>
+<li class="chapter" data-level="2.5.6" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#continuity-and-derivatives"><i class="fa fa-check"></i><b>2.5.6</b> Continuity and derivatives</a></li>
+<li class="chapter" data-level="2.5.7" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#what-goes-wrong"><i class="fa fa-check"></i><b>2.5.7</b> What goes wrong?</a></li>
+</ul></li>
+<li class="chapter" data-level="2.6" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#calculating-derivatives"><i class="fa fa-check"></i><b>2.6</b> Calculating derivatives</a>
+<ul>
+<li class="chapter" data-level="2.6.1" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#derivative-rules"><i class="fa fa-check"></i><b>2.6.1</b> Derivative rules</a></li>
+<li class="chapter" data-level="2.6.2" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#challenge-problems"><i class="fa fa-check"></i><b>2.6.2</b> Challenge problems</a></li>
+<li class="chapter" data-level="2.6.3" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#composite-functions"><i class="fa fa-check"></i><b>2.6.3</b> Composite functions</a></li>
+<li class="chapter" data-level="2.6.4" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#chain-rule"><i class="fa fa-check"></i><b>2.6.4</b> Chain rule</a></li>
+</ul></li>
+<li class="chapter" data-level="2.7" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#derivatives-for-the-exponential-function-and-natural-logarithms"><i class="fa fa-check"></i><b>2.7</b> Derivatives for the exponential function and natural logarithms</a>
+<ul>
+<li class="chapter" data-level="2.7.1" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#derivative-of-exponential-function"><i class="fa fa-check"></i><b>2.7.1</b> Derivative of exponential function</a></li>
+<li class="chapter" data-level="2.7.2" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#derivative-of-the-natural-logarithm"><i class="fa fa-check"></i><b>2.7.2</b> Derivative of the natural logarithm</a></li>
+<li class="chapter" data-level="2.7.3" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#relevance-of-exponential-functions-and-natural-logarithm"><i class="fa fa-check"></i><b>2.7.3</b> Relevance of exponential functions and natural logarithm</a></li>
+</ul></li>
+<li class="chapter" data-level="2.8" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#derivatives-and-properties-of-functions"><i class="fa fa-check"></i><b>2.8</b> Derivatives and properties of functions</a>
+<ul>
+<li class="chapter" data-level="2.8.1" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#relative-maxima-minima-and-derivatives"><i class="fa fa-check"></i><b>2.8.1</b> Relative maxima, minima and derivatives</a></li>
+<li class="chapter" data-level="2.8.2" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#mean-value-theorem"><i class="fa fa-check"></i><b>2.8.2</b> Mean value theorem</a></li>
+<li class="chapter" data-level="2.8.3" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#applications-of-the-mean-value-theorem"><i class="fa fa-check"></i><b>2.8.3</b> Applications of the mean value theorem</a></li>
+<li class="chapter" data-level="2.8.4" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#extension-to-indeterminate-form-limits"><i class="fa fa-check"></i><b>2.8.4</b> Extension to indeterminate form limits</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="critical-points.html"><a href="critical-points.html"><i class="fa fa-check"></i><b>3</b> Critical points and approximation</a>
+<ul>
+<li class="chapter" data-level="" data-path="critical-points.html"><a href="critical-points.html#learning-objectives-2"><i class="fa fa-check"></i>Learning objectives</a></li>
+<li class="chapter" data-level="" data-path="critical-points.html"><a href="critical-points.html#supplemental-readings-2"><i class="fa fa-check"></i>Supplemental readings</a></li>
+<li class="chapter" data-level="3.1" data-path="critical-points.html"><a href="critical-points.html#intuition"><i class="fa fa-check"></i><b>3.1</b> Intuition</a></li>
+<li class="chapter" data-level="3.2" data-path="critical-points.html"><a href="critical-points.html#higher-order-derivatives"><i class="fa fa-check"></i><b>3.2</b> Higher order derivatives</a></li>
+<li class="chapter" data-level="3.3" data-path="critical-points.html"><a href="critical-points.html#critical-points-1"><i class="fa fa-check"></i><b>3.3</b> Critical points</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="critical-points.html"><a href="critical-points.html#inflection-point"><i class="fa fa-check"></i><b>3.3.1</b> Inflection point</a></li>
+<li class="chapter" data-level="3.3.2" data-path="critical-points.html"><a href="critical-points.html#concavity"><i class="fa fa-check"></i><b>3.3.2</b> Concavity</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="critical-points.html"><a href="critical-points.html#extrema"><i class="fa fa-check"></i><b>3.4</b> Extrema</a>
+<ul>
+<li class="chapter" data-level="3.4.1" data-path="critical-points.html"><a href="critical-points.html#minimum-and-maximum-on-the-interval-05-are-located-at-the-endpoints"><i class="fa fa-check"></i><b>3.4.1</b> Minimum and maximum on the interval <span class="math inline">\([0,5]\)</span> are located at the endpoints</a></li>
+<li class="chapter" data-level="3.4.2" data-path="critical-points.html"><a href="critical-points.html#global-maximum-is-located-at-x0"><i class="fa fa-check"></i><b>3.4.2</b> Global maximum is located at <span class="math inline">\(x=0\)</span></a></li>
+<li class="chapter" data-level="3.4.3" data-path="critical-points.html"><a href="critical-points.html#global-minimum-is-located-at-x---frac92"><i class="fa fa-check"></i><b>3.4.3</b> Global minimum is located at <span class="math inline">\(x= - \frac{9}{2}\)</span></a></li>
+<li class="chapter" data-level="3.4.4" data-path="critical-points.html"><a href="critical-points.html#a-bunch-of-local-minima-and-maxima"><i class="fa fa-check"></i><b>3.4.4</b> A bunch of local minima and maxima</a></li>
+<li class="chapter" data-level="3.4.5" data-path="critical-points.html"><a href="critical-points.html#x0-is-an-inflection-point-that-is-neither-a-minimum-nor-a-maximum-fx-0"><i class="fa fa-check"></i><b>3.4.5</b> <span class="math inline">\(x=0\)</span> is an inflection point that is neither a minimum nor a maximum (<span class="math inline">\(f&#39;&#39;(x) = 0\)</span>)</a></li>
+</ul></li>
+<li class="chapter" data-level="3.5" data-path="critical-points.html"><a href="critical-points.html#framework-for-analytical-optimization"><i class="fa fa-check"></i><b>3.5</b> Framework for analytical optimization</a>
+<ul>
+<li class="chapter" data-level="3.5.1" data-path="critical-points.html"><a href="critical-points.html#example-fx--x2-x-in--3-3"><i class="fa fa-check"></i><b>3.5.1</b> Example: <span class="math inline">\(f(x) = -x^2\)</span>, <span class="math inline">\(x \in [-3, 3]\)</span></a></li>
+<li class="chapter" data-level="3.5.2" data-path="critical-points.html"><a href="critical-points.html#example-fx-x3-x-in--3-3"><i class="fa fa-check"></i><b>3.5.2</b> Example: <span class="math inline">\(f(x) = x^3\)</span>, <span class="math inline">\(x \in [-3, 3]\)</span></a></li>
+<li class="chapter" data-level="3.5.3" data-path="critical-points.html"><a href="critical-points.html#example-spatial-model"><i class="fa fa-check"></i><b>3.5.3</b> Example: spatial model</a></li>
+<li class="chapter" data-level="3.5.4" data-path="critical-points.html"><a href="critical-points.html#example-maximum-likelihood-estimation"><i class="fa fa-check"></i><b>3.5.4</b> Example: Maximum likelihood estimation</a></li>
+</ul></li>
+<li class="chapter" data-level="3.6" data-path="critical-points.html"><a href="critical-points.html#computational-optimization-procedures"><i class="fa fa-check"></i><b>3.6</b> Computational optimization procedures</a>
+<ul>
+<li class="chapter" data-level="3.6.1" data-path="critical-points.html"><a href="critical-points.html#newton-raphson-root-finding"><i class="fa fa-check"></i><b>3.6.1</b> Newton-Raphson root finding</a></li>
+<li class="chapter" data-level="3.6.2" data-path="critical-points.html"><a href="critical-points.html#grid-search"><i class="fa fa-check"></i><b>3.6.2</b> Grid search</a></li>
+<li class="chapter" data-level="3.6.3" data-path="critical-points.html"><a href="critical-points.html#gradient-descent"><i class="fa fa-check"></i><b>3.6.3</b> Gradient descent</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="linear-algebra.html"><a href="linear-algebra.html"><i class="fa fa-check"></i><b>4</b> Linear algebra</a>
+<ul>
+<li class="chapter" data-level="" data-path="linear-algebra.html"><a href="linear-algebra.html#learning-objectives-3"><i class="fa fa-check"></i>Learning objectives</a></li>
+<li class="chapter" data-level="" data-path="linear-algebra.html"><a href="linear-algebra.html#supplemental-readings-3"><i class="fa fa-check"></i>Supplemental readings</a></li>
+<li class="chapter" data-level="4.1" data-path="linear-algebra.html"><a href="linear-algebra.html#linear-algebra-1"><i class="fa fa-check"></i><b>4.1</b> Linear algebra</a></li>
+<li class="chapter" data-level="4.2" data-path="linear-algebra.html"><a href="linear-algebra.html#points-and-vectors"><i class="fa fa-check"></i><b>4.2</b> Points and vectors</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="linear-algebra.html"><a href="linear-algebra.html#points"><i class="fa fa-check"></i><b>4.2.1</b> Points</a></li>
+<li class="chapter" data-level="4.2.2" data-path="linear-algebra.html"><a href="linear-algebra.html#vectors"><i class="fa fa-check"></i><b>4.2.2</b> Vectors</a></li>
+<li class="chapter" data-level="4.2.3" data-path="linear-algebra.html"><a href="linear-algebra.html#one-dimensional-example"><i class="fa fa-check"></i><b>4.2.3</b> One dimensional example</a></li>
+<li class="chapter" data-level="4.2.4" data-path="linear-algebra.html"><a href="linear-algebra.html#two-dimensional-example"><i class="fa fa-check"></i><b>4.2.4</b> Two dimensional example</a></li>
+<li class="chapter" data-level="4.2.5" data-path="linear-algebra.html"><a href="linear-algebra.html#three-dimensional-example"><i class="fa fa-check"></i><b>4.2.5</b> Three dimensional example</a></li>
+<li class="chapter" data-level="4.2.6" data-path="linear-algebra.html"><a href="linear-algebra.html#n-dimensional-example"><i class="fa fa-check"></i><b>4.2.6</b> <span class="math inline">\(N\)</span>-dimensional example</a></li>
+<li class="chapter" data-level="4.2.7" data-path="linear-algebra.html"><a href="linear-algebra.html#examples-of-some-basic-arithmetic"><i class="fa fa-check"></i><b>4.2.7</b> Examples of some basic arithmetic</a></li>
+<li class="chapter" data-level="4.2.8" data-path="linear-algebra.html"><a href="linear-algebra.html#linear-dependence"><i class="fa fa-check"></i><b>4.2.8</b> Linear dependence</a></li>
+<li class="chapter" data-level="4.2.9" data-path="linear-algebra.html"><a href="linear-algebra.html#inner-product"><i class="fa fa-check"></i><b>4.2.9</b> Inner product</a></li>
+<li class="chapter" data-level="4.2.10" data-path="linear-algebra.html"><a href="linear-algebra.html#calculating-vector-length"><i class="fa fa-check"></i><b>4.2.10</b> Calculating vector length</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="linear-algebra.html"><a href="linear-algebra.html#example-text-analysis"><i class="fa fa-check"></i><b>4.3</b> Example: text analysis</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="linear-algebra.html"><a href="linear-algebra.html#measure-1-inner-product"><i class="fa fa-check"></i><b>4.3.1</b> Measure 1: inner product</a></li>
+<li class="chapter" data-level="4.3.2" data-path="linear-algebra.html"><a href="linear-algebra.html#measure-2-cosine-similarity"><i class="fa fa-check"></i><b>4.3.2</b> Measure 2: cosine similarity</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="linear-algebra.html"><a href="linear-algebra.html#matricies"><i class="fa fa-check"></i><b>4.4</b> Matricies</a>
+<ul>
+<li class="chapter" data-level="4.4.1" data-path="linear-algebra.html"><a href="linear-algebra.html#basic-arithmetic"><i class="fa fa-check"></i><b>4.4.1</b> Basic arithmetic</a></li>
+<li class="chapter" data-level="4.4.2" data-path="linear-algebra.html"><a href="linear-algebra.html#transposition"><i class="fa fa-check"></i><b>4.4.2</b> Transposition</a></li>
+<li class="chapter" data-level="4.4.3" data-path="linear-algebra.html"><a href="linear-algebra.html#multiplication"><i class="fa fa-check"></i><b>4.4.3</b> Multiplication</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="linear-algebra.html"><a href="linear-algebra.html#example-neural-networks"><i class="fa fa-check"></i><b>4.5</b> Example: neural networks</a>
+<ul>
+<li class="chapter" data-level="4.5.1" data-path="linear-algebra.html"><a href="linear-algebra.html#how-are-neural-networks-used"><i class="fa fa-check"></i><b>4.5.1</b> How are neural networks used</a></li>
+<li class="chapter" data-level="4.5.2" data-path="linear-algebra.html"><a href="linear-algebra.html#how-are-neural-networks-related-to-linear-algebra"><i class="fa fa-check"></i><b>4.5.2</b> How are neural networks related to linear algebra?</a></li>
+</ul></li>
+<li class="chapter" data-level="4.6" data-path="linear-algebra.html"><a href="linear-algebra.html#matrix-inversion"><i class="fa fa-check"></i><b>4.6</b> Matrix inversion</a>
+<ul>
+<li class="chapter" data-level="4.6.1" data-path="linear-algebra.html"><a href="linear-algebra.html#calculating-matrix-inversions"><i class="fa fa-check"></i><b>4.6.1</b> Calculating matrix inversions</a></li>
+<li class="chapter" data-level="4.6.2" data-path="linear-algebra.html"><a href="linear-algebra.html#when-do-inverses-exist"><i class="fa fa-check"></i><b>4.6.2</b> When do inverses exist</a></li>
+<li class="chapter" data-level="4.6.3" data-path="linear-algebra.html"><a href="linear-algebra.html#inverting-a-2-times-2-matrix"><i class="fa fa-check"></i><b>4.6.3</b> Inverting a <span class="math inline">\(2 \times 2\)</span> matrix</a></li>
+<li class="chapter" data-level="4.6.4" data-path="linear-algebra.html"><a href="linear-algebra.html#inverting-an-n-times-n-matrix"><i class="fa fa-check"></i><b>4.6.4</b> Inverting an <span class="math inline">\(n \times n\)</span> matrix</a></li>
+<li class="chapter" data-level="4.6.5" data-path="linear-algebra.html"><a href="linear-algebra.html#application-to-regression-analysis"><i class="fa fa-check"></i><b>4.6.5</b> Application to regression analysis</a></li>
+<li class="chapter" data-level="4.6.6" data-path="linear-algebra.html"><a href="linear-algebra.html#application-to-solving-systems-of-equations-tax-benefits-of-charitable-contributions"><i class="fa fa-check"></i><b>4.6.6</b> Application to solving systems of equations: tax benefits of charitable contributions</a></li>
+</ul></li>
+<li class="chapter" data-level="4.7" data-path="linear-algebra.html"><a href="linear-algebra.html#determinant"><i class="fa fa-check"></i><b>4.7</b> Determinant</a>
+<ul>
+<li class="chapter" data-level="4.7.1" data-path="linear-algebra.html"><a href="linear-algebra.html#relevance-of-the-determinant"><i class="fa fa-check"></i><b>4.7.1</b> Relevance of the determinant</a></li>
+</ul></li>
+<li class="chapter" data-level="4.8" data-path="linear-algebra.html"><a href="linear-algebra.html#matrix-decomposition"><i class="fa fa-check"></i><b>4.8</b> Matrix decomposition</a>
+<ul>
+<li class="chapter" data-level="4.8.1" data-path="linear-algebra.html"><a href="linear-algebra.html#dimension-reduction"><i class="fa fa-check"></i><b>4.8.1</b> Dimension reduction</a></li>
+<li class="chapter" data-level="4.8.2" data-path="linear-algebra.html"><a href="linear-algebra.html#singular-value-decomposition"><i class="fa fa-check"></i><b>4.8.2</b> Singular value decomposition</a></li>
+<li class="chapter" data-level="4.8.3" data-path="linear-algebra.html"><a href="linear-algebra.html#principal-components-analysis"><i class="fa fa-check"></i><b>4.8.3</b> Principal components analysis</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="linear-algebra.html"><a href="linear-algebra.html#acknowledgements"><i class="fa fa-check"></i>Acknowledgements</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="multivariable-differentiation.html"><a href="multivariable-differentiation.html"><i class="fa fa-check"></i><b>5</b> Functions of several variables and optimization with several variables</a>
+<ul>
+<li class="chapter" data-level="" data-path="multivariable-differentiation.html"><a href="multivariable-differentiation.html#learning-objectives-4"><i class="fa fa-check"></i>Learning objectives</a></li>
+<li class="chapter" data-level="" data-path="multivariable-differentiation.html"><a href="multivariable-differentiation.html#supplemental-readings-4"><i class="fa fa-check"></i>Supplemental readings</a></li>
+<li class="chapter" data-level="5.1" data-path="multivariable-differentiation.html"><a href="multivariable-differentiation.html#higher-order-derivatives-1"><i class="fa fa-check"></i><b>5.1</b> Higher order derivatives</a></li>
+<li class="chapter" data-level="5.2" data-path="multivariable-differentiation.html"><a href="multivariable-differentiation.html#multivariate-function"><i class="fa fa-check"></i><b>5.2</b> Multivariate function</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="multivariable-differentiation.html"><a href="multivariable-differentiation.html#definition-2"><i class="fa fa-check"></i><b>5.2.1</b> Definition</a></li>
+<li class="chapter" data-level="5.2.2" data-path="multivariable-differentiation.html"><a href="multivariable-differentiation.html#evaluating-multivariate-functions"><i class="fa fa-check"></i><b>5.2.2</b> Evaluating multivariate functions</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="multivariable-differentiation.html"><a href="multivariable-differentiation.html#multivariate-derivatives"><i class="fa fa-check"></i><b>5.3</b> Multivariate derivatives</a></li>
+<li class="chapter" data-level="5.4" data-path="multivariable-differentiation.html"><a href="multivariable-differentiation.html#multivariate-optimization"><i class="fa fa-check"></i><b>5.4</b> Multivariate optimization</a>
+<ul>
+<li class="chapter" data-level="5.4.1" data-path="multivariable-differentiation.html"><a href="multivariable-differentiation.html#differences-from-single-variable-optimization-procedure"><i class="fa fa-check"></i><b>5.4.1</b> Differences from single variable optimization procedure</a></li>
+<li class="chapter" data-level="5.4.2" data-path="multivariable-differentiation.html"><a href="multivariable-differentiation.html#first-derivative-test-gradient"><i class="fa fa-check"></i><b>5.4.2</b> First derivative test: Gradient</a></li>
+<li class="chapter" data-level="5.4.3" data-path="multivariable-differentiation.html"><a href="multivariable-differentiation.html#second-derivative-test-hessian"><i class="fa fa-check"></i><b>5.4.3</b> Second derivative test: Hessian</a></li>
+<li class="chapter" data-level="5.4.4" data-path="multivariable-differentiation.html"><a href="multivariable-differentiation.html#basic-procedure-summarized"><i class="fa fa-check"></i><b>5.4.4</b> Basic procedure summarized</a></li>
+</ul></li>
+<li class="chapter" data-level="5.5" data-path="multivariable-differentiation.html"><a href="multivariable-differentiation.html#a-simple-optimization-example"><i class="fa fa-check"></i><b>5.5</b> A simple optimization example</a></li>
+<li class="chapter" data-level="5.6" data-path="multivariable-differentiation.html"><a href="multivariable-differentiation.html#maximum-likelihood-estimation-for-a-normal-distribution"><i class="fa fa-check"></i><b>5.6</b> Maximum likelihood estimation for a normal distribution</a></li>
+<li class="chapter" data-level="5.7" data-path="multivariable-differentiation.html"><a href="multivariable-differentiation.html#computational-optimization-procedures-1"><i class="fa fa-check"></i><b>5.7</b> Computational optimization procedures</a>
+<ul>
+<li class="chapter" data-level="5.7.1" data-path="multivariable-differentiation.html"><a href="multivariable-differentiation.html#multivariate-newton-raphson"><i class="fa fa-check"></i><b>5.7.1</b> Multivariate Newton-Raphson</a></li>
+<li class="chapter" data-level="5.7.2" data-path="multivariable-differentiation.html"><a href="multivariable-differentiation.html#grid-search-1"><i class="fa fa-check"></i><b>5.7.2</b> Grid search</a></li>
+<li class="chapter" data-level="5.7.3" data-path="multivariable-differentiation.html"><a href="multivariable-differentiation.html#gradient-descent-1"><i class="fa fa-check"></i><b>5.7.3</b> Gradient descent</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="integral-calculus.html"><a href="integral-calculus.html"><i class="fa fa-check"></i><b>6</b> Integration and integral calculus</a>
+<ul>
+<li class="chapter" data-level="" data-path="integral-calculus.html"><a href="integral-calculus.html#learning-objectives-5"><i class="fa fa-check"></i>Learning objectives</a></li>
+<li class="chapter" data-level="" data-path="integral-calculus.html"><a href="integral-calculus.html#supplemental-readings-5"><i class="fa fa-check"></i>Supplemental readings</a></li>
+<li class="chapter" data-level="6.1" data-path="integral-calculus.html"><a href="integral-calculus.html#prepare-for-the-journey"><i class="fa fa-check"></i><b>6.1</b> Prepare for the journey</a></li>
+<li class="chapter" data-level="6.2" data-path="integral-calculus.html"><a href="integral-calculus.html#indefinite-integration"><i class="fa fa-check"></i><b>6.2</b> Indefinite integration</a>
+<ul>
+<li class="chapter" data-level="6.2.1" data-path="integral-calculus.html"><a href="integral-calculus.html#many-possible-antiderivatives"><i class="fa fa-check"></i><b>6.2.1</b> Many possible antiderivatives</a></li>
+<li class="chapter" data-level="6.2.2" data-path="integral-calculus.html"><a href="integral-calculus.html#common-rules-of-integration"><i class="fa fa-check"></i><b>6.2.2</b> Common rules of integration</a></li>
+<li class="chapter" data-level="6.2.3" data-path="integral-calculus.html"><a href="integral-calculus.html#practice-integrating-functions"><i class="fa fa-check"></i><b>6.2.3</b> Practice integrating functions</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="integral-calculus.html"><a href="integral-calculus.html#the-definite-integral-area-under-the-curve"><i class="fa fa-check"></i><b>6.3</b> The definite integral: area under the curve</a>
+<ul>
+<li class="chapter" data-level="6.3.1" data-path="integral-calculus.html"><a href="integral-calculus.html#the-definite-integral-riemann"><i class="fa fa-check"></i><b>6.3.1</b> The definite integral (Riemann)</a></li>
+<li class="chapter" data-level="6.3.2" data-path="integral-calculus.html"><a href="integral-calculus.html#counterexamples"><i class="fa fa-check"></i><b>6.3.2</b> Counterexamples</a></li>
+<li class="chapter" data-level="6.3.3" data-path="integral-calculus.html"><a href="integral-calculus.html#fundamental-theorem-of-calculus"><i class="fa fa-check"></i><b>6.3.3</b> Fundamental theorem of calculus</a></li>
+<li class="chapter" data-level="6.3.4" data-path="integral-calculus.html"><a href="integral-calculus.html#common-rules-for-definite-integrals"><i class="fa fa-check"></i><b>6.3.4</b> Common rules for definite integrals</a></li>
+<li class="chapter" data-level="6.3.5" data-path="integral-calculus.html"><a href="integral-calculus.html#practice-solving-definite-integrals"><i class="fa fa-check"></i><b>6.3.5</b> Practice solving definite integrals</a></li>
+<li class="chapter" data-level="6.3.6" data-path="integral-calculus.html"><a href="integral-calculus.html#integration-by-substitution"><i class="fa fa-check"></i><b>6.3.6</b> Integration by substitution</a></li>
+<li class="chapter" data-level="6.3.7" data-path="integral-calculus.html"><a href="integral-calculus.html#integration-by-parts"><i class="fa fa-check"></i><b>6.3.7</b> Integration by parts</a></li>
+</ul></li>
+<li class="chapter" data-level="6.4" data-path="integral-calculus.html"><a href="integral-calculus.html#infinite-integrals"><i class="fa fa-check"></i><b>6.4</b> Infinite integrals</a>
+<ul>
+<li class="chapter" data-level="6.4.1" data-path="integral-calculus.html"><a href="integral-calculus.html#two-sided-infinite-integrals"><i class="fa fa-check"></i><b>6.4.1</b> Two-sided infinite integrals</a></li>
+<li class="chapter" data-level="6.4.2" data-path="integral-calculus.html"><a href="integral-calculus.html#improper-integrals"><i class="fa fa-check"></i><b>6.4.2</b> Improper integrals</a></li>
+</ul></li>
+<li class="chapter" data-level="6.5" data-path="integral-calculus.html"><a href="integral-calculus.html#monte-carlo-and-integration"><i class="fa fa-check"></i><b>6.5</b> Monte Carlo and integration</a></li>
+<li class="chapter" data-level="6.6" data-path="integral-calculus.html"><a href="integral-calculus.html#multivariate-integration"><i class="fa fa-check"></i><b>6.6</b> Multivariate integration</a>
+<ul>
+<li class="chapter" data-level="6.6.1" data-path="integral-calculus.html"><a href="integral-calculus.html#more-complicated-bounds-of-integration"><i class="fa fa-check"></i><b>6.6.1</b> More complicated bounds of integration</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="integral-calculus.html"><a href="integral-calculus.html#acknowledgments"><i class="fa fa-check"></i>Acknowledgments</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="sample-space-probability.html"><a href="sample-space-probability.html"><i class="fa fa-check"></i><b>7</b> Sample space and probability</a>
+<ul>
+<li class="chapter" data-level="" data-path="sample-space-probability.html"><a href="sample-space-probability.html#learning-objectives-6"><i class="fa fa-check"></i>Learning objectives</a></li>
+<li class="chapter" data-level="" data-path="sample-space-probability.html"><a href="sample-space-probability.html#supplemental-readings-6"><i class="fa fa-check"></i>Supplemental readings</a></li>
+<li class="chapter" data-level="7.1" data-path="sample-space-probability.html"><a href="sample-space-probability.html#model-of-probability"><i class="fa fa-check"></i><b>7.1</b> Model of probability</a></li>
+<li class="chapter" data-level="7.2" data-path="sample-space-probability.html"><a href="sample-space-probability.html#sample-space"><i class="fa fa-check"></i><b>7.2</b> Sample space</a></li>
+<li class="chapter" data-level="7.3" data-path="sample-space-probability.html"><a href="sample-space-probability.html#events"><i class="fa fa-check"></i><b>7.3</b> Events</a>
+<ul>
+<li class="chapter" data-level="7.3.1" data-path="sample-space-probability.html"><a href="sample-space-probability.html#event-operations"><i class="fa fa-check"></i><b>7.3.1</b> Event operations</a></li>
+</ul></li>
+<li class="chapter" data-level="7.4" data-path="sample-space-probability.html"><a href="sample-space-probability.html#probability-1"><i class="fa fa-check"></i><b>7.4</b> Probability</a>
+<ul>
+<li class="chapter" data-level="7.4.1" data-path="sample-space-probability.html"><a href="sample-space-probability.html#three-axioms"><i class="fa fa-check"></i><b>7.4.1</b> Three axioms</a></li>
+<li class="chapter" data-level="7.4.2" data-path="sample-space-probability.html"><a href="sample-space-probability.html#basic-examples"><i class="fa fa-check"></i><b>7.4.2</b> Basic examples</a></li>
+<li class="chapter" data-level="7.4.3" data-path="sample-space-probability.html"><a href="sample-space-probability.html#surprising-probability-facts"><i class="fa fa-check"></i><b>7.4.3</b> Surprising probability facts</a></li>
+</ul></li>
+<li class="chapter" data-level="7.5" data-path="sample-space-probability.html"><a href="sample-space-probability.html#conditional-probability"><i class="fa fa-check"></i><b>7.5</b> Conditional probability</a>
+<ul>
+<li class="chapter" data-level="7.5.1" data-path="sample-space-probability.html"><a href="sample-space-probability.html#examples-1"><i class="fa fa-check"></i><b>7.5.1</b> Examples</a></li>
+<li class="chapter" data-level="7.5.2" data-path="sample-space-probability.html"><a href="sample-space-probability.html#difference-between-prab-and-prba"><i class="fa fa-check"></i><b>7.5.2</b> Difference between <span class="math inline">\(\Pr(A|B)\)</span> and <span class="math inline">\(\Pr(B|A)\)</span></a></li>
+</ul></li>
+<li class="chapter" data-level="7.6" data-path="sample-space-probability.html"><a href="sample-space-probability.html#law-of-total-probability"><i class="fa fa-check"></i><b>7.6</b> Law of total probability</a></li>
+<li class="chapter" data-level="7.7" data-path="sample-space-probability.html"><a href="sample-space-probability.html#bayes-rule"><i class="fa fa-check"></i><b>7.7</b> Bayes’ Rule</a></li>
+<li class="chapter" data-level="7.8" data-path="sample-space-probability.html"><a href="sample-space-probability.html#independence-of-probabilities"><i class="fa fa-check"></i><b>7.8</b> Independence of probabilities</a>
+<ul>
+<li class="chapter" data-level="7.8.1" data-path="sample-space-probability.html"><a href="sample-space-probability.html#rolling-a-4-sided-die"><i class="fa fa-check"></i><b>7.8.1</b> Rolling a 4-sided die</a></li>
+<li class="chapter" data-level="7.8.2" data-path="sample-space-probability.html"><a href="sample-space-probability.html#independence-and-causal-inference"><i class="fa fa-check"></i><b>7.8.2</b> Independence and causal inference</a></li>
+<li class="chapter" data-level="7.8.3" data-path="sample-space-probability.html"><a href="sample-space-probability.html#independence-of-a-collection-of-events"><i class="fa fa-check"></i><b>7.8.3</b> Independence of a collection of events</a></li>
+<li class="chapter" data-level="7.8.4" data-path="sample-space-probability.html"><a href="sample-space-probability.html#independent-trials-and-the-binomial-probabilities"><i class="fa fa-check"></i><b>7.8.4</b> Independent trials and the binomial probabilities</a></li>
+</ul></li>
+<li class="chapter" data-level="7.9" data-path="sample-space-probability.html"><a href="sample-space-probability.html#counting"><i class="fa fa-check"></i><b>7.9</b> Counting</a>
+<ul>
+<li class="chapter" data-level="7.9.1" data-path="sample-space-probability.html"><a href="sample-space-probability.html#counting-principle"><i class="fa fa-check"></i><b>7.9.1</b> Counting principle</a></li>
+<li class="chapter" data-level="7.9.2" data-path="sample-space-probability.html"><a href="sample-space-probability.html#permutations"><i class="fa fa-check"></i><b>7.9.2</b> Permutations</a></li>
+<li class="chapter" data-level="7.9.3" data-path="sample-space-probability.html"><a href="sample-space-probability.html#combinations"><i class="fa fa-check"></i><b>7.9.3</b> Combinations</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html"><i class="fa fa-check"></i><b>8</b> Discrete random variables</a>
+<ul>
+<li class="chapter" data-level="" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#learning-objectives-7"><i class="fa fa-check"></i>Learning objectives</a></li>
+<li class="chapter" data-level="" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#supplemental-readings-7"><i class="fa fa-check"></i>Supplemental readings</a></li>
+<li class="chapter" data-level="8.1" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#random-variable"><i class="fa fa-check"></i><b>8.1</b> Random variable</a>
+<ul>
+<li class="chapter" data-level="8.1.1" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#discrete-random-variables-1"><i class="fa fa-check"></i><b>8.1.1</b> Discrete random variables</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#probability-mass-functions"><i class="fa fa-check"></i><b>8.2</b> Probability mass functions</a>
+<ul>
+<li class="chapter" data-level="8.2.1" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#intuition-1"><i class="fa fa-check"></i><b>8.2.1</b> Intuition</a></li>
+<li class="chapter" data-level="8.2.2" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#definition-3"><i class="fa fa-check"></i><b>8.2.2</b> Definition</a></li>
+</ul></li>
+<li class="chapter" data-level="8.3" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#cumulative-mass-function"><i class="fa fa-check"></i><b>8.3</b> Cumulative mass function</a>
+<ul>
+<li class="chapter" data-level="8.3.1" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#three-person-experiment"><i class="fa fa-check"></i><b>8.3.1</b> Three person experiment</a></li>
+</ul></li>
+<li class="chapter" data-level="8.4" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#famous-discrete-random-variables"><i class="fa fa-check"></i><b>8.4</b> Famous discrete random variables</a>
+<ul>
+<li class="chapter" data-level="8.4.1" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#bernoulli"><i class="fa fa-check"></i><b>8.4.1</b> Bernoulli</a></li>
+<li class="chapter" data-level="8.4.2" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#binomial"><i class="fa fa-check"></i><b>8.4.2</b> Binomial</a></li>
+<li class="chapter" data-level="8.4.3" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#geometric"><i class="fa fa-check"></i><b>8.4.3</b> Geometric</a></li>
+<li class="chapter" data-level="8.4.4" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#poisson"><i class="fa fa-check"></i><b>8.4.4</b> Poisson</a></li>
+</ul></li>
+<li class="chapter" data-level="8.5" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#functions-of-random-variables"><i class="fa fa-check"></i><b>8.5</b> Functions of random variables</a></li>
+<li class="chapter" data-level="8.6" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#expectation-mean-and-variance"><i class="fa fa-check"></i><b>8.6</b> Expectation, mean, and variance</a>
+<ul>
+<li class="chapter" data-level="8.6.1" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#motivation"><i class="fa fa-check"></i><b>8.6.1</b> Motivation</a></li>
+<li class="chapter" data-level="8.6.2" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#expectation"><i class="fa fa-check"></i><b>8.6.2</b> Expectation</a></li>
+<li class="chapter" data-level="8.6.3" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#variance-moments-and-the-expected-value-rule"><i class="fa fa-check"></i><b>8.6.3</b> Variance, moments, and the expected value rule</a></li>
+<li class="chapter" data-level="8.6.4" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#practice-calculating-expectation-and-variance"><i class="fa fa-check"></i><b>8.6.4</b> Practice calculating expectation and variance</a></li>
+<li class="chapter" data-level="8.6.5" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#decision-making-using-expected-values"><i class="fa fa-check"></i><b>8.6.5</b> Decision making using expected values</a></li>
+</ul></li>
+<li class="chapter" data-level="8.7" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#cumulative-mass-function-redux"><i class="fa fa-check"></i><b>8.7</b> Cumulative mass function, redux</a>
+<ul>
+<li class="chapter" data-level="8.7.1" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#common-cmfs"><i class="fa fa-check"></i><b>8.7.1</b> Common CMFs</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="general-random-variables.html"><a href="general-random-variables.html"><i class="fa fa-check"></i><b>9</b> General random variables</a>
+<ul>
+<li class="chapter" data-level="" data-path="general-random-variables.html"><a href="general-random-variables.html#learning-objectives-8"><i class="fa fa-check"></i>Learning objectives</a></li>
+<li class="chapter" data-level="" data-path="general-random-variables.html"><a href="general-random-variables.html#supplemental-readings-8"><i class="fa fa-check"></i>Supplemental readings</a></li>
+<li class="chapter" data-level="9.1" data-path="general-random-variables.html"><a href="general-random-variables.html#continuous-random-variables"><i class="fa fa-check"></i><b>9.1</b> Continuous random variables</a></li>
+<li class="chapter" data-level="9.2" data-path="general-random-variables.html"><a href="general-random-variables.html#probability-density-function"><i class="fa fa-check"></i><b>9.2</b> Probability density function</a>
+<ul>
+<li class="chapter" data-level="9.2.1" data-path="general-random-variables.html"><a href="general-random-variables.html#definition-4"><i class="fa fa-check"></i><b>9.2.1</b> Definition</a></li>
+<li class="chapter" data-level="9.2.2" data-path="general-random-variables.html"><a href="general-random-variables.html#example-uniform-random-variable"><i class="fa fa-check"></i><b>9.2.2</b> Example: Uniform Random Variable</a></li>
+<li class="chapter" data-level="9.2.3" data-path="general-random-variables.html"><a href="general-random-variables.html#expectation-continuous"><i class="fa fa-check"></i><b>9.2.3</b> Expectation</a></li>
+<li class="chapter" data-level="9.2.4" data-path="general-random-variables.html"><a href="general-random-variables.html#exponential-random-variable"><i class="fa fa-check"></i><b>9.2.4</b> Exponential random variable</a></li>
+</ul></li>
+<li class="chapter" data-level="9.3" data-path="general-random-variables.html"><a href="general-random-variables.html#cumulative-distribution-function"><i class="fa fa-check"></i><b>9.3</b> Cumulative distribution function</a>
+<ul>
+<li class="chapter" data-level="9.3.1" data-path="general-random-variables.html"><a href="general-random-variables.html#properties-of-cdfs"><i class="fa fa-check"></i><b>9.3.1</b> Properties of CDFs</a></li>
+</ul></li>
+<li class="chapter" data-level="9.4" data-path="general-random-variables.html"><a href="general-random-variables.html#normal-distribution"><i class="fa fa-check"></i><b>9.4</b> Normal distribution</a>
+<ul>
+<li class="chapter" data-level="9.4.1" data-path="general-random-variables.html"><a href="general-random-variables.html#expected-valuevariance-of-normal-distribution"><i class="fa fa-check"></i><b>9.4.1</b> Expected value/variance of normal distribution</a></li>
+<li class="chapter" data-level="9.4.2" data-path="general-random-variables.html"><a href="general-random-variables.html#why-rely-on-the-standard-normal-distribution"><i class="fa fa-check"></i><b>9.4.2</b> Why rely on the standard normal distribution</a></li>
+</ul></li>
+<li class="chapter" data-level="9.5" data-path="general-random-variables.html"><a href="general-random-variables.html#gamma-distribution"><i class="fa fa-check"></i><b>9.5</b> Gamma distribution</a>
+<ul>
+<li class="chapter" data-level="9.5.1" data-path="general-random-variables.html"><a href="general-random-variables.html#properties-of-gamma-distributions"><i class="fa fa-check"></i><b>9.5.1</b> Properties of Gamma distributions</a></li>
+<li class="chapter" data-level="9.5.2" data-path="general-random-variables.html"><a href="general-random-variables.html#importance-of-the-gamma-distribution"><i class="fa fa-check"></i><b>9.5.2</b> Importance of the Gamma distribution</a></li>
+</ul></li>
+<li class="chapter" data-level="9.6" data-path="general-random-variables.html"><a href="general-random-variables.html#chi2-distribution"><i class="fa fa-check"></i><b>9.6</b> <span class="math inline">\(\chi^2\)</span> distribution</a>
+<ul>
+<li class="chapter" data-level="9.6.1" data-path="general-random-variables.html"><a href="general-random-variables.html#chi2-properties"><i class="fa fa-check"></i><b>9.6.1</b> <span class="math inline">\(\chi^2\)</span> properties</a></li>
+</ul></li>
+<li class="chapter" data-level="9.7" data-path="general-random-variables.html"><a href="general-random-variables.html#students-t-distribution"><i class="fa fa-check"></i><b>9.7</b> Student’s <span class="math inline">\(t\)</span> distribution</a>
+<ul>
+<li class="chapter" data-level="9.7.1" data-path="general-random-variables.html"><a href="general-random-variables.html#history-of-students-t"><i class="fa fa-check"></i><b>9.7.1</b> History of Student’s <span class="math inline">\(t\)</span></a></li>
+<li class="chapter" data-level="9.7.2" data-path="general-random-variables.html"><a href="general-random-variables.html#differences-from-the-normal-distribution"><i class="fa fa-check"></i><b>9.7.2</b> Differences from the Normal Distribution</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="multivar-distribs.html"><a href="multivar-distribs.html"><i class="fa fa-check"></i><b>10</b> Multivariate distributions</a>
+<ul>
+<li class="chapter" data-level="" data-path="multivar-distribs.html"><a href="multivar-distribs.html#learning-objectives-9"><i class="fa fa-check"></i>Learning objectives</a></li>
+<li class="chapter" data-level="" data-path="multivar-distribs.html"><a href="multivar-distribs.html#supplemental-readings-9"><i class="fa fa-check"></i>Supplemental readings</a></li>
+<li class="chapter" data-level="10.1" data-path="multivar-distribs.html"><a href="multivar-distribs.html#multivariate-distribution"><i class="fa fa-check"></i><b>10.1</b> Multivariate distribution</a></li>
+<li class="chapter" data-level="10.2" data-path="multivar-distribs.html"><a href="multivar-distribs.html#examples-of-joint-pdfs"><i class="fa fa-check"></i><b>10.2</b> Examples of joint PDFs</a></li>
+<li class="chapter" data-level="10.3" data-path="multivar-distribs.html"><a href="multivar-distribs.html#multivariate-cumulative-density-function"><i class="fa fa-check"></i><b>10.3</b> Multivariate cumulative density function</a></li>
+<li class="chapter" data-level="10.4" data-path="multivar-distribs.html"><a href="multivar-distribs.html#marginalization"><i class="fa fa-check"></i><b>10.4</b> Marginalization</a>
+<ul>
+<li class="chapter" data-level="10.4.1" data-path="multivar-distribs.html"><a href="multivar-distribs.html#joint-vs.-conditional-pdf"><i class="fa fa-check"></i><b>10.4.1</b> Joint vs. conditional PDF</a></li>
+<li class="chapter" data-level="10.4.2" data-path="multivar-distribs.html"><a href="multivar-distribs.html#why-does-marginalization-work"><i class="fa fa-check"></i><b>10.4.2</b> Why does marginalization work?</a></li>
+<li class="chapter" data-level="10.4.3" data-path="multivar-distribs.html"><a href="multivar-distribs.html#move-to-the-continuous-case"><i class="fa fa-check"></i><b>10.4.3</b> Move to the continuous case</a></li>
+<li class="chapter" data-level="10.4.4" data-path="multivar-distribs.html"><a href="multivar-distribs.html#a-simple-example"><i class="fa fa-check"></i><b>10.4.4</b> A (simple) example</a></li>
+<li class="chapter" data-level="10.4.5" data-path="multivar-distribs.html"><a href="multivar-distribs.html#more-complex-example"><i class="fa fa-check"></i><b>10.4.5</b> More complex example</a></li>
+</ul></li>
+<li class="chapter" data-level="10.5" data-path="multivar-distribs.html"><a href="multivar-distribs.html#conditional-distribution"><i class="fa fa-check"></i><b>10.5</b> Conditional distribution</a>
+<ul>
+<li class="chapter" data-level="10.5.1" data-path="multivar-distribs.html"><a href="multivar-distribs.html#a-simple-example-of-dependence"><i class="fa fa-check"></i><b>10.5.1</b> A (simple) example of dependence</a></li>
+</ul></li>
+<li class="chapter" data-level="10.6" data-path="multivar-distribs.html"><a href="multivar-distribs.html#expectation-1"><i class="fa fa-check"></i><b>10.6</b> Expectation</a></li>
+<li class="chapter" data-level="10.7" data-path="multivar-distribs.html"><a href="multivar-distribs.html#covariance-and-correlation"><i class="fa fa-check"></i><b>10.7</b> Covariance and correlation</a>
+<ul>
+<li class="chapter" data-level="10.7.1" data-path="multivar-distribs.html"><a href="multivar-distribs.html#some-observations"><i class="fa fa-check"></i><b>10.7.1</b> Some observations</a></li>
+</ul></li>
+<li class="chapter" data-level="10.8" data-path="multivar-distribs.html"><a href="multivar-distribs.html#sums-of-random-variables"><i class="fa fa-check"></i><b>10.8</b> Sums of random variables</a></li>
+<li class="chapter" data-level="10.9" data-path="multivar-distribs.html"><a href="multivar-distribs.html#multivariate-normal-distribution-1"><i class="fa fa-check"></i><b>10.9</b> Multivariate normal distribution</a>
+<ul>
+<li class="chapter" data-level="10.9.1" data-path="multivar-distribs.html"><a href="multivar-distribs.html#bivariate-example"><i class="fa fa-check"></i><b>10.9.1</b> Bivariate example</a></li>
+<li class="chapter" data-level="10.9.2" data-path="multivar-distribs.html"><a href="multivar-distribs.html#properties-of-the-multivariate-normal-distribution"><i class="fa fa-check"></i><b>10.9.2</b> Properties of the multivariate normal distribution</a></li>
+<li class="chapter" data-level="10.9.3" data-path="multivar-distribs.html"><a href="multivar-distribs.html#independence-and-multivariate-normal"><i class="fa fa-check"></i><b>10.9.3</b> Independence and multivariate normal</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#limits"><i class="fa fa-check"></i><b>11</b> Properties of random variables and limit theorems</a>
+<ul>
+<li class="chapter" data-level="" data-path="limits.html"><a href="limits.html"><i class="fa fa-check"></i>Learning objectives</a></li>
+<li class="chapter" data-level="" data-path="limits.html"><a href="limits.html#supplemental-readings-10"><i class="fa fa-check"></i>Supplemental readings</a></li>
+<li class="chapter" data-level="11.1" data-path="limits.html"><a href="limits.html#iterated-expectations"><i class="fa fa-check"></i><b>11.1</b> Iterated Expectations</a></li>
+<li class="chapter" data-level="11.2" data-path="limits.html"><a href="limits.html#change-of-coordinates"><i class="fa fa-check"></i><b>11.2</b> Change of coordinates</a></li>
+<li class="chapter" data-level="11.3" data-path="limits.html"><a href="limits.html#moment-generating-functions"><i class="fa fa-check"></i><b>11.3</b> Moment generating functions</a>
+<ul>
+<li class="chapter" data-level="11.3.1" data-path="limits.html"><a href="limits.html#the-moments-of-the-normal-distribution"><i class="fa fa-check"></i><b>11.3.1</b> The moments of the normal distribution</a></li>
+<li class="chapter" data-level="11.3.2" data-path="limits.html"><a href="limits.html#extracting-moments-of-the-normal-distribution"><i class="fa fa-check"></i><b>11.3.2</b> Extracting moments of the normal distribution</a></li>
+</ul></li>
+<li class="chapter" data-level="11.4" data-path="limits.html"><a href="limits.html#sequences-of-independent-random-variables"><i class="fa fa-check"></i><b>11.4</b> Sequences of independent random variables</a></li>
+<li class="chapter" data-level="11.5" data-path="limits.html"><a href="limits.html#inequalities-and-limit-theorems"><i class="fa fa-check"></i><b>11.5</b> Inequalities and limit theorems</a>
+<ul>
+<li class="chapter" data-level="11.5.1" data-path="limits.html"><a href="limits.html#limit-theorems"><i class="fa fa-check"></i><b>11.5.1</b> Limit theorems</a></li>
+<li class="chapter" data-level="11.5.2" data-path="limits.html"><a href="limits.html#weak-law-of-large-numbers"><i class="fa fa-check"></i><b>11.5.2</b> Weak law of large numbers</a></li>
+</ul></li>
+<li class="chapter" data-level="11.6" data-path="limits.html"><a href="limits.html#sequence-of-random-variables"><i class="fa fa-check"></i><b>11.6</b> Sequence of random variables</a>
+<ul>
+<li class="chapter" data-level="11.6.1" data-path="limits.html"><a href="limits.html#meanvariance-of-sample-mean"><i class="fa fa-check"></i><b>11.6.1</b> Mean/variance of sample mean</a></li>
+<li class="chapter" data-level="11.6.2" data-path="limits.html"><a href="limits.html#weak-law-of-large-numbers-1"><i class="fa fa-check"></i><b>11.6.2</b> Weak law of large numbers</a></li>
+</ul></li>
+<li class="chapter" data-level="11.7" data-path="limits.html"><a href="limits.html#sequences-and-convergence"><i class="fa fa-check"></i><b>11.7</b> Sequences and convergence</a>
+<ul>
+<li class="chapter" data-level="11.7.1" data-path="limits.html"><a href="limits.html#convergence-definitions"><i class="fa fa-check"></i><b>11.7.1</b> Convergence definitions</a></li>
+<li class="chapter" data-level="11.7.2" data-path="limits.html"><a href="limits.html#convergence-in-probability"><i class="fa fa-check"></i><b>11.7.2</b> Convergence in probability</a></li>
+<li class="chapter" data-level="11.7.3" data-path="limits.html"><a href="limits.html#almost-sure-convergence"><i class="fa fa-check"></i><b>11.7.3</b> Almost sure convergence</a></li>
+<li class="chapter" data-level="11.7.4" data-path="limits.html"><a href="limits.html#convergence-in-distribution"><i class="fa fa-check"></i><b>11.7.4</b> Convergence in distribution</a></li>
+<li class="chapter" data-level="11.7.5" data-path="limits.html"><a href="limits.html#convergence-in-distribution-not-rightarrow-convergence-in-probability"><i class="fa fa-check"></i><b>11.7.5</b> Convergence in distribution <span class="math inline">\(\not \Rightarrow\)</span> convergence in probability</a></li>
+<li class="chapter" data-level="11.7.6" data-path="limits.html"><a href="limits.html#central-limit-theorem"><i class="fa fa-check"></i><b>11.7.6</b> Central limit theorem</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="classic-inference.html"><a href="classic-inference.html"><i class="fa fa-check"></i><b>12</b> Classical statistical inference</a>
+<ul>
+<li class="chapter" data-level="" data-path="classic-inference.html"><a href="classic-inference.html#learning-objectives-11"><i class="fa fa-check"></i>Learning objectives</a></li>
+<li class="chapter" data-level="" data-path="classic-inference.html"><a href="classic-inference.html#supplemental-readings-11"><i class="fa fa-check"></i>Supplemental readings</a></li>
+<li class="chapter" data-level="12.1" data-path="classic-inference.html"><a href="classic-inference.html#statistical-inference"><i class="fa fa-check"></i><b>12.1</b> Statistical inference</a></li>
+<li class="chapter" data-level="12.2" data-path="classic-inference.html"><a href="classic-inference.html#parametric-models"><i class="fa fa-check"></i><b>12.2</b> Parametric models</a>
+<ul>
+<li class="chapter" data-level="12.2.1" data-path="classic-inference.html"><a href="classic-inference.html#examples-of-parametric-models"><i class="fa fa-check"></i><b>12.2.1</b> Examples of parametric models</a></li>
+</ul></li>
+<li class="chapter" data-level="12.3" data-path="classic-inference.html"><a href="classic-inference.html#point-estimates"><i class="fa fa-check"></i><b>12.3</b> Point estimates</a>
+<ul>
+<li class="chapter" data-level="12.3.1" data-path="classic-inference.html"><a href="classic-inference.html#properties-of-point-estimates"><i class="fa fa-check"></i><b>12.3.1</b> Properties of point estimates</a></li>
+</ul></li>
+<li class="chapter" data-level="12.4" data-path="classic-inference.html"><a href="classic-inference.html#confidence-sets"><i class="fa fa-check"></i><b>12.4</b> Confidence sets</a>
+<ul>
+<li class="chapter" data-level="12.4.1" data-path="classic-inference.html"><a href="classic-inference.html#caution-interpreting-confidence-intervals"><i class="fa fa-check"></i><b>12.4.1</b> Caution interpreting confidence intervals</a></li>
+<li class="chapter" data-level="12.4.2" data-path="classic-inference.html"><a href="classic-inference.html#constructing-confidence-intervals"><i class="fa fa-check"></i><b>12.4.2</b> Constructing confidence intervals</a></li>
+</ul></li>
+<li class="chapter" data-level="12.5" data-path="classic-inference.html"><a href="classic-inference.html#hypothesis-testing"><i class="fa fa-check"></i><b>12.5</b> Hypothesis testing</a>
+<ul>
+<li class="chapter" data-level="12.5.1" data-path="classic-inference.html"><a href="classic-inference.html#types-of-errors"><i class="fa fa-check"></i><b>12.5.1</b> Types of errors</a></li>
+<li class="chapter" data-level="12.5.2" data-path="classic-inference.html"><a href="classic-inference.html#power-function"><i class="fa fa-check"></i><b>12.5.2</b> Power function</a></li>
+<li class="chapter" data-level="12.5.3" data-path="classic-inference.html"><a href="classic-inference.html#sided-tests"><i class="fa fa-check"></i><b>12.5.3</b> Sided tests</a></li>
+<li class="chapter" data-level="12.5.4" data-path="classic-inference.html"><a href="classic-inference.html#example-hypothesis-test"><i class="fa fa-check"></i><b>12.5.4</b> Example hypothesis test</a></li>
+<li class="chapter" data-level="12.5.5" data-path="classic-inference.html"><a href="classic-inference.html#wald-test"><i class="fa fa-check"></i><b>12.5.5</b> Wald test</a></li>
+<li class="chapter" data-level="12.5.6" data-path="classic-inference.html"><a href="classic-inference.html#wald-or-t-test"><i class="fa fa-check"></i><b>12.5.6</b> Wald or <span class="math inline">\(t\)</span>-test?</a></li>
+<li class="chapter" data-level="12.5.7" data-path="classic-inference.html"><a href="classic-inference.html#relationship-to-confidence-intervals"><i class="fa fa-check"></i><b>12.5.7</b> Relationship to confidence intervals</a></li>
+<li class="chapter" data-level="12.5.8" data-path="classic-inference.html"><a href="classic-inference.html#statistical-vs.-scientific-significance"><i class="fa fa-check"></i><b>12.5.8</b> Statistical vs. scientific significance</a></li>
+</ul></li>
+<li class="chapter" data-level="12.6" data-path="classic-inference.html"><a href="classic-inference.html#p-values"><i class="fa fa-check"></i><b>12.6</b> <span class="math inline">\(p\)</span>-values</a>
+<ul>
+<li class="chapter" data-level="12.6.1" data-path="classic-inference.html"><a href="classic-inference.html#interpreting-p-values"><i class="fa fa-check"></i><b>12.6.1</b> Interpreting <span class="math inline">\(p\)</span>-values</a></li>
+<li class="chapter" data-level="12.6.2" data-path="classic-inference.html"><a href="classic-inference.html#calculating-p-values"><i class="fa fa-check"></i><b>12.6.2</b> Calculating <span class="math inline">\(p\)</span>-values</a></li>
+<li class="chapter" data-level="12.6.3" data-path="classic-inference.html"><a href="classic-inference.html#pearsons-chi2-test-for-multinomial-data"><i class="fa fa-check"></i><b>12.6.3</b> Pearson’s <span class="math inline">\(\chi^2\)</span> test for multinomial data</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="mle-ols.html"><a href="mle-ols.html"><i class="fa fa-check"></i><b>13</b> Maximum likelihood estimation and linear regression</a>
+<ul>
+<li class="chapter" data-level="" data-path="mle-ols.html"><a href="mle-ols.html#learning-objectives-12"><i class="fa fa-check"></i>Learning objectives</a></li>
+<li class="chapter" data-level="" data-path="mle-ols.html"><a href="mle-ols.html#supplemental-readings-12"><i class="fa fa-check"></i>Supplemental readings</a></li>
+<li class="chapter" data-level="13.1" data-path="mle-ols.html"><a href="mle-ols.html#maximum-likelihood"><i class="fa fa-check"></i><b>13.1</b> Maximum likelihood</a>
+<ul>
+<li class="chapter" data-level="13.1.1" data-path="mle-ols.html"><a href="mle-ols.html#properties-of-maximum-likelihood-estimators"><i class="fa fa-check"></i><b>13.1.1</b> Properties of maximum likelihood estimators</a></li>
+</ul></li>
+<li class="chapter" data-level="13.2" data-path="mle-ols.html"><a href="mle-ols.html#least-squares-regression"><i class="fa fa-check"></i><b>13.2</b> Least squares regression</a>
+<ul>
+<li class="chapter" data-level="13.2.1" data-path="mle-ols.html"><a href="mle-ols.html#simple-linear-regression"><i class="fa fa-check"></i><b>13.2.1</b> Simple linear regression</a></li>
+<li class="chapter" data-level="13.2.2" data-path="mle-ols.html"><a href="mle-ols.html#estimation-strategy"><i class="fa fa-check"></i><b>13.2.2</b> Estimation strategy</a></li>
+<li class="chapter" data-level="13.2.3" data-path="mle-ols.html"><a href="mle-ols.html#least-squares-estimator"><i class="fa fa-check"></i><b>13.2.3</b> Least squares estimator</a></li>
+<li class="chapter" data-level="13.2.4" data-path="mle-ols.html"><a href="mle-ols.html#maximum-likelihood-estimation"><i class="fa fa-check"></i><b>13.2.4</b> Maximum likelihood estimation</a></li>
+<li class="chapter" data-level="13.2.5" data-path="mle-ols.html"><a href="mle-ols.html#properties-of-the-least-squares-estimator"><i class="fa fa-check"></i><b>13.2.5</b> Properties of the least squares estimator</a></li>
+</ul></li>
+<li class="chapter" data-level="13.3" data-path="mle-ols.html"><a href="mle-ols.html#assumptions-of-linear-regression-models"><i class="fa fa-check"></i><b>13.3</b> Assumptions of linear regression models</a>
+<ul>
+<li class="chapter" data-level="13.3.1" data-path="mle-ols.html"><a href="mle-ols.html#linearity"><i class="fa fa-check"></i><b>13.3.1</b> Linearity</a></li>
+<li class="chapter" data-level="13.3.2" data-path="mle-ols.html"><a href="mle-ols.html#constant-variance"><i class="fa fa-check"></i><b>13.3.2</b> Constant variance</a></li>
+<li class="chapter" data-level="13.3.3" data-path="mle-ols.html"><a href="mle-ols.html#normality"><i class="fa fa-check"></i><b>13.3.3</b> Normality</a></li>
+<li class="chapter" data-level="13.3.4" data-path="mle-ols.html"><a href="mle-ols.html#independence"><i class="fa fa-check"></i><b>13.3.4</b> Independence</a></li>
+<li class="chapter" data-level="13.3.5" data-path="mle-ols.html"><a href="mle-ols.html#fixed-x-or-x-measured-without-error-and-independent-of-the-error"><i class="fa fa-check"></i><b>13.3.5</b> Fixed <span class="math inline">\(X\)</span>, or <span class="math inline">\(X\)</span> measured without error and independent of the error</a></li>
+<li class="chapter" data-level="13.3.6" data-path="mle-ols.html"><a href="mle-ols.html#x-is-not-invariant"><i class="fa fa-check"></i><b>13.3.6</b> <span class="math inline">\(X\)</span> is not invariant</a></li>
+<li class="chapter" data-level="13.3.7" data-path="mle-ols.html"><a href="mle-ols.html#handling-violations-of-assumptions"><i class="fa fa-check"></i><b>13.3.7</b> Handling violations of assumptions</a></li>
+</ul></li>
+<li class="chapter" data-level="13.4" data-path="mle-ols.html"><a href="mle-ols.html#unusual-and-influential-data"><i class="fa fa-check"></i><b>13.4</b> Unusual and influential data</a>
+<ul>
+<li class="chapter" data-level="13.4.1" data-path="mle-ols.html"><a href="mle-ols.html#terms"><i class="fa fa-check"></i><b>13.4.1</b> Terms</a></li>
+<li class="chapter" data-level="13.4.2" data-path="mle-ols.html"><a href="mle-ols.html#measuring-leverage"><i class="fa fa-check"></i><b>13.4.2</b> Measuring leverage</a></li>
+<li class="chapter" data-level="13.4.3" data-path="mle-ols.html"><a href="mle-ols.html#measuring-discrepancy"><i class="fa fa-check"></i><b>13.4.3</b> Measuring discrepancy</a></li>
+<li class="chapter" data-level="13.4.4" data-path="mle-ols.html"><a href="mle-ols.html#measuring-influence"><i class="fa fa-check"></i><b>13.4.4</b> Measuring influence</a></li>
+<li class="chapter" data-level="13.4.5" data-path="mle-ols.html"><a href="mle-ols.html#visualizing-leverage-discrepancy-and-influence"><i class="fa fa-check"></i><b>13.4.5</b> Visualizing leverage, discrepancy, and influence</a></li>
+<li class="chapter" data-level="13.4.6" data-path="mle-ols.html"><a href="mle-ols.html#numerical-rules-of-thumb"><i class="fa fa-check"></i><b>13.4.6</b> Numerical rules of thumb</a></li>
+<li class="chapter" data-level="13.4.7" data-path="mle-ols.html"><a href="mle-ols.html#how-to-treat-unusual-observations"><i class="fa fa-check"></i><b>13.4.7</b> How to treat unusual observations</a></li>
+</ul></li>
+<li class="chapter" data-level="13.5" data-path="mle-ols.html"><a href="mle-ols.html#non-normally-distributed-errors"><i class="fa fa-check"></i><b>13.5</b> Non-normally distributed errors</a>
+<ul>
+<li class="chapter" data-level="13.5.1" data-path="mle-ols.html"><a href="mle-ols.html#detecting-non-normally-distributed-errors"><i class="fa fa-check"></i><b>13.5.1</b> Detecting non-normally distributed errors</a></li>
+<li class="chapter" data-level="13.5.2" data-path="mle-ols.html"><a href="mle-ols.html#fixing-non-normally-distributed-errors"><i class="fa fa-check"></i><b>13.5.2</b> Fixing non-normally distributed errors</a></li>
+</ul></li>
+<li class="chapter" data-level="13.6" data-path="mle-ols.html"><a href="mle-ols.html#non-constant-error-variance"><i class="fa fa-check"></i><b>13.6</b> Non-constant error variance</a>
+<ul>
+<li class="chapter" data-level="13.6.1" data-path="mle-ols.html"><a href="mle-ols.html#detecting-heteroscedasticity"><i class="fa fa-check"></i><b>13.6.1</b> Detecting heteroscedasticity</a></li>
+<li class="chapter" data-level="13.6.2" data-path="mle-ols.html"><a href="mle-ols.html#accounting-for-heteroscedasticity"><i class="fa fa-check"></i><b>13.6.2</b> Accounting for heteroscedasticity</a></li>
+</ul></li>
+<li class="chapter" data-level="13.7" data-path="mle-ols.html"><a href="mle-ols.html#non-linearity-in-the-data"><i class="fa fa-check"></i><b>13.7</b> Non-linearity in the data</a>
+<ul>
+<li class="chapter" data-level="13.7.1" data-path="mle-ols.html"><a href="mle-ols.html#partial-residual-plots"><i class="fa fa-check"></i><b>13.7.1</b> Partial residual plots</a></li>
+</ul></li>
+<li class="chapter" data-level="13.8" data-path="mle-ols.html"><a href="mle-ols.html#collinearity"><i class="fa fa-check"></i><b>13.8</b> Collinearity</a>
+<ul>
+<li class="chapter" data-level="13.8.1" data-path="mle-ols.html"><a href="mle-ols.html#perfect-collinearity"><i class="fa fa-check"></i><b>13.8.1</b> Perfect collinearity</a></li>
+<li class="chapter" data-level="13.8.2" data-path="mle-ols.html"><a href="mle-ols.html#less-than-perfect-collinearity"><i class="fa fa-check"></i><b>13.8.2</b> Less-than-perfect collinearity</a></li>
+<li class="chapter" data-level="13.8.3" data-path="mle-ols.html"><a href="mle-ols.html#fixing-multicollinearity"><i class="fa fa-check"></i><b>13.8.3</b> Fixing multicollinearity</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="bayesian-inference.html"><a href="bayesian-inference.html"><i class="fa fa-check"></i><b>14</b> Bayesian inference</a>
+<ul>
+<li class="chapter" data-level="" data-path="bayesian-inference.html"><a href="bayesian-inference.html#learning-objectives-13"><i class="fa fa-check"></i>Learning objectives</a></li>
+<li class="chapter" data-level="" data-path="bayesian-inference.html"><a href="bayesian-inference.html#supplemental-readings-13"><i class="fa fa-check"></i>Supplemental readings</a></li>
+<li class="chapter" data-level="14.1" data-path="bayesian-inference.html"><a href="bayesian-inference.html#bayesian-philosophy"><i class="fa fa-check"></i><b>14.1</b> Bayesian philosophy</a></li>
+<li class="chapter" data-level="14.2" data-path="bayesian-inference.html"><a href="bayesian-inference.html#bayes-theorem"><i class="fa fa-check"></i><b>14.2</b> Bayes’ theorem</a></li>
+<li class="chapter" data-level="14.3" data-path="bayesian-inference.html"><a href="bayesian-inference.html#bayesian-method"><i class="fa fa-check"></i><b>14.3</b> Bayesian method</a>
+<ul>
+<li class="chapter" data-level="14.3.1" data-path="bayesian-inference.html"><a href="bayesian-inference.html#example-coin-tossing"><i class="fa fa-check"></i><b>14.3.1</b> Example: coin tossing</a></li>
+</ul></li>
+<li class="chapter" data-level="14.4" data-path="bayesian-inference.html"><a href="bayesian-inference.html#updating-your-prior-beliefs"><i class="fa fa-check"></i><b>14.4</b> Updating your prior beliefs</a></li>
+<li class="chapter" data-level="14.5" data-path="bayesian-inference.html"><a href="bayesian-inference.html#simulation"><i class="fa fa-check"></i><b>14.5</b> Simulation</a></li>
+<li class="chapter" data-level="14.6" data-path="bayesian-inference.html"><a href="bayesian-inference.html#priors"><i class="fa fa-check"></i><b>14.6</b> Priors</a>
+<ul>
+<li class="chapter" data-level="14.6.1" data-path="bayesian-inference.html"><a href="bayesian-inference.html#improper-priors"><i class="fa fa-check"></i><b>14.6.1</b> Improper priors</a></li>
+<li class="chapter" data-level="14.6.2" data-path="bayesian-inference.html"><a href="bayesian-inference.html#flat-priors-are-not-invariant"><i class="fa fa-check"></i><b>14.6.2</b> Flat priors are not invariant</a></li>
+</ul></li>
+<li class="chapter" data-level="14.7" data-path="bayesian-inference.html"><a href="bayesian-inference.html#multiparameter-problems"><i class="fa fa-check"></i><b>14.7</b> Multiparameter problems</a></li>
+<li class="chapter" data-level="14.8" data-path="bayesian-inference.html"><a href="bayesian-inference.html#critiques-and-defenses-of-bayesian-inference"><i class="fa fa-check"></i><b>14.8</b> Critiques and defenses of Bayesian inference</a>
+<ul>
+<li class="chapter" data-level="14.8.1" data-path="bayesian-inference.html"><a href="bayesian-inference.html#critique-of-bayesian-inference"><i class="fa fa-check"></i><b>14.8.1</b> Critique of Bayesian inference</a></li>
+<li class="chapter" data-level="14.8.2" data-path="bayesian-inference.html"><a href="bayesian-inference.html#defense-of-bayesian-inference"><i class="fa fa-check"></i><b>14.8.2</b> Defense of Bayesian inference</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="bayesian-inference.html"><a href="bayesian-inference.html#acknowledgements-1"><i class="fa fa-check"></i>Acknowledgements</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Computational Math Camp</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="sequences-derivatives" class="section level1 hasAnchor" number="2">
+<h1><span class="header-section-number">Lecture 2</span> Sequences, limits, continuity, and derivatives<a href="sequences-derivatives.html#sequences-derivatives" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="learning-objectives-1" class="section level2 unnumbered hasAnchor">
+<h2>Learning objectives<a href="sequences-derivatives.html#learning-objectives-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ul>
+<li>Define sequences</li>
+<li>Distinguish convergence and divergence</li>
+<li>Define limits</li>
+<li>Define continuity</li>
+<li>Calculate limits of sequences and functions</li>
+<li>Define the slope of a line</li>
+<li>Summarize tangent lines, rates of change, and derivatives</li>
+<li>Define derivative rules for common functions</li>
+<li>Apply the product, quotient, and chain rules for differentiation</li>
+<li>Summarize the exponential function and natural logarithms</li>
+<li>Identify properties of derivatives helpful to statistical methods</li>
+</ul>
+</div>
+<div id="supplemental-readings-1" class="section level2 unnumbered hasAnchor">
+<h2>Supplemental readings<a href="sequences-derivatives.html#supplemental-readings-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ul>
+<li>Chapter 5-7, 9, <span class="citation">Pemberton and Rau (<a href="#ref-pemberton2015" role="doc-biblioref">2011</a>)</span></li>
+<li><a href="https://openstax.org/details/books/calculus-volume-1">OpenStax Calculus: Volume 1, ch 2-4</a></li>
+<li><a href="https://openstax.org/details/books/calculus-volume-2">OpenStax Calculus: Volume 2, ch 5</a></li>
+</ul>
+</div>
+<div id="sequence" class="section level2 hasAnchor" number="2.1">
+<h2><span class="header-section-number">2.1</span> Sequence<a href="sequences-derivatives.html#sequence" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="definition" class="section level3 hasAnchor" number="2.1.1">
+<h3><span class="header-section-number">2.1.1</span> Definition<a href="sequences-derivatives.html#definition" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="definition" echo="TRUE">
+<p><span id="def:unlabeled-div-28" class="definition"><strong>Definition 2.1  (Sequence) </strong></span>A sequence is a function whose domain is the set of positive integers</p>
+</div>
+<p>We’ll write a sequence as,</p>
+<p><span class="math display">\[\left\{u_{n} \right\}_{n=1}^{\infty} = (u_{1} , u_{2}, \ldots, u_{N}, \ldots )\]</span></p>
+</div>
+<div id="examples" class="section level3 hasAnchor" number="2.1.2">
+<h3><span class="header-section-number">2.1.2</span> Examples<a href="sequences-derivatives.html#examples" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><span class="math display">\[\left\{\frac{1}{n} \right\} = (1, 1/2, 1/3, 1/4, \ldots, 1/N, \ldots, )\]</span></p>
+<p><img src="02-sequences-limits-derivatives_files/figure-html/seq-1-1.gif" width="90%" style="display: block; margin: auto;" /></p>
+<p><span class="math display">\[\left\{\frac{1}{n^2} \right\} = (1, 1/4, 1/9, 1/16, \ldots, 1/N^2, \ldots, )   \\\]</span></p>
+<p><img src="02-sequences-limits-derivatives_files/figure-html/seq-2-1.gif" width="90%" style="display: block; margin: auto;" /></p>
+<p><span class="math display">\[\left\{\frac{1 + (-1)^n}{2} \right\} = (0, 1, 0, 1, \ldots, 0,1,0,1 \ldots, ) \\\]</span></p>
+<p><img src="02-sequences-limits-derivatives_files/figure-html/seq-3-1.gif" width="90%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="arithmetic-and-geometric-progressions" class="section level3 hasAnchor" number="2.1.3">
+<h3><span class="header-section-number">2.1.3</span> Arithmetic and geometric progressions<a href="sequences-derivatives.html#arithmetic-and-geometric-progressions" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="definition" echo="TRUE">
+<p><span id="def:unlabeled-div-29" class="definition"><strong>Definition 2.2  (Arithmetic progression) </strong></span>An <strong>arithmetic progression</strong> is a sequence <span class="math inline">\(\{ u_n \}\)</span> with the property that the difference between each pair of successive terms is the same: <span class="math inline">\(u_{n+1} - u_n\)</span> is the same for all <span class="math inline">\(n\)</span>. The arithmetic progression with first term <span class="math inline">\(a\)</span> and common difference <span class="math inline">\(d\)</span> is</p>
+<p><span class="math display">\[a, a + d, a + 2d, a +3d, \ldots\]</span></p>
+<p>The <span class="math inline">\(n\)</span>th term is given by</p>
+<p><span class="math display">\[u_n = a + (n-1)d\]</span></p>
+</div>
+<p><img src="02-sequences-limits-derivatives_files/figure-html/arithmetric-progression-1.png" width="90%" style="display: block; margin: auto;" /></p>
+<div class="definition" echo="TRUE">
+<p><span id="def:unlabeled-div-30" class="definition"><strong>Definition 2.3  (Geometric progression) </strong></span>A <strong>geometric progression</strong> is a sequence <span class="math inline">\(\{ u_n \}\)</span> in which each term is obtained from the preceding one by multiplication by the same number: the ratio <span class="math inline">\(\frac{u_{n+1}}{u_n}\)</span> is the same for all <span class="math inline">\(n\)</span>. The geometric progression with first term <span class="math inline">\(a\)</span> and common ratio <span class="math inline">\(x\)</span> is</p>
+<p><span class="math display">\[a, ax, ax^2, ax^3, \ldots\]</span></p>
+<p>The <span class="math inline">\(n\)</span>th term is given by</p>
+<p><span class="math display">\[u_n = ax^{n-1}\]</span></p>
+</div>
+<p><img src="02-sequences-limits-derivatives_files/figure-html/geometric-progression-1.png" width="90%" style="display: block; margin: auto;" /></p>
+<p>Illustrative of a principal of <strong>convergence</strong>. Some applications of geometric progressions occur in economics (e.g. compounding interest).</p>
+</div>
+<div id="convergence" class="section level3 hasAnchor" number="2.1.4">
+<h3><span class="header-section-number">2.1.4</span> Convergence<a href="sequences-derivatives.html#convergence" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Consider the sequence:</p>
+<p><span class="math display">\[\left\{\frac{(-1)^{n} }{n} \right \} = (-1, \frac{1}{2}, \frac{-1}{3}, \frac{1}{4}, \frac{-1}{5}, \frac{1}{6}, \frac{-1}{7}, \frac{1}{8}, \ldots )\]</span></p>
+<p><img src="02-sequences-limits-derivatives_files/figure-html/seq-convergence-1.gif" width="90%" style="display: block; margin: auto;" /></p>
+<div class="definition" echo="TRUE">
+<p><span id="def:unlabeled-div-31" class="definition"><strong>Definition 2.4  (Convergence) </strong></span>A sequence <span class="math inline">\(\left\{u_{n} \right\}_{n=1}^{\infty}\)</span> converges to a real number <span class="math inline">\(A\)</span> if for each <span class="math inline">\(\epsilon &gt;0\)</span> there is a positive integer <span class="math inline">\(N\)</span> such that for all <span class="math inline">\(n \geq N\)</span> we have <span class="math inline">\(|u_{n} - A| &lt; \epsilon\)</span>.</p>
+</div>
+<ul>
+<li>If a sequence converges, it converges to <strong>one</strong> number. We call that <span class="math inline">\(A\)</span>.</li>
+<li><span class="math inline">\(\epsilon&gt;0\)</span> is some <strong>arbitrary</strong> real-valued number. Think about this as our error tolerance. Notice <span class="math inline">\(\epsilon &gt; 0\)</span>.</li>
+<li>As we will see the <span class="math inline">\(N\)</span> will depend upon <span class="math inline">\(\epsilon\)</span>.</li>
+<li>Implies the sequence never gets further than <span class="math inline">\(\epsilon\)</span> away from <span class="math inline">\(A\)</span>.</li>
+</ul>
+<div class="definition" echo="TRUE">
+<p><span id="def:unlabeled-div-32" class="definition"><strong>Definition 2.5  (Divergence and Bounded) </strong></span>If a sequence, <span class="math inline">\(\left\{u_{n} \right\}\)</span> converges we’ll call it <strong>convergent</strong>. If it doesn’t we’ll call it <strong>divergent</strong>. If there is some number <span class="math inline">\(M\)</span> such that, for all <span class="math inline">\(n\)</span> <span class="math inline">\(|u_{n}|&lt;M\)</span>, then we’ll call it <strong>bounded</strong>.</p>
+</div>
+<ul>
+<li><p>An unbounded sequence</p>
+<p><span class="math display">\[\left\{ n \right \} = (1, 2, 3, 4, \ldots, N, \ldots )\]</span></p>
+<p><img src="02-sequences-limits-derivatives_files/figure-html/seq-unbounded-1.png" width="90%" style="display: block; margin: auto;" /></p></li>
+<li><p>A bounded sequence that doesn’t converge</p>
+<p><span class="math display">\[\left\{\frac{1 + (-1)^n}{2} \right\} = (0, 1, 0, 1, \ldots, 0,1,0,1 \ldots, )\]</span></p>
+<p><img src="02-sequences-limits-derivatives_files/figure-html/seq-bounded-1.png" width="90%" style="display: block; margin: auto;" /></p></li>
+</ul>
+<p>All convergent sequences are bounded. If a sequence is <strong>constant</strong>, <span class="math inline">\(\left\{C \right \}\)</span> it converges to <span class="math inline">\(C\)</span>.</p>
+</div>
+<div id="algebra-of-sequences" class="section level3 hasAnchor" number="2.1.5">
+<h3><span class="header-section-number">2.1.5</span> Algebra of sequences<a href="sequences-derivatives.html#algebra-of-sequences" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>How do we add, multiply, and divide sequences?</p>
+<div class="theorem" echo="TRUE">
+<p><span id="thm:unlabeled-div-33" class="theorem"><strong>Theorem 2.1  </strong></span>Suppose <span class="math inline">\(\left\{a_{n} \right \}\)</span> converges to <span class="math inline">\(A\)</span> and <span class="math inline">\(\left\{b_{n} \right\}\)</span> converges to <span class="math inline">\(B\)</span>. Then,</p>
+<ul>
+<li><span class="math inline">\(\left\{a_{n} + b_{n} \right\}\)</span> converges to <span class="math inline">\(A + B\)</span>.</li>
+<li><span class="math inline">\(\left\{a_{n} b_{n} \right\}\)</span> converges to <span class="math inline">\(A \times B\)</span>.<br />
+</li>
+<li>Suppose <span class="math inline">\(b_{n} \neq 0 \forall n\)</span> and <span class="math inline">\(B \neq 0\)</span>. Then <span class="math inline">\(\left\{\frac{a_{n}}{b_{n}} \right\}\)</span> converges to <span class="math inline">\(\frac{A}{B}\)</span>.<br />
+</li>
+</ul>
+</div>
+<div id="think-pair-share-1" class="section level4 hasAnchor" number="2.1.5.1">
+<h4><span class="header-section-number">2.1.5.1</span> Think, pair, share<a href="sequences-derivatives.html#think-pair-share-1" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<ol style="list-style-type: decimal">
+<li>Consider the sequence <span class="math inline">\(\left\{\frac{1}{n} \right\}\)</span> - what does it converge to?</li>
+<li>Consider the sequence <span class="math inline">\(\left\{\frac{1}{2n} \right \}\)</span> - what does it converge to?</li>
+</ol>
+<details>
+<summary>
+<strong>Click for the solution</strong>
+</summary>
+<p>
+<ol style="list-style-type: decimal">
+<li>0 - <span class="math inline">\(2 \times\)</span> a really big number still leads to a really big number in the denominator</li>
+<li>0 - as <span class="math inline">\(n\)</span> gets bigger, the fraction continually decreases towards 0</li>
+</ol>
+<p><img src="02-sequences-limits-derivatives_files/figure-html/converge-similar-denominator-1.png" width="90%" style="display: block; margin: auto;" /></p>
+</p>
+</details>
+</div>
+<div id="challenge-questions" class="section level4 hasAnchor" number="2.1.5.2">
+<h4><span class="header-section-number">2.1.5.2</span> Challenge questions<a href="sequences-derivatives.html#challenge-questions" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<ul>
+<li><p>What does <span class="math inline">\(\left\{3 + \frac{1}{n}\right\}\)</span> converge to?</p>
+<details>
+<summary>
+<p><strong>Click for the solution</strong></p>
+</summary>
+<p>
+<p><span class="math display">\[\lim_{x \rightarrow \infty} \left\{3 + \frac{1}{n}\right\} = 3\]</span></p>
+<pre><code>&lt;/p&gt;</code></pre>
+</details></li>
+<li><p>What about <span class="math inline">\(\left\{ (3 + \frac{1}{n} ) (100 + \frac{1}{n^4} ) \right\}\)</span>?</p>
+<details>
+<summary>
+<p><strong>Click for the solution</strong></p>
+</summary>
+<p>
+<p><span class="math display">\[
+\begin{aligned}
+\lim_{x \rightarrow \infty} \left\{ (3 + \frac{1}{n} ) (100  + \frac{1}{n^4} ) \right\} &amp;= \lim_{x \rightarrow \infty} \left\{ (3 + \frac{1}{n} ) \right\}  \times \lim_{x \rightarrow \infty} \left\{ (100  + \frac{1}{n^4} ) \right\} \\
+&amp;= 3 \times 100 \\
+&amp;= 300
+\end{aligned}
+\]</span></p>
+<pre><code>&lt;/p&gt;</code></pre>
+</details></li>
+<li><p>Finally, <span class="math inline">\(\left\{ \frac{ 300 + \frac{1}{n} }{100 + \frac{1}{n^4}} \right\}\)</span>?</p>
+<details>
+<summary>
+<p><strong>Click for the solution</strong></p>
+</summary>
+<p>
+<p><span class="math display">\[
+\begin{aligned}
+\lim_{x \rightarrow \infty} \left\{ \frac{ 300 + \frac{1}{n} }{100  + \frac{1}{n^4}} \right\} &amp;= \frac{300}{100} \\
+&amp;= 3
+\end{aligned}
+\]</span></p>
+<pre><code>&lt;/p&gt;</code></pre>
+</details></li>
+</ul>
+</div>
+</div>
+</div>
+<div id="limits" class="section level2 hasAnchor" number="2.2">
+<h2><span class="header-section-number">2.2</span> Limits<a href="sequences-derivatives.html#limits" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="sequences-leadsto-limits-of-functions" class="section level3 hasAnchor" number="2.2.1">
+<h3><span class="header-section-number">2.2.1</span> Sequences <span class="math inline">\(\leadsto\)</span> limits of functions<a href="sequences-derivatives.html#sequences-leadsto-limits-of-functions" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li>Calculus/Real Analysis: study of functions on the <strong>real line</strong></li>
+<li>Limit of a function: how does a function behave as it gets close to a particular point?</li>
+</ul>
+<p>Relevant to our understanding and application of:</p>
+<ul>
+<li>Derivatives</li>
+<li>Asymptotics</li>
+<li>Game Theory</li>
+</ul>
+</div>
+<div id="limits-of-functions" class="section level3 hasAnchor" number="2.2.2">
+<h3><span class="header-section-number">2.2.2</span> Limits of functions<a href="sequences-derivatives.html#limits-of-functions" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><img src="02-sequences-limits-derivatives_files/figure-html/lim-sin-x-1.gif" width="90%" style="display: block; margin: auto;" /></p>
+<div class="definition" echo="TRUE">
+<p><span id="def:unlabeled-div-34" class="definition"><strong>Definition 2.6  (Limit of a function) </strong></span>Suppose <span class="math inline">\(f: \Re \rightarrow \Re\)</span>. We say that <span class="math inline">\(f\)</span> has a limit <span class="math inline">\(L\)</span> at <span class="math inline">\(x_{0}\)</span> if, for <span class="math inline">\(\epsilon&gt;0\)</span>, there is a <span class="math inline">\(\delta&gt;0\)</span> such that</p>
+<p><span class="math display">\[|f(x) - L| &lt; \epsilon \, \forall \, x \backepsilon 0 &lt; |x - x_0 | &lt; \delta\]</span></p>
+<p><span class="math display">\[|f(x) - L| &lt; \epsilon \, \text{for all} \, x \, \text{such that} \, 0 &lt; |x - x_0 | &lt; \delta\]</span></p>
+</div>
+<p>Limits are about the behavior of functions at <strong>points</strong>. Here <span class="math inline">\(x_{0}\)</span>. As with sequences, we let <span class="math inline">\(\epsilon\)</span> define an <strong>error rate</strong>. <span class="math inline">\(\delta\)</span> defines an area around <span class="math inline">\(x_{0}\)</span> where <span class="math inline">\(f(x)\)</span> is going to be within our error rate.</p>
+</div>
+<div id="examples-of-limits" class="section level3 hasAnchor" number="2.2.3">
+<h3><span class="header-section-number">2.2.3</span> Examples of limits<a href="sequences-derivatives.html#examples-of-limits" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="theorem" echo="TRUE">
+<p><span id="thm:unlabeled-div-35" class="theorem"><strong>Theorem 2.2  </strong></span>The function <span class="math inline">\(f(x) = x + 1\)</span> has a limit of <span class="math inline">\(1\)</span> at <span class="math inline">\(x_{0} = 0\)</span>.</p>
+</div>
+<p><img src="02-sequences-limits-derivatives_files/figure-html/limit-xplus1-1.png" width="90%" style="display: block; margin: auto;" /></p>
+<div class="proof" echo="TRUE">
+<p><span id="unlabeled-div-36" class="proof"><em>Proof</em>. </span><a href="https://en.wikipedia.org/wiki/Without_loss_of_generality"><strong>Without loss of generalization</strong> (WLOG)</a> choose <span class="math inline">\(\epsilon &gt;0\)</span>. We want to show that there is <span class="math inline">\(\delta_{\epsilon}\)</span> such that <span class="math inline">\(|f(x) - 1| &lt; \epsilon \, \text{for all} \, x \, \text{such that} \, 0 &lt; |x - x_0 | &lt; \delta\)</span>. In other words,</p>
+<p><span class="math display">\[
+\begin{aligned}
+|(x + 1) - 1| &lt; \epsilon \, \text{for all} \, x \, &amp;\text{such that} \, 0 &lt; |x - 0 | &lt; \delta \\
+|x| &lt; \epsilon \, \text{for all} \, x \, &amp;\text{such that} \, 0 &lt; |x | &lt; \delta \\
+\end{aligned}
+\]</span></p>
+<p>But if <span class="math inline">\(\delta_{\epsilon} = \epsilon\)</span> then this holds, we are done.</p>
+</div>
+<p>A function can have a limit of <span class="math inline">\(L\)</span> at <span class="math inline">\(x_{0}\)</span> even if <span class="math inline">\(f(x_{0} ) \neq L\)</span>(!)</p>
+<div class="theorem" echo="TRUE">
+<p><span id="thm:unlabeled-div-37" class="theorem"><strong>Theorem 2.3  </strong></span>The function <span class="math inline">\(f(x) = \frac{x^2 - 1}{x - 1}\)</span> has a limit of <span class="math inline">\(2\)</span> at <span class="math inline">\(x_{0} = 1\)</span>.</p>
+</div>
+<p><img src="02-sequences-limits-derivatives_files/figure-html/limit-discontinuous-1.png" width="90%" style="display: block; margin: auto;" /></p>
+<div class="proof" echo="TRUE">
+<p><span id="unlabeled-div-38" class="proof"><em>Proof</em>. </span>For all <span class="math inline">\(x \neq 1\)</span>,</p>
+<p><span class="math display">\[
+\begin{aligned}
+\frac{x^2 - 1}{x - 1} &amp; = \frac{(x + 1)(x - 1) }{x - 1} \\                  
+                                &amp; = x + 1
+\end{aligned}
+\]</span></p>
+<p>Choose <span class="math inline">\(\epsilon &gt;0\)</span> and set <span class="math inline">\(x_{0}=1\)</span>. Then, we’re looking for <span class="math inline">\(\delta_{\epsilon}\)</span> such that</p>
+<p><span class="math display">\[
+\begin{aligned}
+|(x + 1) -2 | &lt; \epsilon \, \text{for all} \, x \, &amp;\text{such that} \, 0 &lt; |x - 1 | &lt; \delta \\
+|x - 1 | &lt; \epsilon \, \text{for all} \, x \, &amp;\text{such that} \, 0 &lt; |x - 1 | &lt; \delta \\
+\end{aligned}
+\]</span></p>
+<p>Again, if <span class="math inline">\(\delta_{\epsilon} = \epsilon\)</span>, then this is satisfied.</p>
+</div>
+</div>
+<div id="not-all-functions-have-limits" class="section level3 hasAnchor" number="2.2.4">
+<h3><span class="header-section-number">2.2.4</span> Not all functions have limits<a href="sequences-derivatives.html#not-all-functions-have-limits" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="theorem" echo="TRUE">
+<p><span id="thm:unlabeled-div-39" class="theorem"><strong>Theorem 2.4  </strong></span>Consider <span class="math inline">\(f:(0,1) \rightarrow \Re\)</span>, <span class="math inline">\(f(x) = \frac{1}{x}\)</span>. <span class="math inline">\(f(x)\)</span> does not have a limit at <span class="math inline">\(x_{0}=0\)</span></p>
+</div>
+<p><img src="02-sequences-limits-derivatives_files/figure-html/limit-none-1.png" width="90%" style="display: block; margin: auto;" /></p>
+<div class="proof" echo="TRUE">
+<p><span id="unlabeled-div-40" class="proof"><em>Proof</em>. </span>Choose <span class="math inline">\(\epsilon&gt;0\)</span>. We need to show that there <strong>does not</strong> exist</p>
+<p><span class="math display">\[
+\begin{aligned}
+|\frac{1}{x} - L| &lt; \epsilon \, \text{for all} \, x \, &amp;\text{such that} \, 0 &lt; |x - 0 | &lt; \delta \\
+|\frac{1}{x} - L| &lt; \epsilon \, \text{for all} \, x \, &amp;\text{such that} \, 0 &lt; |x| &lt; \delta \\
+\end{aligned}
+\]</span></p>
+<p>But, there is a problem. Because</p>
+<p><span class="math display">\[
+\begin{aligned}
+\frac{1}{x} - L &amp; &lt; \epsilon \\
+\frac{1}{x} &amp; &lt; \epsilon + L \\
+x &amp; &gt; \frac{1}{L + \epsilon}  
+\end{aligned}
+\]</span></p>
+<p>This implies that there <strong>can’t</strong> be a <span class="math inline">\(\delta\)</span>, because <span class="math inline">\(x\)</span> has to be bigger than <span class="math inline">\(\frac{1}{L + \epsilon}\)</span>.</p>
+</div>
+</div>
+<div id="intuitive-definition-of-a-limit" class="section level3 hasAnchor" number="2.2.5">
+<h3><span class="header-section-number">2.2.5</span> Intuitive definition of a limit<a href="sequences-derivatives.html#intuitive-definition-of-a-limit" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="definition" echo="TRUE">
+<p><span id="def:unlabeled-div-41" class="definition"><strong>Definition 2.7  (Limit) </strong></span>If a function <span class="math inline">\(f\)</span> tends to <span class="math inline">\(L\)</span> at point <span class="math inline">\(x_{0}\)</span> we say it has a limit <span class="math inline">\(L\)</span> at <span class="math inline">\(x_{0}\)</span> we commonly write,</p>
+<p><span class="math display">\[\lim_{x \rightarrow x_{0}} f(x) = L\]</span></p>
+</div>
+<div class="definition" echo="TRUE">
+<p><span id="def:unlabeled-div-42" class="definition"><strong>Definition 2.8  (Right and left-hand limits) </strong></span>If a function <span class="math inline">\(f\)</span> tends to <span class="math inline">\(L\)</span> at point <span class="math inline">\(x_{0}\)</span> as we approach from the right, then we write</p>
+<p><span class="math display">\[\lim_{x \rightarrow x_{0}^{+} } f(x) = L\]</span></p>
+<p>and call this a <strong>right hand limit</strong>.</p>
+<p>If a function <span class="math inline">\(f\)</span> tends to <span class="math inline">\(L\)</span> at point <span class="math inline">\(x_{0}\)</span> as we approach from the left, then we write</p>
+<p><span class="math display">\[\lim_{x \rightarrow x_{0}^{-} } f(x) = L\]</span></p>
+<p>and call this a <strong>left-hand limit</strong>.</p>
+</div>
+</div>
+<div id="algebra-of-limits" class="section level3 hasAnchor" number="2.2.6">
+<h3><span class="header-section-number">2.2.6</span> Algebra of limits<a href="sequences-derivatives.html#algebra-of-limits" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="theorem" echo="TRUE">
+<p><span id="thm:unlabeled-div-43" class="theorem"><strong>Theorem 2.5  </strong></span>Suppose <span class="math inline">\(f:\Re \rightarrow \Re\)</span> and <span class="math inline">\(g: \Re \rightarrow \Re\)</span> with limits <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> at <span class="math inline">\(x_{0}\)</span>. Then,</p>
+<p><span class="math display">\[
+\begin{aligned}
+\text{i.) } \lim_{x \rightarrow x_{0} } (f(x) + g(x) ) &amp; = \lim_{x \rightarrow x_{0}} f(x) + \lim_{x \rightarrow x_{0}} g(x)  = A + B \\
+\text{ii.) }\lim_{x \rightarrow x_{0} } f(x) g(x) &amp; = \lim_{x \rightarrow x_{0}} f(x) \lim_{x\rightarrow x_{0}} g(x)  = A B
+\end{aligned}
+\]</span></p>
+<p>Suppose <span class="math inline">\(g(x) \neq 0\)</span> for all <span class="math inline">\(x \in \Re\)</span> and <span class="math inline">\(B \neq 0\)</span> then <span class="math inline">\(\frac{f(x)}{g(x)}\)</span> has a limit at <span class="math inline">\(x_{0}\)</span> and</p>
+<p><span class="math display">\[\lim_{x \rightarrow x_{0}} \frac{f(x)}{g(x)} =  \frac{\lim_{x\rightarrow x_{0} } f(x) }{\lim_{x \rightarrow x_{0} } g(x) } = \frac{A}{B}\]</span></p>
+</div>
+</div>
+</div>
+<div id="continuity" class="section level2 hasAnchor" number="2.3">
+<h2><span class="header-section-number">2.3</span> Continuity<a href="sequences-derivatives.html#continuity" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><img src="02-sequences-limits-derivatives_files/figure-html/continuity-1.png" width="90%" style="display: block; margin: auto;" /></p>
+<p>In the example above, a limit exists at 1. But there is a hole in the function. The function fails the <strong>pencil test</strong>, <strong>discontinuous</strong> at 1.</p>
+<div class="definition" echo="TRUE">
+<p><span id="def:unlabeled-div-44" class="definition"><strong>Definition 2.9  (Pencil test) </strong></span>Imagine drawing a whole function with a pencil. If you can do it without lifting the pencil off the paper, the function is continuous. If you have to lift the pencil off, even for one single point, the function is discontinuous.<a href="#fn5" class="footnote-ref" id="fnref5"><sup>5</sup></a></p>
+</div>
+<div id="defining-continuity" class="section level3 hasAnchor" number="2.3.1">
+<h3><span class="header-section-number">2.3.1</span> Defining continuity<a href="sequences-derivatives.html#defining-continuity" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="definition" echo="TRUE">
+<p><span id="def:unlabeled-div-45" class="definition"><strong>Definition 2.10  </strong></span>Suppose <span class="math inline">\(f:\Re \rightarrow \Re\)</span> and consider <span class="math inline">\(x_{0} \in \Re\)</span>. We will say <span class="math inline">\(f\)</span> is continuous at <span class="math inline">\(x_{0}\)</span> if for each <span class="math inline">\(\epsilon&gt;0\)</span> there is a <span class="math inline">\(\delta&gt;0\)</span> such that if,</p>
+<p><span class="math display">\[
+\begin{aligned}
+|x - x_{0} | &amp; &lt; \delta \text{ for all  } x \in \Re \text{ then } \nonumber \\
+|f(x) - f(x_{0})| &amp; &lt; \epsilon \nonumber
+\end{aligned}
+\]</span></p>
+</div>
+<p>Previously <span class="math inline">\(f(x_{0})\)</span> was replaced with <span class="math inline">\(L\)</span>. Now <span class="math inline">\(f(x)\)</span> has to converge on itself at <span class="math inline">\(x_{0}\)</span>. <strong>Continuity is more restrictive than a limit.</strong></p>
+<div id="examples-of-continuity" class="section level4 hasAnchor" number="2.3.1.1">
+<h4><span class="header-section-number">2.3.1.1</span> Examples of continuity<a href="sequences-derivatives.html#examples-of-continuity" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p><img src="02-sequences-limits-derivatives_files/figure-html/continuity-abs-1.png" width="90%" style="display: block; margin: auto;" /></p>
+<p><img src="02-sequences-limits-derivatives_files/figure-html/continuity-cos-1.png" width="90%" style="display: block; margin: auto;" /></p>
+<p><img src="02-sequences-limits-derivatives_files/figure-html/continuity-x-sq-1.png" width="90%" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="a-real-world-example-of-limits-measuring-incumbency-advantage" class="section level3 hasAnchor" number="2.3.2">
+<h3><span class="header-section-number">2.3.2</span> A real-world example of limits: Measuring incumbency advantage<a href="sequences-derivatives.html#a-real-world-example-of-limits-measuring-incumbency-advantage" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><strong>Incumbency advantage</strong> is the overall causal impact of being the current incumbent party in a district on the votes obtained in the district’s election. In <span class="citation">Lee (<a href="#ref-lee2008" role="doc-biblioref">2008</a>)</span>, the unit of analysis is the congressional district for U.S. House of Representatives. In the United States, incumbent parties win at a consistently high rate in elections to the U.S. House (<span class="math inline">\(&gt;90\%\)</span> win rate).</p>
+<p>Incumbent candidates also have a high win rate, though a bit smaller due to retirement (<span class="math inline">\(\approx 88\%\)</span> probability of running for reelection, <span class="math inline">\(\approx 90\%\)</span> probability of winning conditional on running for election). Compare this to the runner-up – only a <span class="math inline">\(3\%\)</span> chance of winning the next election, and only <span class="math inline">\(20\%\)</span> chance of running in the next election.</p>
+<p>Is there an electoral advantage to incumbency? That is, we expect incumbents use privileges and resources of office to gain an “unfair” advantage over potential challengers. Therefore there is an electoral advantage to incumbency – winning has a <strong>causal</strong> influence on the probability that the candidate will run for office again and eventually win the next election.</p>
+<p>Can this be proven through observational study? No – we cannot compare incumbent and non-incumbent electoral outcomes. What if all of the difference between win probabilities is a selection effect – incumbents are, by definition, those politicians who were successful in the previous election – and therefore incumbency is not the cause of the advantage?</p>
+<div id="ideal-experiment" class="section level4 hasAnchor" number="2.3.2.1">
+<h4><span class="header-section-number">2.3.2.1</span> Ideal experiment<a href="sequences-derivatives.html#ideal-experiment" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<ul>
+<li>Randomly assign incumbent parties in a district between Democrats and Republicans</li>
+<li>Keep all other factors constant</li>
+<li>Corresponding increase in Democratic/Republican electoral success in the next election would represent the overall electoral benefit due to being the incumbent party in the district</li>
+<li>Obviously not realistic</li>
+</ul>
+</div>
+<div id="regression-discontinuity-design" class="section level4 hasAnchor" number="2.3.2.2">
+<h4><span class="header-section-number">2.3.2.2</span> Regression discontinuity design<a href="sequences-derivatives.html#regression-discontinuity-design" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<ul>
+<li>RDDs - dichotomous treatment that is a deterministic function of a single, continuous covariate</li>
+<li>Treatment is assigned to those individuals whose score crosses a known threshold.</li>
+<li>If you know the score, you can reverse-engineer the treatment assignment and assume as-if random assignment in the local neighborhood around a probability of <span class="math inline">\(50\%\)</span>.</li>
+</ul>
+<p>In the context of incumbency advantage, consider that whether or not the Democrats are the incumbent party in a Congressional district is a deterministic function of their vote share in the prior election. Democrats are the incumbent party whenever their two-party margin of victor is greater than <span class="math inline">\(0\)</span>. So it is plausible that within a local range of that value, district assignment to Democrats or Republicans is as-if random. Any differences in the estimated probability of winning the election can be attributed to the effect of incumbent parties.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:rdd-img"></span>
+<img src="images/rdd-incumbency-advantage.png" alt="Source: Randomized experiments from non-random selection in U.S. House elections. Lee (2008)." width="90%" />
+<p class="caption">
+Figure 2.1: Source: Randomized experiments from non-random selection in U.S. House elections. Lee (2008).
+</p>
+</div>
+<p>As apparent from the figure, there is a large discontinuous jump at the 0 point. Democrats who barely win an election are much more likely to run for office and succeed in the next election, compared to Democrats who barely lose. The causal effect is enormous. Nowhere else is there such a large jump as the function is well-behaved and smooth except for at the threshold determining victory or defeat. This discontinuity is key evidence of a causal effect of incumbency advantage on electoral success.</p>
+</div>
+</div>
+<div id="continuity-and-limits" class="section level3 hasAnchor" number="2.3.3">
+<h3><span class="header-section-number">2.3.3</span> Continuity and limits<a href="sequences-derivatives.html#continuity-and-limits" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="theorem" echo="TRUE">
+<p><span id="thm:unlabeled-div-46" class="theorem"><strong>Theorem 2.6  </strong></span>Let <span class="math inline">\(f: \Re \rightarrow \Re\)</span> with <span class="math inline">\(x_{0} \in \Re\)</span>. Then <span class="math inline">\(f\)</span> is continuous at <span class="math inline">\(x_{0}\)</span> if and only if <span class="math inline">\(f\)</span> has a limit at <span class="math inline">\(x_{0}\)</span> and that <span class="math inline">\(\lim_{x \rightarrow x_{0} } f(x) = f(x_{0})\)</span>.</p>
+</div>
+<div class="proof" echo="TRUE">
+<p><span id="unlabeled-div-47" class="proof"><em>Proof</em>. </span><span class="math inline">\((\Rightarrow)\)</span>. Suppose <span class="math inline">\(f\)</span> is continuous at <span class="math inline">\(x_{0}\)</span>. This implies that <span class="math inline">\(|f(x) - f(x_0)| &lt; \epsilon \, \text{for all} \, x \, \text{such that} \, |x - x_0 | &lt; \delta\)</span>. This is the definition of a limit, with <span class="math inline">\(L = f(x_{0})\)</span>.</p>
+<p><span class="math inline">\((\Leftarrow)\)</span>. Suppose <span class="math inline">\(f\)</span> has a limit at <span class="math inline">\(x_{0}\)</span> and that limit is <span class="math inline">\(f(x_{0})\)</span>. This implies that <span class="math inline">\(|f(x) - f(x_0)| &lt; \epsilon \, \text{for all} \, x \, \text{such that} \, |x - x_0 | &lt; \delta\)</span>. But this is the definition of continuity.</p>
+</div>
+</div>
+<div id="algebra-of-continuous-functions" class="section level3 hasAnchor" number="2.3.4">
+<h3><span class="header-section-number">2.3.4</span> Algebra of continuous functions<a href="sequences-derivatives.html#algebra-of-continuous-functions" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="theorem" echo="TRUE">
+<p><span id="thm:unlabeled-div-48" class="theorem"><strong>Theorem 2.7  </strong></span>Suppose <span class="math inline">\(f:\Re \rightarrow \Re\)</span> and <span class="math inline">\(g:\Re \rightarrow \Re\)</span> are continuous at <span class="math inline">\(x_{0}\)</span>. Then,</p>
+<ol style="list-style-type: lower-roman">
+<li><span class="math inline">\(f(x) + g(x)\)</span> is continuous at <span class="math inline">\(x_{0}\)</span></li>
+<li><span class="math inline">\(f(x) g(x)\)</span> is continuous at <span class="math inline">\(x_{0}\)</span></li>
+<li>if <span class="math inline">\(g(x_0) \neq 0\)</span>, then <span class="math inline">\(\frac{f(x) } {g(x) }\)</span> is continuous at <span class="math inline">\(x_{0}\)</span></li>
+</ol>
+</div>
+</div>
+</div>
+<div id="what-is-calculus" class="section level2 hasAnchor" number="2.4">
+<h2><span class="header-section-number">2.4</span> What is calculus?<a href="sequences-derivatives.html#what-is-calculus" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><strong>Calculus</strong> is the study of continuous change within functions. Within calculus falls <strong>differential calculus</strong> (concerning instantaneous rates of change and slopes of curves) and <strong>integral calculus</strong> (concerning accumulation of quantities and the areas under and between curves), forever intertwined with one another. Calculus has broad applications to mathematical and statistical methods in the social sciences. Calculus is a fundamental part of any type of statistics exercise. Although you may not be taking derivatives and integral in your daily work as an analyst, calculus undergirds many concepts we use: maximization, expectation, and cumulative probability.</p>
+<p>Within computational social science, calculus is crucial for finding and identifying <strong>extreme values</strong>: maxima or minima. This is a process known as <strong>optimization</strong>, and has uses for both empirical studies as well as formal theory:</p>
+<ul>
+<li>Given data, what is the most likely value of a parameter(s)?</li>
+<li>Game theory: given another player’s strategy, what is the action that maximizes utility?</li>
+</ul>
+</div>
+<div id="derivatives" class="section level2 hasAnchor" number="2.5">
+<h2><span class="header-section-number">2.5</span> Derivatives<a href="sequences-derivatives.html#derivatives" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="how-functions-change" class="section level3 hasAnchor" number="2.5.1">
+<h3><span class="header-section-number">2.5.1</span> How functions change<a href="sequences-derivatives.html#how-functions-change" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><strong>Derivatives</strong> are rates of change in functions. You can think of them as a special type of limit.</p>
+</div>
+<div id="the-tangent-as-a-limit" class="section level3 hasAnchor" number="2.5.2">
+<h3><span class="header-section-number">2.5.2</span> The tangent as a limit<a href="sequences-derivatives.html#the-tangent-as-a-limit" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><img src="02-sequences-limits-derivatives_files/figure-html/tan-lines-1.gif" width="90%" style="display: block; margin: auto;" /></p>
+<p>Say <span class="math inline">\(y = f(x)\)</span> and there is a point <span class="math inline">\(P\)</span> on the curve. Let <span class="math inline">\(Q\)</span> be another point on the curve, and let <span class="math inline">\(L\)</span> be the straight line through <span class="math inline">\(P\)</span> and <span class="math inline">\(Q\)</span>. You should think of <span class="math inline">\(L\)</span> as the entire straight line through <span class="math inline">\(P\)</span> and <span class="math inline">\(Q\)</span>, extending forever in both directions.</p>
+<p>Now suppose we move the point <span class="math inline">\(Q\)</span> along the graph in the direction of <span class="math inline">\(Q\)</span>. If the curve is reasonably smooth, the slope of <span class="math inline">\(L\)</span> tends to a limit as <span class="math inline">\(Q\)</span> approaches <span class="math inline">\(P\)</span>, and the limit is the same whether <span class="math inline">\(P\)</span> is approached from the right or the left. The <strong>slope of the curve at <span class="math inline">\(P\)</span> is the limit of the slope of <span class="math inline">\(L\)</span> as <span class="math inline">\(Q\)</span> approaches <span class="math inline">\(P\)</span>.</strong></p>
+<p>The <strong>tangent</strong> to the curve at <span class="math inline">\(P\)</span>, labeled <span class="math inline">\(T\)</span>, is the straight line through <span class="math inline">\(P\)</span> whose slope is the slope of the curve at <span class="math inline">\(P\)</span>.</p>
+<p>We denote the coordinates of <span class="math inline">\(P\)</span> and <span class="math inline">\(Q\)</span> by the ordered pairs <span class="math inline">\((x_0, y_0)\)</span> and <span class="math inline">\((x_1, y_1)\)</span> respectively. Then</p>
+<span class="math display">\[\text{slope of } L = \frac{y_1 - y_0}{x_1 - x_0}\]</span>
+
+<div class="rmdnote">
+This is basic rise over run.
+</div>
+<p>We can rewrite this equation to emphasize the fact that <span class="math inline">\(P\)</span> and <span class="math inline">\(Q\)</span> both lie on the graph <span class="math inline">\(y = f(x)\)</span>. Let <span class="math inline">\(h = x_1 - x_0\)</span>. Then</p>
+<p><span class="math display">\[x_1 = x_0 + h, \quad y_0 = f(x_0), \quad y_1 = f(x_0 + h)\]</span></p>
+<p>and</p>
+<p><span class="math display">\[\text{slope of } L = \frac{f(x_0 + h) - f(x_0)}{h}\]</span></p>
+<p>To say that <span class="math inline">\(Q\)</span> approaches <span class="math inline">\(P\)</span> along the curve is the same as saying that <span class="math inline">\(h\)</span> approaches <span class="math inline">\(0\)</span>. Thus the slope at the point <span class="math inline">\(P\)</span> of the graph <span class="math inline">\(y = f(x)\)</span> is the limit of the right-hand side as <span class="math inline">\(h\)</span> approaches <span class="math inline">\(0\)</span>.</p>
+</div>
+<div id="derivative" class="section level3 hasAnchor" number="2.5.3">
+<h3><span class="header-section-number">2.5.3</span> Derivative<a href="sequences-derivatives.html#derivative" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Suppose <span class="math inline">\(f:\Re \rightarrow \Re\)</span>. Measure rate of change at a point <span class="math inline">\(x_{0}\)</span> with a function <span class="math inline">\(R(x)\)</span>,</p>
+<p><span class="math display">\[
+R(x) = \frac{f(x) - f(x_{0}) }{ x- x_{0} }
+\]</span></p>
+<p><span class="math inline">\(R(x)\)</span> defines the rate of change. A derivative will examine what happens with a small perturbation at <span class="math inline">\(x_{0}\)</span>.</p>
+<div class="definition" echo="TRUE">
+<p><span id="def:unlabeled-div-49" class="definition"><strong>Definition 2.11  (Derivative) </strong></span>Let <span class="math inline">\(f:\Re \rightarrow \Re\)</span>. If the limit</p>
+<p><span class="math display">\[
+\begin{aligned}
+\lim_{x\rightarrow x_{0}} R(x) &amp; = \frac{f(x) - f(x_{0}) }{x - x_{0}} \\
+&amp; = f^{&#39;}(x_{0})
+\end{aligned}
+\]</span></p>
+<p>exists then we say that <span class="math inline">\(f\)</span> is <strong>differentiable</strong> at <span class="math inline">\(x_{0}\)</span>. If <span class="math inline">\(f^{&#39;}(x_{0})\)</span> exists for all <span class="math inline">\(x \in \text{Domain}\)</span>, then we say that <span class="math inline">\(f\)</span> is differentiable.</p>
+</div>
+<p>Let <span class="math inline">\(f\)</span> be a function whose domain includes an open interval containing the point <span class="math inline">\(x\)</span>. The derivative of <span class="math inline">\(f\)</span> at <span class="math inline">\(x\)</span> is given by</p>
+<p><span class="math display">\[
+\frac{d}{dx}f(x) =\lim\limits_{h\to 0} \frac{f(x+h)-f(x)}{(x+h)-x} = \lim\limits_{h\to 0} \frac{f(x+h)-f(x)}{h}
+\]</span></p>
+<p>There are two main ways to denote a derivate:</p>
+<ul>
+<li>Leibniz Notation: <span class="math inline">\(\frac{d}{dx}(f(x))\)</span></li>
+<li>Prime or Lagrange Notation: <span class="math inline">\(f&#39;(x)\)</span></li>
+</ul>
+<p>If <span class="math inline">\(f(x)\)</span> is a straight line, the derivative is the slope. For a curve, the slope changes by the values of <span class="math inline">\(x\)</span>, so the derivative is the slope of the line tangent to the curve at <span class="math inline">\(x\)</span>.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:derivsimple"></span>
+<img src="02-sequences-limits-derivatives_files/figure-html/derivsimple-1.png" alt="The Derivative as a Slope" width="90%" />
+<p class="caption">
+Figure 2.2: The Derivative as a Slope
+</p>
+</div>
+<p>If <span class="math inline">\(f&#39;(x)\)</span> exists at a point <span class="math inline">\(x_0\)</span>, then <span class="math inline">\(f\)</span> is said to be <strong>differentiable</strong> at <span class="math inline">\(x_0\)</span>. That also implies that <span class="math inline">\(f(x)\)</span> is continuous at <span class="math inline">\(x_0\)</span>.</p>
+</div>
+<div id="rates-of-change-in-a-function" class="section level3 hasAnchor" number="2.5.4">
+<h3><span class="header-section-number">2.5.4</span> Rates of change in a function<a href="sequences-derivatives.html#rates-of-change-in-a-function" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Another framework is to consider the function <span class="math inline">\(y = f(x)\)</span>. As <span class="math inline">\(x\)</span> changes from <span class="math inline">\(x_0\)</span> to <span class="math inline">\(x_0 + h\)</span>, the value of the function changes from <span class="math inline">\(f(x_0)\)</span> to <span class="math inline">\(f(x_0 + h)\)</span>. Thus the change in <span class="math inline">\(x\)</span> is <span class="math inline">\(h\)</span>, the change in <span class="math inline">\(f(x)\)</span> is <span class="math inline">\(f(x_0 + h) - f(x_0)\)</span>, and the <strong>rate of change</strong> of <span class="math inline">\(f(x)\)</span> is defined to be</p>
+<p><span class="math display">\[\frac{f(x_0 + h) - f(x_0)}{h}\]</span></p>
+<p>We define the rate of change of <span class="math inline">\(f(x)\)</span> at <span class="math inline">\(x=x_0\)</span> to be the limit, as <span class="math inline">\(h \rightarrow 0\)</span>, of the rate of change of <span class="math inline">\(f(x)\)</span> as <span class="math inline">\(x\)</span> changes from <span class="math inline">\(x_0\)</span> to <span class="math inline">\(x_0 + h\)</span>. This is equivalent to the derivative <span class="math inline">\(f&#39;(x_0)\)</span>.</p>
+<p>Consider an example looking at the relationship between campaign spending and a candidate’s vote share in a congressional election:</p>
+<p><img src="02-sequences-limits-derivatives_files/figure-html/vote-spending-1.png" width="90%" style="display: block; margin: auto;" /></p>
+<ul>
+<li>Rate of change <span class="math inline">\(\leadsto\)</span> return on vote share on dollars invested</li>
+<li>Instantaneous rate of change <span class="math inline">\(\leadsto\)</span> increase in vote share in response to infinitesimally small increase in spending</li>
+<li>A type of <strong>limit</strong></li>
+</ul>
+</div>
+<div id="examples-of-derivatives" class="section level3 hasAnchor" number="2.5.5">
+<h3><span class="header-section-number">2.5.5</span> Examples of derivatives<a href="sequences-derivatives.html#examples-of-derivatives" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="example">
+<p><span id="exm:unlabeled-div-50" class="example"><strong>Example 2.1  </strong></span>Suppose <span class="math inline">\(f(x) = x^2\)</span> and consider <span class="math inline">\(x_{0} = 1\)</span>. Then,</p>
+<p><span class="math display">\[
+\begin{aligned}
+\lim_{x\rightarrow 1}R(x) &amp; = \lim_{x\rightarrow 1} \frac{x^2 - 1^2}{x - 1}  \\
+    &amp; = \lim_{x\rightarrow 1} \frac{(x- 1)(x + 1) }{ x- 1}   \\
+    &amp; =  \lim_{x\rightarrow 1} x + 1  \\
+    &amp; = 2
+\end{aligned}
+\]</span></p>
+</div>
+<div class="example">
+<p><span id="exm:unlabeled-div-51" class="example"><strong>Example 2.2  </strong></span>Suppose <span class="math inline">\(f(x) = |x|\)</span> and consider <span class="math inline">\(x_{0} = 0\)</span>. Then,</p>
+<p><span class="math display">\[
+\lim_{x\rightarrow 0} R(x) = \lim_{x\rightarrow 0} \frac{ |x| } {x}
+\]</span></p>
+<p><span class="math inline">\(\lim_{x \rightarrow 0^{-}} R(x) = -1\)</span>, but <span class="math inline">\(\lim_{x \rightarrow 0^{+}} R(x) = 1\)</span>. So, not differentiable at <span class="math inline">\(0\)</span>.</p>
+</div>
+</div>
+<div id="continuity-and-derivatives" class="section level3 hasAnchor" number="2.5.6">
+<h3><span class="header-section-number">2.5.6</span> Continuity and derivatives<a href="sequences-derivatives.html#continuity-and-derivatives" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><span class="math inline">\(f(x) = |x|\)</span> is <strong>continuous</strong> but not differentiable. This is because the change is <strong>too abrupt</strong>. This suggests differentiability is a stronger condition.</p>
+<div class="theorem" echo="TRUE">
+<p><span id="thm:unlabeled-div-52" class="theorem"><strong>Theorem 2.8  </strong></span>Let <span class="math inline">\(f:\Re \rightarrow \Re\)</span> be differentiable at <span class="math inline">\(x_{0}\)</span>. Then <span class="math inline">\(f\)</span> is continuous at <span class="math inline">\(x_{0}\)</span>.</p>
+</div>
+</div>
+<div id="what-goes-wrong" class="section level3 hasAnchor" number="2.5.7">
+<h3><span class="header-section-number">2.5.7</span> What goes wrong?<a href="sequences-derivatives.html#what-goes-wrong" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Consider the following piecewise function:</p>
+<p><span class="math display">\[
+\begin{aligned}
+f(x)  &amp; = x^{2} \text{ for all  } x \in \Re \setminus 0 \\
+f(x) &amp; = 1000  \text{ for  } x = 0
+\end{aligned}
+\]</span></p>
+<p>Consider its derivative at 0. Then,</p>
+<p><span class="math display">\[
+\begin{aligned}
+\lim_{x \rightarrow 0 } R(x) &amp; = \lim_{x \rightarrow 0 } \frac{f(x) - 1000}{ x - 0   } \\
+                                        &amp;= \lim_{x \rightarrow 0 } \frac{x^2}{x} - \lim_{x \rightarrow 0 } \frac{1000}{x}
+\end{aligned}
+\]</span></p>
+<p><span class="math inline">\(\lim_{x \rightarrow 0 } \frac{1000}{x}\)</span> diverges, so the limit doesn’t exist.</p>
+</div>
+</div>
+<div id="calculating-derivatives" class="section level2 hasAnchor" number="2.6">
+<h2><span class="header-section-number">2.6</span> Calculating derivatives<a href="sequences-derivatives.html#calculating-derivatives" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Rarely will we take a limit to calculate a derivative. Rather, rely on rules and properties of derivatives. Our strategy:</p>
+<ul>
+<li>Algebra theorems</li>
+<li>Some specific derivatives</li>
+<li>Work on problems</li>
+</ul>
+<div id="derivative-rules" class="section level3 hasAnchor" number="2.6.1">
+<h3><span class="header-section-number">2.6.1</span> Derivative rules<a href="sequences-derivatives.html#derivative-rules" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Suppose <span class="math inline">\(a\)</span> is some constant, <span class="math inline">\(f(x)\)</span> and <span class="math inline">\(g(x)\)</span> are functions:</p>
+<p><span class="math display">\[
+\begin{aligned}
+f(x) &amp;= x &amp; \quad f^{&#39;}(x) &amp;= 1 \\
+f(x) &amp;= a x^{k} &amp; \quad f^{&#39;}(x) &amp;= (a) (k) x ^{k-1} \\
+f(x) &amp;= e^{x } &amp; \quad f^{&#39;} (x) &amp;= e^{x} \\
+f(x) &amp;= \sin(x) &amp; \quad f^{&#39;} (x) &amp;= \cos (x) \\
+f(x) &amp;= \cos(x) &amp; \quad f^{&#39;} (x) &amp;= - \sin(x) \\
+\end{aligned}
+\]</span></p>
+<p>Suppose that <span class="math inline">\(f\)</span> and <span class="math inline">\(g\)</span> are functions that are differentiable at <span class="math inline">\(x\)</span> and <span class="math inline">\(k\)</span> is a scalar value. The following rules apply:</p>
+<div class="definition" echo="TRUE">
+<p><span id="def:unlabeled-div-53" class="definition"><strong>Definition 2.12  (Constant rule) </strong></span><span class="math display">\[\left[k f(x)\right]&#39; = k f&#39;(x)\]</span></p>
+</div>
+<div class="definition" echo="TRUE">
+<p><span id="def:unlabeled-div-54" class="definition"><strong>Definition 2.13  (Sum rule) </strong></span><span class="math display">\[\left[f(x)\pm g(x)\right]&#39; = f&#39;(x)\pm g&#39;(x)\]</span></p>
+</div>
+<div class="definition" echo="TRUE">
+<p><span id="def:unlabeled-div-55" class="definition"><strong>Definition 2.14  (Product rule) </strong></span><span class="math display">\[\left[f(x)g(x)\right]&#39; = f&#39;(x)g(x)+f(x)g&#39;(x)\]</span></p>
+</div>
+<div class="definition" echo="TRUE">
+<p><span id="def:unlabeled-div-56" class="definition"><strong>Definition 2.15  (Quotient rule) </strong></span><span class="math display">\[\frac{f(x)}{g(x)}&#39; = \frac{f&#39;(x)g(x)-f(x)g&#39;(x)}{[g(x)]^2}, g(x)\neq 0\]</span></p>
+</div>
+<div class="definition" echo="TRUE">
+<p><span id="def:unlabeled-div-57" class="definition"><strong>Definition 2.16  (Power rule) </strong></span><span class="math display">\[\left[x^k\right]&#39; = k x^{k-1}\]</span></p>
+</div>
+<p>These “rules” become apparent by applying the definition of the derivative above to each of the things to be “derived”, but these come up so frequently that it is best to repeat until it is muscle memory.</p>
+</div>
+<div id="challenge-problems" class="section level3 hasAnchor" number="2.6.2">
+<h3><span class="header-section-number">2.6.2</span> Challenge problems<a href="sequences-derivatives.html#challenge-problems" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Differentiate the following functions and evaluate at the specified value:</p>
+<ol style="list-style-type: decimal">
+<li><p><span class="math inline">\(f(x)= x^3 + 5 x^2 + 4 x\)</span>, at <span class="math inline">\(x_{0} = 2\)</span></p>
+<details>
+<summary>
+<p><strong>Click for the solution</strong></p>
+</summary>
+<p>
+<p>Power rule.</p>
+<p><span class="math display">\[
+   \begin{aligned}
+   f&#39;(x) &amp;= 3x^2 + 10x + 4 \\
+   f&#39;(2) &amp;= 3 \times 2^2 + 10 \times 2 + 4 \\
+   &amp;= 3 \times 4 + 10 \times 2 + 4 \\
+   &amp;= 12 + 20 + 4 \\
+   &amp;= 36
+   \end{aligned}
+   \]</span></p>
+</p>
+</details></li>
+<li><p><span class="math inline">\(f(x) = \sin(x) x^3\)</span> at <span class="math inline">\(x_{0} = 2\)</span></p>
+<details>
+<summary>
+<p><strong>Click for the solution</strong></p>
+</summary>
+<p>
+<p>Application of the product rule and definition of the derivative of <span class="math inline">\(\sin(x)\)</span>.</p>
+<p><span class="math display">\[
+   \begin{aligned}
+   g(x) &amp;= \sin(x) &amp;\quad h(x) &amp;= x^3 \\
+   g&#39;(x) &amp;= \cos(x) &amp;\quad h&#39;(x) &amp;= 3x^2
+   \end{aligned}
+   \]</span></p>
+<p><span class="math display">\[
+   \begin{aligned}
+   f&#39;(x) &amp;= g&#39;(x) h(x) + g(x) h&#39;(x) \\
+   &amp;= \cos(x) x^3 + \sin(x) 3x^2 \\
+   &amp;= x^2 (x \cos(x) + 3 \sin(x)) \\
+   f&#39;(2) &amp;= 2^2 (2 \cos(2) + 3 \sin(2)) \\
+   &amp;= 4 (2 \cos(2) + 3 \sin(2)) \\
+   &amp;= 8 \cos(2) + 12 \sin(2) \\
+   &amp;\approx 7.582
+   \end{aligned}
+   \]</span></p>
+</p>
+</details></li>
+<li><p><span class="math inline">\(h(x) = \dfrac{e^{x}}{x^3}\)</span> at <span class="math inline">\(x_0 = 2\)</span></p>
+<details>
+<summary>
+<p><strong>Click for the solution</strong></p>
+</summary>
+<p>
+<p>Application of the quotient rule and definition of the derivative of <span class="math inline">\(e^x\)</span>.</p>
+<p><span class="math display">\[
+   \begin{aligned}
+   f(x) &amp;= e^x &amp;\quad g(x) &amp;= x^3 \\
+   f&#39;(x) &amp;= e^x &amp;\quad g&#39;(x) &amp;= 3x^2
+   \end{aligned}
+   \]</span></p>
+<p><span class="math display">\[
+   \begin{aligned}
+   h&#39;(x) &amp;= \frac{f&#39;(x)g(x)-f(x)g&#39;(x)}{[g(x)]^2}, g(x)\neq 0 \\
+   &amp;= \frac{e^x x^3 - e^x 3x^2}{(x^3)^2} \\
+   &amp;= \frac{e^x x^2 (x - 3)}{x^6} \\
+   &amp;= \frac{e^x (x - 3)}{x^4}, g(x)\neq 0 \\
+   h&#39;(2) &amp;= \frac{e^2 (2 - 3)}{2^4} \\
+   &amp;= \frac{-(e^2)}{16} \\
+   &amp;\approx \frac{-7.389}{16} \\
+   &amp;\approx -0.462
+   \end{aligned}
+   \]</span></p>
+</p>
+</details></li>
+<li><p><span class="math inline">\(h(x) = \log (x) x^3\)</span> at <span class="math inline">\(x_0 = e\)</span></p>
+<details>
+<summary>
+<p><strong>Click for the solution</strong></p>
+</summary>
+<p>
+<p>Requires the product rule combined with power rule and knowledge of the derivative of <span class="math inline">\(\log(x)\)</span>.</p>
+<p><span class="math display">\[
+   \begin{aligned}
+   f(x) &amp;= \log(x) &amp;\quad g(x) &amp;= x^3 \\
+   f&#39;(x) &amp;= \frac{1}{x} &amp;\quad g&#39;(x) &amp;= 3x^2
+   \end{aligned}
+   \]</span></p>
+<p><span class="math display">\[
+   \begin{aligned}
+   h&#39;(x) &amp;= f&#39;(x)g(x) + f(x)g&#39;(x) \\
+   &amp;= \frac{1}{x} \times x^3 + \log(x) \times 3x^2 \\
+   &amp;= x^2 + 3x^2 \log(x) \\
+   &amp;= x^2(1 + 3 \log(x)) \\
+   h&#39;(e) &amp;= e^2(1 + 3 \log(e)) \\
+   &amp;= e^2 (1 + 3 * 1) \\
+   &amp;= 4e^2
+   \end{aligned}
+   \]</span></p>
+</p>
+</details></li>
+</ol>
+</div>
+<div id="composite-functions" class="section level3 hasAnchor" number="2.6.3">
+<h3><span class="header-section-number">2.6.3</span> Composite functions<a href="sequences-derivatives.html#composite-functions" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>As useful as the above rules are, many functions you’ll see won’t fit neatly in each case immediately. Instead, they will be functions of functions. For example, the difference between <span class="math inline">\(x^2 + 1^2\)</span> and <span class="math inline">\((x^2 + 1)^2\)</span> may look trivial, but the sum rule can be easily applied to the former, while it’s actually not obvious what do with the latter.</p>
+<p><strong>Composite functions</strong> are formed by substituting one function into another and are denoted by</p>
+<p><span class="math display">\[f \circ g=f[g(x)]\]</span></p>
+<p>To form <span class="math inline">\(f[g(x)]\)</span>, the range of <span class="math inline">\(g\)</span> must be contained (at least in part) within the domain of <span class="math inline">\(f\)</span>. The domain of <span class="math inline">\(f\circ g\)</span> consists of all the points in the domain of <span class="math inline">\(g\)</span> for which <span class="math inline">\(g(x)\)</span> is in the domain of <span class="math inline">\(f\)</span>.</p>
+<p>For example, let <span class="math inline">\(f(x)=\log x\)</span> for <span class="math inline">\(0&lt;x&lt;\infty\)</span> and <span class="math inline">\(g(x)=x^2\)</span> for <span class="math inline">\(-\infty&lt;x&lt;\infty\)</span>.</p>
+<p>Then</p>
+<p><span class="math display">\[f\circ g=\log x^2, -\infty&lt;x&lt;\infty - \{0\}\]</span></p>
+<p>Also</p>
+<p><span class="math display">\[g\circ f = [\log x]^2, 0&lt;x&lt;\infty\]</span></p>
+<p>Notice that <span class="math inline">\(f\circ g\)</span> and <span class="math inline">\(g\circ f\)</span> are not the same functions.</p>
+<p>With the notation of composite functions in place, now we can introduce a helpful additional rule that will deal with a derivative of composite functions as a chain of concentric derivatives.</p>
+</div>
+<div id="chain-rule" class="section level3 hasAnchor" number="2.6.4">
+<h3><span class="header-section-number">2.6.4</span> Chain rule<a href="sequences-derivatives.html#chain-rule" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Let <span class="math inline">\(y=f\circ g= f[g(x)]\)</span>. The derivative of <span class="math inline">\(y\)</span> with respect to <span class="math inline">\(x\)</span> is</p>
+<p><span class="math display">\[\frac{d}{dx} \{ f[g(x)] \} = f&#39;[g(x)] g&#39;(x)\]</span></p>
+<p>We can read this as: “the derivative of the composite function <span class="math inline">\(y\)</span> is the derivative of <span class="math inline">\(f\)</span> evaluated at <span class="math inline">\(g(x)\)</span>, times the derivative of <span class="math inline">\(g\)</span>.”</p>
+<p>The chain rule can be thought of as the derivative of the “outside” times the derivative of the “inside”, remembering that the derivative of the outside function is evaluated at the value of the inside function.</p>
+<div id="examples-of-the-chain-rule" class="section level4 hasAnchor" number="2.6.4.1">
+<h4><span class="header-section-number">2.6.4.1</span> Examples of the chain rule<a href="sequences-derivatives.html#examples-of-the-chain-rule" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div class="example">
+<p><span id="exm:unlabeled-div-58" class="example"><strong>Example 2.3  </strong></span><span class="math display">\[
+\begin{aligned}
+h(x) &amp;= e^{2x} \\
+g(x) &amp;= e^{x} \\
+f(x) &amp;= 2x
+\end{aligned}
+\]</span></p>
+<p>So</p>
+<p><span class="math display">\[h(x) = g(f(x)) = g(2x) = e^{2x}\]</span></p>
+<p>Taking derivatives, we have</p>
+<p><span class="math display">\[h^{&#39;}(x) = g^{&#39;}(f(x))f^{&#39;}(x) = e^{2x}2\]</span></p>
+</div>
+<div class="example">
+<p><span id="exm:unlabeled-div-59" class="example"><strong>Example 2.4  </strong></span><span class="math display">\[
+\begin{aligned}
+h(x) &amp;= \log(\cos(x) ) \\
+g(x) &amp;= \log(x) \\
+f(x) &amp;= \cos(x)
+\end{aligned}
+\]</span></p>
+<p>So</p>
+<p><span class="math display">\[h(x) = g(f(x)) = g( \cos(x)) = \log(\cos(x))\]</span></p>
+<p><span class="math display">\[h^{&#39;}(x) = g^{&#39;}(f(x))f^{&#39;}(x) = \frac{-1}{\cos(x)} \sin(x) = -\tan (x)\]</span></p>
+</div>
+<div id="generalized-power-rule" class="section level5 hasAnchor" number="2.6.4.1.1">
+<h5><span class="header-section-number">2.6.4.1.1</span> Generalized Power Rule<a href="sequences-derivatives.html#generalized-power-rule" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>The direct use of a chain rule is when the exponent of is itself a function, so the power rule could not have applied generally:</p>
+<p>If <span class="math inline">\(f(x)=[g(x)]^p\)</span> for any rational number <span class="math inline">\(p\)</span>,</p>
+<p><span class="math display">\[f^\prime(x) =p[g(x)]^{p-1}g^\prime(x)\]</span></p>
+</div>
+</div>
+</div>
+</div>
+<div id="derivatives-for-the-exponential-function-and-natural-logarithms" class="section level2 hasAnchor" number="2.7">
+<h2><span class="header-section-number">2.7</span> Derivatives for the exponential function and natural logarithms<a href="sequences-derivatives.html#derivatives-for-the-exponential-function-and-natural-logarithms" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The <strong>exponential function</strong> is one of the most important functions in mathematics.</p>
+<p><img src="02-sequences-limits-derivatives_files/figure-html/exp-func-1.png" width="90%" style="display: block; margin: auto;" /></p>
+<p>We previously discussed <a href="sets-functions.html#logarithms-and-exponential-functions">common rules for exponents and logarithms</a>. Here, we focus on the properties of their derivatives.</p>
+<div id="derivative-of-exponential-function" class="section level3 hasAnchor" number="2.7.1">
+<h3><span class="header-section-number">2.7.1</span> Derivative of exponential function<a href="sequences-derivatives.html#derivative-of-exponential-function" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The function <span class="math inline">\(e^x\)</span> is continuous and differentiable in its domains, and its first derivative is</p>
+<p><span class="math display">\[\frac{d}{dx}(e^x) = e^x\]</span></p>
+<p>Why is this so? According to the limit definition of a derivative:<a href="#fn6" class="footnote-ref" id="fnref6"><sup>6</sup></a></p>
+<p><span class="math display">\[
+\begin{aligned}
+\frac{d}{dx}f(x) &amp; = \lim\limits_{h\to 0} \frac{f(x+h)-f(x)}{h} \\
+&amp; = \lim\limits_{h\to 0} \frac{e^{x + h} - e^x}{h}
+\end{aligned}
+\]</span></p>
+<p>By the <strong>law of exponents</strong>, we can split the addition of exponents into multiplication of the same base:</p>
+<p><span class="math display">\[\frac{d}{dx}f(x) = \lim\limits_{h\to 0} \frac{e^x e^h - e^x}{h}\]</span></p>
+<p>Factor out <span class="math inline">\(e^x\)</span>:</p>
+<p><span class="math display">\[\frac{d}{dx}f(x) = \lim\limits_{h\to 0} \frac{e^x(e^h - 1)}{h}\]</span></p>
+<p>We can put <span class="math inline">\(e^x\)</span> in front of the limit because it is a <strong>multiplicative constant</strong> (while it has a variable <span class="math inline">\(x\)</span> term, the limit is as <span class="math inline">\(h \rightarrow 0\)</span>, not <span class="math inline">\(x \rightarrow 0\)</span>):</p>
+<p><span class="math display">\[\frac{d}{dx}f(x) = e^x \lim\limits_{h\to 0} \frac{e^h - 1}{h}\]</span></p>
+<p>As <span class="math inline">\(h\)</span> approaches <span class="math inline">\(0\)</span>, the limit gets closer to <span class="math inline">\(\frac{0}{0}\)</span> which is an indeterminant form. If we visually inspect what is happening at that point:</p>
+<p><img src="02-sequences-limits-derivatives_files/figure-html/exp-limit-1.png" width="90%" style="display: block; margin: auto;" /></p>
+<p>We can clearly see that as <span class="math inline">\(x\)</span> approaches <span class="math inline">\(0\)</span>, the function is converging towards 1, even if it never actually gets there.<a href="#fn7" class="footnote-ref" id="fnref7"><sup>7</sup></a> We can therefore substitute into the equation:</p>
+<p><span class="math display">\[
+\begin{aligned}
+\frac{d}{dx}f(x) &amp; = e^x \lim\limits_{h\to 0} \frac{e^h - 1}{h} \\
+&amp; = e^x (1) \\
+&amp; = e^x
+\end{aligned}
+\]</span></p>
+<p>Therefore, <span class="math inline">\(e^x\)</span> is itself the derivative of <span class="math inline">\(e^x\)</span>.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:fig-derivexponent"></span>
+<img src="02-sequences-limits-derivatives_files/figure-html/fig-derivexponent-1.png" alt="Derivative of the Exponential Function" width="90%" />
+<p class="caption">
+Figure 2.3: Derivative of the Exponential Function
+</p>
+</div>
+</div>
+<div id="derivative-of-the-natural-logarithm" class="section level3 hasAnchor" number="2.7.2">
+<h3><span class="header-section-number">2.7.2</span> Derivative of the natural logarithm<a href="sequences-derivatives.html#derivative-of-the-natural-logarithm" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The <strong>natural logarithm</strong> of <span class="math inline">\(x\)</span> is the logarithm to base <span class="math inline">\(e\)</span> of <span class="math inline">\(x\)</span>, where <span class="math inline">\(e\)</span> is defined as <strong>Euler’s number</strong> (<span class="math inline">\(e^1 \approx 2.7182818\)</span>):</p>
+<p><span class="math display">\[y = \log_e (x) \iff x = e^y\]</span></p>
+<p>There is a direct relationship between <span class="math inline">\(e^x\)</span> and <span class="math inline">\(\log_e(x)\)</span> (aka <span class="math inline">\(\log\)</span> or <span class="math inline">\(\ln\)</span>):</p>
+<p><span class="math display">\[
+\begin{aligned}
+e^{\log(x)} &amp;= x \, \mbox{for every positive number} \, x \\
+\log(e^y) &amp;= y \, \mbox{for every real number} \, y \\
+\end{aligned}
+\]</span></p>
+<p>In short, the natural logarithm is the inverse function of the exponential function.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:exp-log"></span>
+<img src="02-sequences-limits-derivatives_files/figure-html/exp-log-1.png" alt="Exponential function and natural logarithm" width="90%" />
+<p class="caption">
+Figure 2.4: Exponential function and natural logarithm
+</p>
+</div>
+<p>The derivative of a natural logarithm is</p>
+<p><span class="math display">\[\frac{d}{dx} \log(x) = \frac{1}{x}\]</span></p>
+<p>This follows from the <strong>inverse function rule</strong> which states that for a monotonic function <span class="math inline">\(f\)</span> and its inverse <span class="math inline">\(g\)</span>, their derivatives are related to each other by:</p>
+<p><span class="math display">\[
+\begin{aligned}
+g&#39;(y) &amp;= \frac{1}{f&#39;(x)} \\
+\frac{dx}{dy} &amp;= \frac{1}{\frac{dy}{dx}}
+\end{aligned}
+\]</span></p>
+<p>As well as from the fact that the exponential function is its own derivative. Let <span class="math inline">\(y = \log(x)\)</span>. Then <span class="math inline">\(x = e^y\)</span>, <span class="math inline">\(\frac{dx}{dy} = e^y = x\)</span>, and</p>
+<p><span class="math display">\[\frac{dy}{dx} = \frac{1}{\frac{dx}{dy}} = \frac{1}{x}\]</span></p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:fig-derivlog"></span>
+<img src="02-sequences-limits-derivatives_files/figure-html/fig-derivlog-1.png" alt="Derivative of the Natural Log" width="90%" />
+<p class="caption">
+Figure 2.5: Derivative of the Natural Log
+</p>
+</div>
+</div>
+<div id="relevance-of-exponential-functions-and-natural-logarithm" class="section level3 hasAnchor" number="2.7.3">
+<h3><span class="header-section-number">2.7.3</span> Relevance of exponential functions and natural logarithm<a href="sequences-derivatives.html#relevance-of-exponential-functions-and-natural-logarithm" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The exponential function is popular in economics for growth over time (e.g. compounding interest). Natural logarithms can be used for elasticity models, as well as transforming variables in regression models to appear more normally distributed.</p>
+</div>
+</div>
+<div id="derivatives-and-properties-of-functions" class="section level2 hasAnchor" number="2.8">
+<h2><span class="header-section-number">2.8</span> Derivatives and properties of functions<a href="sequences-derivatives.html#derivatives-and-properties-of-functions" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Derivatives are often used to <strong>optimize</strong> a function (<a href="critical-points.html">tomorrow</a>). But they also reveal <strong>average rates of change</strong> or crucial properties of functions. Here we want to introduce ideas, and hopefully make them less shocking when you see them in work.</p>
+<div id="relative-maxima-minima-and-derivatives" class="section level3 hasAnchor" number="2.8.1">
+<h3><span class="header-section-number">2.8.1</span> Relative maxima, minima and derivatives<a href="sequences-derivatives.html#relative-maxima-minima-and-derivatives" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="theorem" echo="TRUE">
+<p><span id="thm:unlabeled-div-60" class="theorem"><strong>Theorem 2.9  (Rolle's theorem) </strong></span>Suppose <span class="math inline">\(f:[a, b] \rightarrow \Re\)</span>. Suppose <span class="math inline">\(f\)</span> has a relative maxima or minima on <span class="math inline">\((a,b)\)</span> and call that <span class="math inline">\(c \in (a, b)\)</span>. Then <span class="math inline">\(f&#39;(c) = 0\)</span>.</p>
+</div>
+<p>Intuition:</p>
+<p><img src="02-sequences-limits-derivatives_files/figure-html/rolles-theorem-1.png" width="90%" style="display: block; margin: auto;" /></p>
+<div class="proof" echo="TRUE">
+<p><span id="unlabeled-div-61" class="proof"><em>Proof</em>. </span>Consider (without loss of generalization) a relative maximum <span class="math inline">\(c\)</span>. Consider the left-hand and right-hand limits</p>
+<p><span class="math display">\[
+\begin{aligned}
+\lim_{x \rightarrow c^{-}} \frac{f(x) - f(c) }{x - c } &amp; \geq 0  \\
+\lim_{x \rightarrow c^{+}} \frac{f(x) - f(c) } {x - c }  &amp; \leq 0  
+\end{aligned}
+\]</span></p>
+<p>But we also know that</p>
+<p><span class="math display">\[
+\begin{aligned}
+\lim_{x \rightarrow c^{-}} \frac{f(x) - f(c ) }{x - c } &amp; = f^{&#39;}(c)  \\
+\lim_{x \rightarrow c^{+}} \frac{f(x) - f(c) } {x - c }  &amp;  =  f^{&#39;}(c)   
+\end{aligned}
+\]</span></p>
+<p>The only way, then, that</p>
+<p><span class="math inline">\(\lim_{x \rightarrow c^{-}} \frac{f(x) - f(c) }{x -c} = \lim_{x \rightarrow c^{+}} \frac{f(x) - f(c) } {x - c}\)</span> is if <span class="math inline">\(f^{&#39;}(c) = 0\)</span>.</p>
+</div>
+</div>
+<div id="mean-value-theorem" class="section level3 hasAnchor" number="2.8.2">
+<h3><span class="header-section-number">2.8.2</span> Mean value theorem<a href="sequences-derivatives.html#mean-value-theorem" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Rolle’s theorem is a special case of the <strong>mean value theorem</strong>, where <span class="math inline">\(f&#39;(c) = 0\)</span>.</p>
+<div class="theorem" echo="TRUE">
+<p><span id="thm:unlabeled-div-62" class="theorem"><strong>Theorem 2.10  (Mean value theorem) </strong></span>If <span class="math inline">\(f:[a,b] \rightarrow \Re\)</span> is continuous on <span class="math inline">\([a,b]\)</span> and differentiable on <span class="math inline">\((a,b)\)</span>, then there is a <span class="math inline">\(c \in (a,b)\)</span> such that</p>
+<p><span class="math display">\[
+f^{&#39;}(c) = \frac{f(b) - f(a) } { b - a}
+\]</span></p>
+</div>
+<p><img src="02-sequences-limits-derivatives_files/figure-html/mean-value-theorem-1.png" width="90%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="applications-of-the-mean-value-theorem" class="section level3 hasAnchor" number="2.8.3">
+<h3><span class="header-section-number">2.8.3</span> Applications of the mean value theorem<a href="sequences-derivatives.html#applications-of-the-mean-value-theorem" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>This will come up in a formal theory article. You’ll at least know where to look. It allows us to say lots of powerful stuff about functions, which is especially useful for approximating derivatives.</p>
+<div class="corollary" echo="TRUE">
+<p><span id="cor:unlabeled-div-63" class="corollary"><strong>Corollary 2.1  </strong></span>Suppose that <span class="math inline">\(f:[a,b] \rightarrow \Re\)</span> is continuous on <span class="math inline">\([a,b]\)</span> and differentiable on <span class="math inline">\((a,b)\)</span>. Then,</p>
+<ol style="list-style-type: decimal">
+<li>If <span class="math inline">\(f^{&#39;}(x) \neq 0\)</span> for all <span class="math inline">\(x \in (a,b)\)</span> then <span class="math inline">\(f\)</span> is 1-1</li>
+<li>If <span class="math inline">\(f^{&#39;}(x) = 0\)</span> then <span class="math inline">\(f(x)\)</span> is constant</li>
+<li>If <span class="math inline">\(f^{&#39;}(x)&gt; 0\)</span> for all <span class="math inline">\(x \in (a,b)\)</span> then then <span class="math inline">\(f\)</span> is strictly increasing</li>
+<li>If <span class="math inline">\(f^{&#39;}(x)&lt;0\)</span> for all <span class="math inline">\(x \in (a,b)\)</span> then <span class="math inline">\(f\)</span> is strictly decreasing</li>
+</ol>
+</div>
+<p>Let’s prove these in turn. Why? Because they are just applying ideas.</p>
+<div id="if-fx-neq-0-for-all-x-in-ab-then-f-is-1-1" class="section level4 hasAnchor" number="2.8.3.1">
+<h4><span class="header-section-number">2.8.3.1</span> If <span class="math inline">\(f^{&#39;}(x) \neq 0\)</span> for all <span class="math inline">\(x \in (a,b)\)</span> then <span class="math inline">\(f\)</span> is 1-1<a href="sequences-derivatives.html#if-fx-neq-0-for-all-x-in-ab-then-f-is-1-1" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>A <strong>one-to-one function</strong> is a function for which every element of the range of the function corresponds to exactly one element of the domain.</p>
+<p><img src="02-sequences-limits-derivatives_files/figure-html/one-to-one-1.png" width="90%" style="display: block; margin: auto;" /></p>
+<div class="proof" echo="TRUE">
+<p><span id="unlabeled-div-64" class="proof"><em>Proof</em>. </span>By way of contradiction, suppose that <span class="math inline">\(f\)</span> is not 1-1. Then there is <span class="math inline">\(x, y \in (a,b)\)</span> such that <span class="math inline">\(f(x) = f(y)\)</span>. Then,</p>
+<p><span class="math display">\[f&#39;(c) = \frac{f(x) - f(y)}{x- y} = \frac{0}{x -y}  = 0\]</span></p>
+<p>This means <span class="math inline">\(f&#39; \neq 0\)</span> for all <span class="math inline">\(x\)</span>!</p>
+</div>
+</div>
+<div id="if-fx-0-then-fx-is-constant" class="section level4 hasAnchor" number="2.8.3.2">
+<h4><span class="header-section-number">2.8.3.2</span> If <span class="math inline">\(f^{&#39;}(x) = 0\)</span> then <span class="math inline">\(f(x)\)</span> is constant<a href="sequences-derivatives.html#if-fx-0-then-fx-is-constant" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div class="proof" echo="TRUE">
+<p><span id="unlabeled-div-65" class="proof"><em>Proof</em>. </span>By way of contradiction, suppose that there is <span class="math inline">\(x, y \in (a,b)\)</span> such that <span class="math inline">\(f(x) \neq f(y)\)</span>. But then,</p>
+<p><span class="math display">\[f&#39;(c) = \frac{f(x) - f(y) } {x - y} \neq 0\]</span></p>
+</div>
+</div>
+<div id="if-fx-0-for-all-x-in-ab-then-then-f-is-strictly-increasing" class="section level4 hasAnchor" number="2.8.3.3">
+<h4><span class="header-section-number">2.8.3.3</span> If <span class="math inline">\(f^{&#39;}(x)&gt; 0\)</span> for all <span class="math inline">\(x \in (a,b)\)</span> then then <span class="math inline">\(f\)</span> is strictly increasing<a href="sequences-derivatives.html#if-fx-0-for-all-x-in-ab-then-then-f-is-strictly-increasing" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div class="proof" echo="TRUE">
+<p><span id="unlabeled-div-66" class="proof"><em>Proof</em>. </span>By way of contradiction, suppose that there is <span class="math inline">\(x, y \in (a,b)\)</span> with <span class="math inline">\(y&lt;x\)</span> but <span class="math inline">\(f(y)&gt;f(x)\)</span>. But then,</p>
+<p><span class="math display">\[f&#39;(c) = \frac{f(x) - f(y) }{x - y } &lt; 0\]</span></p>
+</div>
+<ul>
+<li>Bonus: proof for strictly decreasing is the reverse of this</li>
+</ul>
+</div>
+</div>
+<div id="extension-to-indeterminate-form-limits" class="section level3 hasAnchor" number="2.8.4">
+<h3><span class="header-section-number">2.8.4</span> Extension to indeterminate form limits<a href="sequences-derivatives.html#extension-to-indeterminate-form-limits" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The mean value theorem generalizes to a form known as the <strong>Cauchy mean value theorem</strong>.</p>
+<div class="theorem" echo="TRUE">
+<p><span id="thm:unlabeled-div-67" class="theorem"><strong>Theorem 2.11  (Cauchy mean value theorem) </strong></span>Suppose <span class="math inline">\(f\)</span> and <span class="math inline">\(g\)</span> are differentiable functions and <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> are real numbers such that <span class="math inline">\(a &lt; b\)</span>. Suppose also that <span class="math inline">\(g&#39;(x) \neq 0\)</span> for all <span class="math inline">\(x\)</span> such that <span class="math inline">\(a &lt; x &lt; b\)</span>. There exists a real number <span class="math inline">\(c\)</span> such that <span class="math inline">\(a &lt; c &lt; b\)</span> and</p>
+<p><span class="math display">\[\frac{f&#39;(c)}{g&#39;(c)} = \frac{f(b) - f(a)}{g(b) - g(a)}\]</span></p>
+</div>
+<p>The ordinary mean value theorem is the special case where <span class="math inline">\(g(x) = x\)</span> for all <span class="math inline">\(x\)</span>.</p>
+<p>This is extraordinarily helpful if we want to calculate the limit of a ratio</p>
+<p><span class="math display">\[\lim_{x \rightarrow a} \frac{f(x)}{g(x)}\]</span></p>
+<p>where <span class="math inline">\(f\)</span> and <span class="math inline">\(g\)</span> are continuous functions. If <span class="math inline">\(g(a) \neq 0\)</span> then</p>
+<p><span class="math display">\[\lim_{x \rightarrow a} \frac{f(x)}{g(x)} = \frac{f(a)}{g(a)}\]</span></p>
+<p>If <span class="math inline">\(g(a) = 0\)</span> and <span class="math inline">\(f(a) \neq 0\)</span>, no limit exists. But in the case where <span class="math inline">\(f(a) = g(a) = 0\)</span>, we have what is known as an <strong>indeterminate form</strong> - a limit may or may not exist in this case. Examples of indeterminate forms include <span class="math inline">\(\frac{0}{0}\)</span> and <span class="math inline">\(\frac{\infty}{\infty}\)</span>.</p>
+<p>We can use <strong>L’Hôpital’s Rule</strong> (derived from the Cauchy mean value theorem) to simplify the expression and solve for the limit.</p>
+<div class="theorem" echo="TRUE">
+<p><span id="thm:unlabeled-div-68" class="theorem"><strong>Theorem 2.12  (L'Hôpital's Rule) </strong></span>Suppose that <span class="math inline">\(f(a) = g(a) = 0\)</span> and <span class="math inline">\(g&#39;(x) \neq 0\)</span> if <span class="math inline">\(x\)</span> is close but not equal to <span class="math inline">\(a\)</span>. Then</p>
+<p><span class="math display">\[\lim_{x \rightarrow a} \frac{f(x)}{g(x)} = \lim_{x \rightarrow a} \frac{f&#39;(x)}{g&#39;(x)}\]</span></p>
+<p>provided the limit on the right-hand side exists. This follows from the Cauchy mean value thoerem. Using that theorem and our assumption that <span class="math inline">\(f(a) = g(a) = 0\)</span>, we see that given any <span class="math inline">\(x\)</span> that is close but not equal to <span class="math inline">\(a\)</span>, there is a number <span class="math inline">\(p\)</span> between <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> such that</p>
+<p><span class="math display">\[
+\begin{aligned}
+\frac{f(x) - f(a)}{g(x) - g(a)} &amp;= \frac{f&#39;(p)}{g&#39;(p)} \\
+\frac{f(x) - 0}{g(x) - 0} &amp;= \frac{f&#39;(p)}{g&#39;(p)} \\
+\frac{f(x)}{g(x)} &amp;= \frac{f&#39;(p)}{g&#39;(p)}
+\end{aligned}
+\]</span></p>
+</div>
+
+<div class="rmdnote">
+Same as Cauchy mean value theorem, just replace <span class="math inline">\(c\)</span> with <span class="math inline">\(p\)</span>.
+</div>
+<p>As <span class="math inline">\(x\)</span> approaches <span class="math inline">\(a\)</span>, so does <span class="math inline">\(p\)</span>.</p>
+<div class="example">
+<p><span id="exm:unlabeled-div-69" class="example"><strong>Example 2.5  </strong></span><span class="math display">\[\lim_{x \rightarrow 0} \frac{(1 + x)^{1/3} - 1}{x - x^2}\]</span></p>
+<p><img src="02-sequences-limits-derivatives_files/figure-html/lhopital-1-1.png" width="90%" style="display: block; margin: auto;" /></p>
+<p>Denote the numerator of the fraction by <span class="math inline">\(f(x)\)</span> and the denominator by <span class="math inline">\(g(x)\)</span>. Then <span class="math inline">\(f(0) = g(0) = 0\)</span>, so the form is indeterminate. Now</p>
+<p><span class="math display">\[
+\begin{aligned}
+f&#39;(x) &amp;= \frac{1}{3} (1 + x)^{-2/3} \\
+f&#39;(0) &amp;= \frac{1}{3} (1)^{-2/3} = \frac{1}{3} (1) = \frac{1}{3} \\
+g&#39;(x) &amp;= 1 - 2x \\
+g&#39;(0) &amp;= 1 - 2(0) = 1
+\end{aligned}
+\]</span></p>
+<p><span class="math display">\[\lim_{x \rightarrow a} \frac{f(x)}{g(x)} = \lim_{x \rightarrow a} \frac{f&#39;(x)}{g&#39;(x)} = \frac{1/3}{1} = \frac{1}{3}\]</span></p>
+</div>
+<div class="example">
+<p><span id="exm:unlabeled-div-70" class="example"><strong>Example 2.6  </strong></span><span class="math display">\[l = \lim_{x \rightarrow 0} \frac{x - \log(1 + x)}{x^2}\]</span></p>
+<p><img src="02-sequences-limits-derivatives_files/figure-html/lhopital-2-1.png" width="90%" style="display: block; margin: auto;" /></p>
+<p><span class="math display">\[
+\begin{aligned}
+f(x) &amp;= x - \log(1 + x) \\
+f&#39;(x) &amp;= 1 - \frac{1}{1 + x} \\
+g(x) &amp;= x^2 \\
+g&#39;(x) &amp;= 2x
+\end{aligned}
+\]</span></p>
+<p><span class="math display">\[
+\begin{aligned}
+L &amp;= \lim_{x \rightarrow 0} \frac{1 - \frac{1}{1 + x}}{2x} \\
+&amp;= \lim_{x \rightarrow 0} \frac{1}{2x} - \frac{\frac{1}{1 + x}}{2x} \\
+&amp;= \lim_{x \rightarrow 0} \frac{1}{2x} - \frac{1}{2x(1 + x)} \\
+&amp;= \lim_{x \rightarrow 0} \frac{1(1 + x)}{2x(1 + x)} - \frac{1}{2x(1 + x)} \\
+&amp;= \lim_{x \rightarrow 0} \frac{1(1 + x) - 1}{2x(1 + x)} \\
+&amp;= \lim_{x \rightarrow 0} \frac{1 + x - 1}{2x(1 + x)} \\
+&amp;= \lim_{x \rightarrow 0} \frac{x}{2x(1 + x)} \\
+&amp;= \lim_{x \rightarrow 0} \frac{1}{2(1 + x)} \\
+&amp;= \lim_{x \rightarrow 0} \frac{1}{2(1 + 0)} = \frac{1}{2}
+\end{aligned}
+\]</span></p>
+<p>Letting <span class="math inline">\(x \rightarrow 0\)</span>, we have <span class="math inline">\(L = \frac{1}{2}\)</span>.</p>
+<p>Note that instead of simplifying the expression, we could use this approach iteratively.</p>
+<p><span class="math display">\[\lim_{x \rightarrow a} \frac{f(x)}{g(x)} = \lim_{x \rightarrow a} \frac{f&#39;(x)}{g&#39;(x)} = \lim_{x \rightarrow a} \frac{f&#39;&#39;(x)}{g&#39;&#39;(x)} = \ldots\]</span></p>
+<p><span class="math display">\[
+\begin{aligned}
+f&#39;&#39;(x) &amp;= \frac{1}{(1 +x)^{2}} \\
+g&#39;&#39;(x) &amp;= 2 \\
+\lim_{x \rightarrow 0} \frac{f&#39;&#39;(x)}{g&#39;&#39;(x)} &amp;= \frac{(1 + x)^{-2}}{2} = \frac{1^{-2}}{2} = \frac{1}{2}
+\end{aligned}
+\]</span></p>
+</div>
+
+</div>
+</div>
+</div>
+<h3>References<a href="references.html#references" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-lee2008" class="csl-entry">
+Lee, David S. 2008. <span>“Randomized Experiments from Non-Random Selection in u.s. House Elections.”</span> <em>Journal of Econometrics</em> 142 (2): 675–97. https://doi.org/<a href="https://doi.org/10.1016/j.jeconom.2007.05.004">https://doi.org/10.1016/j.jeconom.2007.05.004</a>.
+</div>
+<div id="ref-pemberton2015" class="csl-entry">
+Pemberton, Malcolm, and Nicholas Rau. 2011. <em>Mathematics for Economists: An Introductory Textbook</em>. 4th edition. University of Toronto Press.
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol start="5">
+<li id="fn5"><p>Thanks Sanja!<a href="sequences-derivatives.html#fnref5" class="footnote-back">↩︎</a></p></li>
+<li id="fn6"><p><a href="https://www.wyzant.com/resources/lessons/math/calculus/derivative_proofs/e_to_the_x">Derivative of <span class="math inline">\(e^x\)</span> Proofs</a><a href="sequences-derivatives.html#fnref6" class="footnote-back">↩︎</a></p></li>
+<li id="fn7"><p>For a formal proof of <span class="math inline">\(\lim\limits_{h\to 0} \frac{e^h - 1}{h}\)</span>, see <a href="https://proofwiki.org/wiki/Derivative_of_Exponential_at_Zero">here</a>.<a href="sequences-derivatives.html#fnref7" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="sets-functions.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="critical-points.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/math-camp/notes/edit/master/02-sequences-limits-derivatives.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "section"
+},
+"theme": "readable",
+"highlight": "pygment"
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

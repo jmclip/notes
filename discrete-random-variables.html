@@ -1,0 +1,1412 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Lecture 8 Discrete random variables | Computational Math Camp</title>
+  <meta name="description" content="Contains lecture notes for the 2022 Computational Math Camp." />
+  <meta name="generator" content="bookdown 0.26 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Lecture 8 Discrete random variables | Computational Math Camp" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="Contains lecture notes for the 2022 Computational Math Camp." />
+  <meta name="github-repo" content="math-camp/notes" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Lecture 8 Discrete random variables | Computational Math Camp" />
+  
+  <meta name="twitter:description" content="Contains lecture notes for the 2022 Computational Math Camp." />
+  
+
+<meta name="author" content="Yanyan Sheng" />
+
+
+<meta name="date" content="2022-08-17" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="sample-space-probability.html"/>
+<link rel="next" href="general-random-variables.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<script src="libs/plotly-binding-4.10.0/plotly.js"></script>
+<script src="libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
+<link href="libs/plotly-htmlwidgets-css-2.5.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="libs/plotly-main-2.5.1/plotly-latest.min.js"></script>
+\[
+\newcommand{\E}{\mathrm{E}}
+\newcommand{\Var}{\mathrm{Var}}
+\newcommand{\Cov}{\mathrm{Cov}}
+\newcommand{\se}{\text{se}}
+\newcommand{\sd}{\text{sd}}
+\newcommand{\Cor}{\mathrm{Cor}}
+\newcommand{\Lagr}{\mathcal{L}}
+\newcommand{\lagr}{\mathcal{l}}
+\]
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="css/style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Overview</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#meeting-information"><i class="fa fa-check"></i>Meeting information</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#instructional-staff"><i class="fa fa-check"></i>Instructional staff</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#teaching-assistants"><i class="fa fa-check"></i>Teaching assistants</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#course-description"><i class="fa fa-check"></i>Course description</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#who-should-take-this-course"><i class="fa fa-check"></i>Who should take this course</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#grades"><i class="fa fa-check"></i>Grades</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#disability-services"><i class="fa fa-check"></i>Disability services</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#core-texts"><i class="fa fa-check"></i>Core texts</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#course-format"><i class="fa fa-check"></i>Course format</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#problem-sets"><i class="fa fa-check"></i>Problem sets</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#course-schedule"><i class="fa fa-check"></i>Course schedule</a></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="sets-functions.html"><a href="sets-functions.html"><i class="fa fa-check"></i><b>1</b> Linear equations, inequalities, sets and functions, quadratics, and logarithms</a>
+<ul>
+<li class="chapter" data-level="" data-path="sets-functions.html"><a href="sets-functions.html#learning-objectives"><i class="fa fa-check"></i>Learning objectives</a></li>
+<li class="chapter" data-level="" data-path="sets-functions.html"><a href="sets-functions.html#supplemental-readings"><i class="fa fa-check"></i>Supplemental readings</a></li>
+<li class="chapter" data-level="1.1" data-path="sets-functions.html"><a href="sets-functions.html#what-is-computational-social-science"><i class="fa fa-check"></i><b>1.1</b> What is computational social science?</a>
+<ul>
+<li class="chapter" data-level="1.1.1" data-path="sets-functions.html"><a href="sets-functions.html#disciplines-within-social-science"><i class="fa fa-check"></i><b>1.1.1</b> Disciplines within social science</a></li>
+<li class="chapter" data-level="1.1.2" data-path="sets-functions.html"><a href="sets-functions.html#computational-social-science"><i class="fa fa-check"></i><b>1.1.2</b> Computational social science</a></li>
+<li class="chapter" data-level="1.1.3" data-path="sets-functions.html"><a href="sets-functions.html#acquiring-css-skills"><i class="fa fa-check"></i><b>1.1.3</b> Acquiring CSS skills</a></li>
+</ul></li>
+<li class="chapter" data-level="1.2" data-path="sets-functions.html"><a href="sets-functions.html#difference-between-math-probability-and-statistics"><i class="fa fa-check"></i><b>1.2</b> Difference between math, probability, and statistics</a>
+<ul>
+<li class="chapter" data-level="1.2.1" data-path="sets-functions.html"><a href="sets-functions.html#mathematics"><i class="fa fa-check"></i><b>1.2.1</b> Mathematics</a></li>
+<li class="chapter" data-level="1.2.2" data-path="sets-functions.html"><a href="sets-functions.html#probability"><i class="fa fa-check"></i><b>1.2.2</b> Probability</a></li>
+<li class="chapter" data-level="1.2.3" data-path="sets-functions.html"><a href="sets-functions.html#statistics"><i class="fa fa-check"></i><b>1.2.3</b> Statistics</a></li>
+<li class="chapter" data-level="1.2.4" data-path="sets-functions.html"><a href="sets-functions.html#their-uses"><i class="fa fa-check"></i><b>1.2.4</b> Their uses</a></li>
+</ul></li>
+<li class="chapter" data-level="1.3" data-path="sets-functions.html"><a href="sets-functions.html#goals-for-this-camp"><i class="fa fa-check"></i><b>1.3</b> Goals for this camp</a></li>
+<li class="chapter" data-level="1.4" data-path="sets-functions.html"><a href="sets-functions.html#course-logistics"><i class="fa fa-check"></i><b>1.4</b> Course logistics</a>
+<ul>
+<li class="chapter" data-level="1.4.1" data-path="sets-functions.html"><a href="sets-functions.html#course-staff"><i class="fa fa-check"></i><b>1.4.1</b> Course staff</a></li>
+<li class="chapter" data-level="1.4.2" data-path="sets-functions.html"><a href="sets-functions.html#teaching-assistants-1"><i class="fa fa-check"></i><b>1.4.2</b> Teaching assistants</a></li>
+<li class="chapter" data-level="1.4.3" data-path="sets-functions.html"><a href="sets-functions.html#prerequisites-for-the-math-camp"><i class="fa fa-check"></i><b>1.4.3</b> Prerequisites for the math camp</a></li>
+<li class="chapter" data-level="1.4.4" data-path="sets-functions.html"><a href="sets-functions.html#alternatives-to-this-camp"><i class="fa fa-check"></i><b>1.4.4</b> Alternatives to this camp</a></li>
+<li class="chapter" data-level="1.4.5" data-path="sets-functions.html"><a href="sets-functions.html#evaluation"><i class="fa fa-check"></i><b>1.4.5</b> Evaluation</a></li>
+<li class="chapter" data-level="1.4.6" data-path="sets-functions.html"><a href="sets-functions.html#why-are-we-doing-this"><i class="fa fa-check"></i><b>1.4.6</b> Why are we doing this</a></li>
+</ul></li>
+<li class="chapter" data-level="1.5" data-path="sets-functions.html"><a href="sets-functions.html#mathematical-notation"><i class="fa fa-check"></i><b>1.5</b> Mathematical notation</a>
+<ul>
+<li class="chapter" data-level="1.5.1" data-path="sets-functions.html"><a href="sets-functions.html#why-math-is-important-to-social-science"><i class="fa fa-check"></i><b>1.5.1</b> Why math is important to social science</a></li>
+<li class="chapter" data-level="1.5.2" data-path="sets-functions.html"><a href="sets-functions.html#example-paradox-of-voting"><i class="fa fa-check"></i><b>1.5.2</b> Example: Paradox of voting</a></li>
+</ul></li>
+<li class="chapter" data-level="1.6" data-path="sets-functions.html"><a href="sets-functions.html#sets"><i class="fa fa-check"></i><b>1.6</b> Sets</a>
+<ul>
+<li class="chapter" data-level="1.6.1" data-path="sets-functions.html"><a href="sets-functions.html#set-builder-notation"><i class="fa fa-check"></i><b>1.6.1</b> Set builder notation</a></li>
+<li class="chapter" data-level="1.6.2" data-path="sets-functions.html"><a href="sets-functions.html#set-operations"><i class="fa fa-check"></i><b>1.6.2</b> Set operations</a></li>
+<li class="chapter" data-level="1.6.3" data-path="sets-functions.html"><a href="sets-functions.html#some-facts-about-sets"><i class="fa fa-check"></i><b>1.6.3</b> Some facts about sets</a></li>
+</ul></li>
+<li class="chapter" data-level="1.7" data-path="sets-functions.html"><a href="sets-functions.html#functions"><i class="fa fa-check"></i><b>1.7</b> Functions</a>
+<ul>
+<li class="chapter" data-level="1.7.1" data-path="sets-functions.html"><a href="sets-functions.html#ordered-pairs"><i class="fa fa-check"></i><b>1.7.1</b> Ordered pairs</a></li>
+<li class="chapter" data-level="1.7.2" data-path="sets-functions.html"><a href="sets-functions.html#relation"><i class="fa fa-check"></i><b>1.7.2</b> Relation</a></li>
+<li class="chapter" data-level="1.7.3" data-path="sets-functions.html"><a href="sets-functions.html#relation-vs.-function"><i class="fa fa-check"></i><b>1.7.3</b> Relation vs. function</a></li>
+<li class="chapter" data-level="1.7.4" data-path="sets-functions.html"><a href="sets-functions.html#two-major-properties-of-functions"><i class="fa fa-check"></i><b>1.7.4</b> Two major properties of functions</a></li>
+</ul></li>
+<li class="chapter" data-level="1.8" data-path="sets-functions.html"><a href="sets-functions.html#quadratic-functions"><i class="fa fa-check"></i><b>1.8</b> Quadratic functions</a>
+<ul>
+<li class="chapter" data-level="1.8.1" data-path="sets-functions.html"><a href="sets-functions.html#quadratic-equation"><i class="fa fa-check"></i><b>1.8.1</b> Quadratic equation</a></li>
+<li class="chapter" data-level="1.8.2" data-path="sets-functions.html"><a href="sets-functions.html#quadratic-formula"><i class="fa fa-check"></i><b>1.8.2</b> Quadratic formula</a></li>
+</ul></li>
+<li class="chapter" data-level="1.9" data-path="sets-functions.html"><a href="sets-functions.html#systems-of-linear-equations"><i class="fa fa-check"></i><b>1.9</b> Systems of linear equations</a>
+<ul>
+<li class="chapter" data-level="1.9.1" data-path="sets-functions.html"><a href="sets-functions.html#one-solution"><i class="fa fa-check"></i><b>1.9.1</b> One solution</a></li>
+<li class="chapter" data-level="1.9.2" data-path="sets-functions.html"><a href="sets-functions.html#no-solution"><i class="fa fa-check"></i><b>1.9.2</b> No solution</a></li>
+<li class="chapter" data-level="1.9.3" data-path="sets-functions.html"><a href="sets-functions.html#infinite-solutions"><i class="fa fa-check"></i><b>1.9.3</b> Infinite solutions</a></li>
+<li class="chapter" data-level="1.9.4" data-path="sets-functions.html"><a href="sets-functions.html#three-equations-in-three-unknowns"><i class="fa fa-check"></i><b>1.9.4</b> Three equations in three unknowns</a></li>
+<li class="chapter" data-level="1.9.5" data-path="sets-functions.html"><a href="sets-functions.html#gaussian-elimination"><i class="fa fa-check"></i><b>1.9.5</b> Gaussian elimination</a></li>
+</ul></li>
+<li class="chapter" data-level="1.10" data-path="sets-functions.html"><a href="sets-functions.html#logarithms-and-exponential-functions"><i class="fa fa-check"></i><b>1.10</b> Logarithms and exponential functions</a>
+<ul>
+<li class="chapter" data-level="1.10.1" data-path="sets-functions.html"><a href="sets-functions.html#functions-with-exponents"><i class="fa fa-check"></i><b>1.10.1</b> Functions with exponents</a></li>
+<li class="chapter" data-level="1.10.2" data-path="sets-functions.html"><a href="sets-functions.html#common-rules-of-exponents"><i class="fa fa-check"></i><b>1.10.2</b> Common rules of exponents</a></li>
+<li class="chapter" data-level="1.10.3" data-path="sets-functions.html"><a href="sets-functions.html#logarithms"><i class="fa fa-check"></i><b>1.10.3</b> Logarithms</a></li>
+</ul></li>
+<li class="chapter" data-level="1.11" data-path="sets-functions.html"><a href="sets-functions.html#bonus-content-computational-tools-for-the-future"><i class="fa fa-check"></i><b>1.11</b> Bonus content: Computational tools for the future</a>
+<ul>
+<li class="chapter" data-level="1.11.1" data-path="sets-functions.html"><a href="sets-functions.html#programming-languages-for-statistical-learning"><i class="fa fa-check"></i><b>1.11.1</b> Programming languages for statistical learning</a></li>
+<li class="chapter" data-level="1.11.2" data-path="sets-functions.html"><a href="sets-functions.html#version-control-git"><i class="fa fa-check"></i><b>1.11.2</b> Version control (Git)</a></li>
+<li class="chapter" data-level="1.11.3" data-path="sets-functions.html"><a href="sets-functions.html#publishing"><i class="fa fa-check"></i><b>1.11.3</b> Publishing</a></li>
+<li class="chapter" data-level="1.11.4" data-path="sets-functions.html"><a href="sets-functions.html#how-will-you-acquire-these-skills"><i class="fa fa-check"></i><b>1.11.4</b> How will you acquire these skills?</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html"><i class="fa fa-check"></i><b>2</b> Sequences, limits, continuity, and derivatives</a>
+<ul>
+<li class="chapter" data-level="" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#learning-objectives-1"><i class="fa fa-check"></i>Learning objectives</a></li>
+<li class="chapter" data-level="" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#supplemental-readings-1"><i class="fa fa-check"></i>Supplemental readings</a></li>
+<li class="chapter" data-level="2.1" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#sequence"><i class="fa fa-check"></i><b>2.1</b> Sequence</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#definition"><i class="fa fa-check"></i><b>2.1.1</b> Definition</a></li>
+<li class="chapter" data-level="2.1.2" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#examples"><i class="fa fa-check"></i><b>2.1.2</b> Examples</a></li>
+<li class="chapter" data-level="2.1.3" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#arithmetic-and-geometric-progressions"><i class="fa fa-check"></i><b>2.1.3</b> Arithmetic and geometric progressions</a></li>
+<li class="chapter" data-level="2.1.4" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#convergence"><i class="fa fa-check"></i><b>2.1.4</b> Convergence</a></li>
+<li class="chapter" data-level="2.1.5" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#algebra-of-sequences"><i class="fa fa-check"></i><b>2.1.5</b> Algebra of sequences</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#limits"><i class="fa fa-check"></i><b>2.2</b> Limits</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#sequences-leadsto-limits-of-functions"><i class="fa fa-check"></i><b>2.2.1</b> Sequences <span class="math inline">\(\leadsto\)</span> limits of functions</a></li>
+<li class="chapter" data-level="2.2.2" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#limits-of-functions"><i class="fa fa-check"></i><b>2.2.2</b> Limits of functions</a></li>
+<li class="chapter" data-level="2.2.3" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#examples-of-limits"><i class="fa fa-check"></i><b>2.2.3</b> Examples of limits</a></li>
+<li class="chapter" data-level="2.2.4" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#not-all-functions-have-limits"><i class="fa fa-check"></i><b>2.2.4</b> Not all functions have limits</a></li>
+<li class="chapter" data-level="2.2.5" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#intuitive-definition-of-a-limit"><i class="fa fa-check"></i><b>2.2.5</b> Intuitive definition of a limit</a></li>
+<li class="chapter" data-level="2.2.6" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#algebra-of-limits"><i class="fa fa-check"></i><b>2.2.6</b> Algebra of limits</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#continuity"><i class="fa fa-check"></i><b>2.3</b> Continuity</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#defining-continuity"><i class="fa fa-check"></i><b>2.3.1</b> Defining continuity</a></li>
+<li class="chapter" data-level="2.3.2" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#a-real-world-example-of-limits-measuring-incumbency-advantage"><i class="fa fa-check"></i><b>2.3.2</b> A real-world example of limits: Measuring incumbency advantage</a></li>
+<li class="chapter" data-level="2.3.3" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#continuity-and-limits"><i class="fa fa-check"></i><b>2.3.3</b> Continuity and limits</a></li>
+<li class="chapter" data-level="2.3.4" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#algebra-of-continuous-functions"><i class="fa fa-check"></i><b>2.3.4</b> Algebra of continuous functions</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#what-is-calculus"><i class="fa fa-check"></i><b>2.4</b> What is calculus?</a></li>
+<li class="chapter" data-level="2.5" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#derivatives"><i class="fa fa-check"></i><b>2.5</b> Derivatives</a>
+<ul>
+<li class="chapter" data-level="2.5.1" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#how-functions-change"><i class="fa fa-check"></i><b>2.5.1</b> How functions change</a></li>
+<li class="chapter" data-level="2.5.2" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#the-tangent-as-a-limit"><i class="fa fa-check"></i><b>2.5.2</b> The tangent as a limit</a></li>
+<li class="chapter" data-level="2.5.3" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#derivative"><i class="fa fa-check"></i><b>2.5.3</b> Derivative</a></li>
+<li class="chapter" data-level="2.5.4" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#rates-of-change-in-a-function"><i class="fa fa-check"></i><b>2.5.4</b> Rates of change in a function</a></li>
+<li class="chapter" data-level="2.5.5" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#examples-of-derivatives"><i class="fa fa-check"></i><b>2.5.5</b> Examples of derivatives</a></li>
+<li class="chapter" data-level="2.5.6" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#continuity-and-derivatives"><i class="fa fa-check"></i><b>2.5.6</b> Continuity and derivatives</a></li>
+<li class="chapter" data-level="2.5.7" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#what-goes-wrong"><i class="fa fa-check"></i><b>2.5.7</b> What goes wrong?</a></li>
+</ul></li>
+<li class="chapter" data-level="2.6" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#calculating-derivatives"><i class="fa fa-check"></i><b>2.6</b> Calculating derivatives</a>
+<ul>
+<li class="chapter" data-level="2.6.1" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#derivative-rules"><i class="fa fa-check"></i><b>2.6.1</b> Derivative rules</a></li>
+<li class="chapter" data-level="2.6.2" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#challenge-problems"><i class="fa fa-check"></i><b>2.6.2</b> Challenge problems</a></li>
+<li class="chapter" data-level="2.6.3" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#composite-functions"><i class="fa fa-check"></i><b>2.6.3</b> Composite functions</a></li>
+<li class="chapter" data-level="2.6.4" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#chain-rule"><i class="fa fa-check"></i><b>2.6.4</b> Chain rule</a></li>
+</ul></li>
+<li class="chapter" data-level="2.7" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#derivatives-for-the-exponential-function-and-natural-logarithms"><i class="fa fa-check"></i><b>2.7</b> Derivatives for the exponential function and natural logarithms</a>
+<ul>
+<li class="chapter" data-level="2.7.1" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#derivative-of-exponential-function"><i class="fa fa-check"></i><b>2.7.1</b> Derivative of exponential function</a></li>
+<li class="chapter" data-level="2.7.2" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#derivative-of-the-natural-logarithm"><i class="fa fa-check"></i><b>2.7.2</b> Derivative of the natural logarithm</a></li>
+<li class="chapter" data-level="2.7.3" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#relevance-of-exponential-functions-and-natural-logarithm"><i class="fa fa-check"></i><b>2.7.3</b> Relevance of exponential functions and natural logarithm</a></li>
+</ul></li>
+<li class="chapter" data-level="2.8" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#derivatives-and-properties-of-functions"><i class="fa fa-check"></i><b>2.8</b> Derivatives and properties of functions</a>
+<ul>
+<li class="chapter" data-level="2.8.1" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#relative-maxima-minima-and-derivatives"><i class="fa fa-check"></i><b>2.8.1</b> Relative maxima, minima and derivatives</a></li>
+<li class="chapter" data-level="2.8.2" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#mean-value-theorem"><i class="fa fa-check"></i><b>2.8.2</b> Mean value theorem</a></li>
+<li class="chapter" data-level="2.8.3" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#applications-of-the-mean-value-theorem"><i class="fa fa-check"></i><b>2.8.3</b> Applications of the mean value theorem</a></li>
+<li class="chapter" data-level="2.8.4" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#extension-to-indeterminate-form-limits"><i class="fa fa-check"></i><b>2.8.4</b> Extension to indeterminate form limits</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="critical-points.html"><a href="critical-points.html"><i class="fa fa-check"></i><b>3</b> Critical points and approximation</a>
+<ul>
+<li class="chapter" data-level="" data-path="critical-points.html"><a href="critical-points.html#learning-objectives-2"><i class="fa fa-check"></i>Learning objectives</a></li>
+<li class="chapter" data-level="" data-path="critical-points.html"><a href="critical-points.html#supplemental-readings-2"><i class="fa fa-check"></i>Supplemental readings</a></li>
+<li class="chapter" data-level="3.1" data-path="critical-points.html"><a href="critical-points.html#intuition"><i class="fa fa-check"></i><b>3.1</b> Intuition</a></li>
+<li class="chapter" data-level="3.2" data-path="critical-points.html"><a href="critical-points.html#higher-order-derivatives"><i class="fa fa-check"></i><b>3.2</b> Higher order derivatives</a></li>
+<li class="chapter" data-level="3.3" data-path="critical-points.html"><a href="critical-points.html#critical-points-1"><i class="fa fa-check"></i><b>3.3</b> Critical points</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="critical-points.html"><a href="critical-points.html#inflection-point"><i class="fa fa-check"></i><b>3.3.1</b> Inflection point</a></li>
+<li class="chapter" data-level="3.3.2" data-path="critical-points.html"><a href="critical-points.html#concavity"><i class="fa fa-check"></i><b>3.3.2</b> Concavity</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="critical-points.html"><a href="critical-points.html#extrema"><i class="fa fa-check"></i><b>3.4</b> Extrema</a>
+<ul>
+<li class="chapter" data-level="3.4.1" data-path="critical-points.html"><a href="critical-points.html#minimum-and-maximum-on-the-interval-05-are-located-at-the-endpoints"><i class="fa fa-check"></i><b>3.4.1</b> Minimum and maximum on the interval <span class="math inline">\([0,5]\)</span> are located at the endpoints</a></li>
+<li class="chapter" data-level="3.4.2" data-path="critical-points.html"><a href="critical-points.html#global-maximum-is-located-at-x0"><i class="fa fa-check"></i><b>3.4.2</b> Global maximum is located at <span class="math inline">\(x=0\)</span></a></li>
+<li class="chapter" data-level="3.4.3" data-path="critical-points.html"><a href="critical-points.html#global-minimum-is-located-at-x---frac92"><i class="fa fa-check"></i><b>3.4.3</b> Global minimum is located at <span class="math inline">\(x= - \frac{9}{2}\)</span></a></li>
+<li class="chapter" data-level="3.4.4" data-path="critical-points.html"><a href="critical-points.html#a-bunch-of-local-minima-and-maxima"><i class="fa fa-check"></i><b>3.4.4</b> A bunch of local minima and maxima</a></li>
+<li class="chapter" data-level="3.4.5" data-path="critical-points.html"><a href="critical-points.html#x0-is-an-inflection-point-that-is-neither-a-minimum-nor-a-maximum-fx-0"><i class="fa fa-check"></i><b>3.4.5</b> <span class="math inline">\(x=0\)</span> is an inflection point that is neither a minimum nor a maximum (<span class="math inline">\(f&#39;&#39;(x) = 0\)</span>)</a></li>
+</ul></li>
+<li class="chapter" data-level="3.5" data-path="critical-points.html"><a href="critical-points.html#framework-for-analytical-optimization"><i class="fa fa-check"></i><b>3.5</b> Framework for analytical optimization</a>
+<ul>
+<li class="chapter" data-level="3.5.1" data-path="critical-points.html"><a href="critical-points.html#example-fx--x2-x-in--3-3"><i class="fa fa-check"></i><b>3.5.1</b> Example: <span class="math inline">\(f(x) = -x^2\)</span>, <span class="math inline">\(x \in [-3, 3]\)</span></a></li>
+<li class="chapter" data-level="3.5.2" data-path="critical-points.html"><a href="critical-points.html#example-fx-x3-x-in--3-3"><i class="fa fa-check"></i><b>3.5.2</b> Example: <span class="math inline">\(f(x) = x^3\)</span>, <span class="math inline">\(x \in [-3, 3]\)</span></a></li>
+<li class="chapter" data-level="3.5.3" data-path="critical-points.html"><a href="critical-points.html#example-spatial-model"><i class="fa fa-check"></i><b>3.5.3</b> Example: spatial model</a></li>
+<li class="chapter" data-level="3.5.4" data-path="critical-points.html"><a href="critical-points.html#example-maximum-likelihood-estimation"><i class="fa fa-check"></i><b>3.5.4</b> Example: Maximum likelihood estimation</a></li>
+</ul></li>
+<li class="chapter" data-level="3.6" data-path="critical-points.html"><a href="critical-points.html#computational-optimization-procedures"><i class="fa fa-check"></i><b>3.6</b> Computational optimization procedures</a>
+<ul>
+<li class="chapter" data-level="3.6.1" data-path="critical-points.html"><a href="critical-points.html#newton-raphson-root-finding"><i class="fa fa-check"></i><b>3.6.1</b> Newton-Raphson root finding</a></li>
+<li class="chapter" data-level="3.6.2" data-path="critical-points.html"><a href="critical-points.html#grid-search"><i class="fa fa-check"></i><b>3.6.2</b> Grid search</a></li>
+<li class="chapter" data-level="3.6.3" data-path="critical-points.html"><a href="critical-points.html#gradient-descent"><i class="fa fa-check"></i><b>3.6.3</b> Gradient descent</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="linear-algebra.html"><a href="linear-algebra.html"><i class="fa fa-check"></i><b>4</b> Linear algebra</a>
+<ul>
+<li class="chapter" data-level="" data-path="linear-algebra.html"><a href="linear-algebra.html#learning-objectives-3"><i class="fa fa-check"></i>Learning objectives</a></li>
+<li class="chapter" data-level="" data-path="linear-algebra.html"><a href="linear-algebra.html#supplemental-readings-3"><i class="fa fa-check"></i>Supplemental readings</a></li>
+<li class="chapter" data-level="4.1" data-path="linear-algebra.html"><a href="linear-algebra.html#linear-algebra-1"><i class="fa fa-check"></i><b>4.1</b> Linear algebra</a></li>
+<li class="chapter" data-level="4.2" data-path="linear-algebra.html"><a href="linear-algebra.html#points-and-vectors"><i class="fa fa-check"></i><b>4.2</b> Points and vectors</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="linear-algebra.html"><a href="linear-algebra.html#points"><i class="fa fa-check"></i><b>4.2.1</b> Points</a></li>
+<li class="chapter" data-level="4.2.2" data-path="linear-algebra.html"><a href="linear-algebra.html#vectors"><i class="fa fa-check"></i><b>4.2.2</b> Vectors</a></li>
+<li class="chapter" data-level="4.2.3" data-path="linear-algebra.html"><a href="linear-algebra.html#one-dimensional-example"><i class="fa fa-check"></i><b>4.2.3</b> One dimensional example</a></li>
+<li class="chapter" data-level="4.2.4" data-path="linear-algebra.html"><a href="linear-algebra.html#two-dimensional-example"><i class="fa fa-check"></i><b>4.2.4</b> Two dimensional example</a></li>
+<li class="chapter" data-level="4.2.5" data-path="linear-algebra.html"><a href="linear-algebra.html#three-dimensional-example"><i class="fa fa-check"></i><b>4.2.5</b> Three dimensional example</a></li>
+<li class="chapter" data-level="4.2.6" data-path="linear-algebra.html"><a href="linear-algebra.html#n-dimensional-example"><i class="fa fa-check"></i><b>4.2.6</b> <span class="math inline">\(N\)</span>-dimensional example</a></li>
+<li class="chapter" data-level="4.2.7" data-path="linear-algebra.html"><a href="linear-algebra.html#examples-of-some-basic-arithmetic"><i class="fa fa-check"></i><b>4.2.7</b> Examples of some basic arithmetic</a></li>
+<li class="chapter" data-level="4.2.8" data-path="linear-algebra.html"><a href="linear-algebra.html#linear-dependence"><i class="fa fa-check"></i><b>4.2.8</b> Linear dependence</a></li>
+<li class="chapter" data-level="4.2.9" data-path="linear-algebra.html"><a href="linear-algebra.html#inner-product"><i class="fa fa-check"></i><b>4.2.9</b> Inner product</a></li>
+<li class="chapter" data-level="4.2.10" data-path="linear-algebra.html"><a href="linear-algebra.html#calculating-vector-length"><i class="fa fa-check"></i><b>4.2.10</b> Calculating vector length</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="linear-algebra.html"><a href="linear-algebra.html#example-text-analysis"><i class="fa fa-check"></i><b>4.3</b> Example: text analysis</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="linear-algebra.html"><a href="linear-algebra.html#measure-1-inner-product"><i class="fa fa-check"></i><b>4.3.1</b> Measure 1: inner product</a></li>
+<li class="chapter" data-level="4.3.2" data-path="linear-algebra.html"><a href="linear-algebra.html#measure-2-cosine-similarity"><i class="fa fa-check"></i><b>4.3.2</b> Measure 2: cosine similarity</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="linear-algebra.html"><a href="linear-algebra.html#matricies"><i class="fa fa-check"></i><b>4.4</b> Matricies</a>
+<ul>
+<li class="chapter" data-level="4.4.1" data-path="linear-algebra.html"><a href="linear-algebra.html#basic-arithmetic"><i class="fa fa-check"></i><b>4.4.1</b> Basic arithmetic</a></li>
+<li class="chapter" data-level="4.4.2" data-path="linear-algebra.html"><a href="linear-algebra.html#transposition"><i class="fa fa-check"></i><b>4.4.2</b> Transposition</a></li>
+<li class="chapter" data-level="4.4.3" data-path="linear-algebra.html"><a href="linear-algebra.html#multiplication"><i class="fa fa-check"></i><b>4.4.3</b> Multiplication</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="linear-algebra.html"><a href="linear-algebra.html#example-neural-networks"><i class="fa fa-check"></i><b>4.5</b> Example: neural networks</a>
+<ul>
+<li class="chapter" data-level="4.5.1" data-path="linear-algebra.html"><a href="linear-algebra.html#how-are-neural-networks-used"><i class="fa fa-check"></i><b>4.5.1</b> How are neural networks used</a></li>
+<li class="chapter" data-level="4.5.2" data-path="linear-algebra.html"><a href="linear-algebra.html#how-are-neural-networks-related-to-linear-algebra"><i class="fa fa-check"></i><b>4.5.2</b> How are neural networks related to linear algebra?</a></li>
+</ul></li>
+<li class="chapter" data-level="4.6" data-path="linear-algebra.html"><a href="linear-algebra.html#matrix-inversion"><i class="fa fa-check"></i><b>4.6</b> Matrix inversion</a>
+<ul>
+<li class="chapter" data-level="4.6.1" data-path="linear-algebra.html"><a href="linear-algebra.html#calculating-matrix-inversions"><i class="fa fa-check"></i><b>4.6.1</b> Calculating matrix inversions</a></li>
+<li class="chapter" data-level="4.6.2" data-path="linear-algebra.html"><a href="linear-algebra.html#when-do-inverses-exist"><i class="fa fa-check"></i><b>4.6.2</b> When do inverses exist</a></li>
+<li class="chapter" data-level="4.6.3" data-path="linear-algebra.html"><a href="linear-algebra.html#inverting-a-2-times-2-matrix"><i class="fa fa-check"></i><b>4.6.3</b> Inverting a <span class="math inline">\(2 \times 2\)</span> matrix</a></li>
+<li class="chapter" data-level="4.6.4" data-path="linear-algebra.html"><a href="linear-algebra.html#inverting-an-n-times-n-matrix"><i class="fa fa-check"></i><b>4.6.4</b> Inverting an <span class="math inline">\(n \times n\)</span> matrix</a></li>
+<li class="chapter" data-level="4.6.5" data-path="linear-algebra.html"><a href="linear-algebra.html#application-to-regression-analysis"><i class="fa fa-check"></i><b>4.6.5</b> Application to regression analysis</a></li>
+<li class="chapter" data-level="4.6.6" data-path="linear-algebra.html"><a href="linear-algebra.html#application-to-solving-systems-of-equations-tax-benefits-of-charitable-contributions"><i class="fa fa-check"></i><b>4.6.6</b> Application to solving systems of equations: tax benefits of charitable contributions</a></li>
+</ul></li>
+<li class="chapter" data-level="4.7" data-path="linear-algebra.html"><a href="linear-algebra.html#determinant"><i class="fa fa-check"></i><b>4.7</b> Determinant</a>
+<ul>
+<li class="chapter" data-level="4.7.1" data-path="linear-algebra.html"><a href="linear-algebra.html#relevance-of-the-determinant"><i class="fa fa-check"></i><b>4.7.1</b> Relevance of the determinant</a></li>
+</ul></li>
+<li class="chapter" data-level="4.8" data-path="linear-algebra.html"><a href="linear-algebra.html#matrix-decomposition"><i class="fa fa-check"></i><b>4.8</b> Matrix decomposition</a>
+<ul>
+<li class="chapter" data-level="4.8.1" data-path="linear-algebra.html"><a href="linear-algebra.html#dimension-reduction"><i class="fa fa-check"></i><b>4.8.1</b> Dimension reduction</a></li>
+<li class="chapter" data-level="4.8.2" data-path="linear-algebra.html"><a href="linear-algebra.html#singular-value-decomposition"><i class="fa fa-check"></i><b>4.8.2</b> Singular value decomposition</a></li>
+<li class="chapter" data-level="4.8.3" data-path="linear-algebra.html"><a href="linear-algebra.html#principal-components-analysis"><i class="fa fa-check"></i><b>4.8.3</b> Principal components analysis</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="linear-algebra.html"><a href="linear-algebra.html#acknowledgements"><i class="fa fa-check"></i>Acknowledgements</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="multivariable-differentiation.html"><a href="multivariable-differentiation.html"><i class="fa fa-check"></i><b>5</b> Functions of several variables and optimization with several variables</a>
+<ul>
+<li class="chapter" data-level="" data-path="multivariable-differentiation.html"><a href="multivariable-differentiation.html#learning-objectives-4"><i class="fa fa-check"></i>Learning objectives</a></li>
+<li class="chapter" data-level="" data-path="multivariable-differentiation.html"><a href="multivariable-differentiation.html#supplemental-readings-4"><i class="fa fa-check"></i>Supplemental readings</a></li>
+<li class="chapter" data-level="5.1" data-path="multivariable-differentiation.html"><a href="multivariable-differentiation.html#higher-order-derivatives-1"><i class="fa fa-check"></i><b>5.1</b> Higher order derivatives</a></li>
+<li class="chapter" data-level="5.2" data-path="multivariable-differentiation.html"><a href="multivariable-differentiation.html#multivariate-function"><i class="fa fa-check"></i><b>5.2</b> Multivariate function</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="multivariable-differentiation.html"><a href="multivariable-differentiation.html#definition-2"><i class="fa fa-check"></i><b>5.2.1</b> Definition</a></li>
+<li class="chapter" data-level="5.2.2" data-path="multivariable-differentiation.html"><a href="multivariable-differentiation.html#evaluating-multivariate-functions"><i class="fa fa-check"></i><b>5.2.2</b> Evaluating multivariate functions</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="multivariable-differentiation.html"><a href="multivariable-differentiation.html#multivariate-derivatives"><i class="fa fa-check"></i><b>5.3</b> Multivariate derivatives</a></li>
+<li class="chapter" data-level="5.4" data-path="multivariable-differentiation.html"><a href="multivariable-differentiation.html#multivariate-optimization"><i class="fa fa-check"></i><b>5.4</b> Multivariate optimization</a>
+<ul>
+<li class="chapter" data-level="5.4.1" data-path="multivariable-differentiation.html"><a href="multivariable-differentiation.html#differences-from-single-variable-optimization-procedure"><i class="fa fa-check"></i><b>5.4.1</b> Differences from single variable optimization procedure</a></li>
+<li class="chapter" data-level="5.4.2" data-path="multivariable-differentiation.html"><a href="multivariable-differentiation.html#first-derivative-test-gradient"><i class="fa fa-check"></i><b>5.4.2</b> First derivative test: Gradient</a></li>
+<li class="chapter" data-level="5.4.3" data-path="multivariable-differentiation.html"><a href="multivariable-differentiation.html#second-derivative-test-hessian"><i class="fa fa-check"></i><b>5.4.3</b> Second derivative test: Hessian</a></li>
+<li class="chapter" data-level="5.4.4" data-path="multivariable-differentiation.html"><a href="multivariable-differentiation.html#basic-procedure-summarized"><i class="fa fa-check"></i><b>5.4.4</b> Basic procedure summarized</a></li>
+</ul></li>
+<li class="chapter" data-level="5.5" data-path="multivariable-differentiation.html"><a href="multivariable-differentiation.html#a-simple-optimization-example"><i class="fa fa-check"></i><b>5.5</b> A simple optimization example</a></li>
+<li class="chapter" data-level="5.6" data-path="multivariable-differentiation.html"><a href="multivariable-differentiation.html#maximum-likelihood-estimation-for-a-normal-distribution"><i class="fa fa-check"></i><b>5.6</b> Maximum likelihood estimation for a normal distribution</a></li>
+<li class="chapter" data-level="5.7" data-path="multivariable-differentiation.html"><a href="multivariable-differentiation.html#computational-optimization-procedures-1"><i class="fa fa-check"></i><b>5.7</b> Computational optimization procedures</a>
+<ul>
+<li class="chapter" data-level="5.7.1" data-path="multivariable-differentiation.html"><a href="multivariable-differentiation.html#multivariate-newton-raphson"><i class="fa fa-check"></i><b>5.7.1</b> Multivariate Newton-Raphson</a></li>
+<li class="chapter" data-level="5.7.2" data-path="multivariable-differentiation.html"><a href="multivariable-differentiation.html#grid-search-1"><i class="fa fa-check"></i><b>5.7.2</b> Grid search</a></li>
+<li class="chapter" data-level="5.7.3" data-path="multivariable-differentiation.html"><a href="multivariable-differentiation.html#gradient-descent-1"><i class="fa fa-check"></i><b>5.7.3</b> Gradient descent</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="integral-calculus.html"><a href="integral-calculus.html"><i class="fa fa-check"></i><b>6</b> Integration and integral calculus</a>
+<ul>
+<li class="chapter" data-level="" data-path="integral-calculus.html"><a href="integral-calculus.html#learning-objectives-5"><i class="fa fa-check"></i>Learning objectives</a></li>
+<li class="chapter" data-level="" data-path="integral-calculus.html"><a href="integral-calculus.html#supplemental-readings-5"><i class="fa fa-check"></i>Supplemental readings</a></li>
+<li class="chapter" data-level="6.1" data-path="integral-calculus.html"><a href="integral-calculus.html#prepare-for-the-journey"><i class="fa fa-check"></i><b>6.1</b> Prepare for the journey</a></li>
+<li class="chapter" data-level="6.2" data-path="integral-calculus.html"><a href="integral-calculus.html#indefinite-integration"><i class="fa fa-check"></i><b>6.2</b> Indefinite integration</a>
+<ul>
+<li class="chapter" data-level="6.2.1" data-path="integral-calculus.html"><a href="integral-calculus.html#many-possible-antiderivatives"><i class="fa fa-check"></i><b>6.2.1</b> Many possible antiderivatives</a></li>
+<li class="chapter" data-level="6.2.2" data-path="integral-calculus.html"><a href="integral-calculus.html#common-rules-of-integration"><i class="fa fa-check"></i><b>6.2.2</b> Common rules of integration</a></li>
+<li class="chapter" data-level="6.2.3" data-path="integral-calculus.html"><a href="integral-calculus.html#practice-integrating-functions"><i class="fa fa-check"></i><b>6.2.3</b> Practice integrating functions</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="integral-calculus.html"><a href="integral-calculus.html#the-definite-integral-area-under-the-curve"><i class="fa fa-check"></i><b>6.3</b> The definite integral: area under the curve</a>
+<ul>
+<li class="chapter" data-level="6.3.1" data-path="integral-calculus.html"><a href="integral-calculus.html#the-definite-integral-riemann"><i class="fa fa-check"></i><b>6.3.1</b> The definite integral (Riemann)</a></li>
+<li class="chapter" data-level="6.3.2" data-path="integral-calculus.html"><a href="integral-calculus.html#counterexamples"><i class="fa fa-check"></i><b>6.3.2</b> Counterexamples</a></li>
+<li class="chapter" data-level="6.3.3" data-path="integral-calculus.html"><a href="integral-calculus.html#fundamental-theorem-of-calculus"><i class="fa fa-check"></i><b>6.3.3</b> Fundamental theorem of calculus</a></li>
+<li class="chapter" data-level="6.3.4" data-path="integral-calculus.html"><a href="integral-calculus.html#common-rules-for-definite-integrals"><i class="fa fa-check"></i><b>6.3.4</b> Common rules for definite integrals</a></li>
+<li class="chapter" data-level="6.3.5" data-path="integral-calculus.html"><a href="integral-calculus.html#practice-solving-definite-integrals"><i class="fa fa-check"></i><b>6.3.5</b> Practice solving definite integrals</a></li>
+<li class="chapter" data-level="6.3.6" data-path="integral-calculus.html"><a href="integral-calculus.html#integration-by-substitution"><i class="fa fa-check"></i><b>6.3.6</b> Integration by substitution</a></li>
+<li class="chapter" data-level="6.3.7" data-path="integral-calculus.html"><a href="integral-calculus.html#integration-by-parts"><i class="fa fa-check"></i><b>6.3.7</b> Integration by parts</a></li>
+</ul></li>
+<li class="chapter" data-level="6.4" data-path="integral-calculus.html"><a href="integral-calculus.html#infinite-integrals"><i class="fa fa-check"></i><b>6.4</b> Infinite integrals</a>
+<ul>
+<li class="chapter" data-level="6.4.1" data-path="integral-calculus.html"><a href="integral-calculus.html#two-sided-infinite-integrals"><i class="fa fa-check"></i><b>6.4.1</b> Two-sided infinite integrals</a></li>
+<li class="chapter" data-level="6.4.2" data-path="integral-calculus.html"><a href="integral-calculus.html#improper-integrals"><i class="fa fa-check"></i><b>6.4.2</b> Improper integrals</a></li>
+</ul></li>
+<li class="chapter" data-level="6.5" data-path="integral-calculus.html"><a href="integral-calculus.html#monte-carlo-and-integration"><i class="fa fa-check"></i><b>6.5</b> Monte Carlo and integration</a></li>
+<li class="chapter" data-level="6.6" data-path="integral-calculus.html"><a href="integral-calculus.html#multivariate-integration"><i class="fa fa-check"></i><b>6.6</b> Multivariate integration</a>
+<ul>
+<li class="chapter" data-level="6.6.1" data-path="integral-calculus.html"><a href="integral-calculus.html#more-complicated-bounds-of-integration"><i class="fa fa-check"></i><b>6.6.1</b> More complicated bounds of integration</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="integral-calculus.html"><a href="integral-calculus.html#acknowledgments"><i class="fa fa-check"></i>Acknowledgments</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="sample-space-probability.html"><a href="sample-space-probability.html"><i class="fa fa-check"></i><b>7</b> Sample space and probability</a>
+<ul>
+<li class="chapter" data-level="" data-path="sample-space-probability.html"><a href="sample-space-probability.html#learning-objectives-6"><i class="fa fa-check"></i>Learning objectives</a></li>
+<li class="chapter" data-level="" data-path="sample-space-probability.html"><a href="sample-space-probability.html#supplemental-readings-6"><i class="fa fa-check"></i>Supplemental readings</a></li>
+<li class="chapter" data-level="7.1" data-path="sample-space-probability.html"><a href="sample-space-probability.html#model-of-probability"><i class="fa fa-check"></i><b>7.1</b> Model of probability</a></li>
+<li class="chapter" data-level="7.2" data-path="sample-space-probability.html"><a href="sample-space-probability.html#sample-space"><i class="fa fa-check"></i><b>7.2</b> Sample space</a></li>
+<li class="chapter" data-level="7.3" data-path="sample-space-probability.html"><a href="sample-space-probability.html#events"><i class="fa fa-check"></i><b>7.3</b> Events</a>
+<ul>
+<li class="chapter" data-level="7.3.1" data-path="sample-space-probability.html"><a href="sample-space-probability.html#event-operations"><i class="fa fa-check"></i><b>7.3.1</b> Event operations</a></li>
+</ul></li>
+<li class="chapter" data-level="7.4" data-path="sample-space-probability.html"><a href="sample-space-probability.html#probability-1"><i class="fa fa-check"></i><b>7.4</b> Probability</a>
+<ul>
+<li class="chapter" data-level="7.4.1" data-path="sample-space-probability.html"><a href="sample-space-probability.html#three-axioms"><i class="fa fa-check"></i><b>7.4.1</b> Three axioms</a></li>
+<li class="chapter" data-level="7.4.2" data-path="sample-space-probability.html"><a href="sample-space-probability.html#basic-examples"><i class="fa fa-check"></i><b>7.4.2</b> Basic examples</a></li>
+<li class="chapter" data-level="7.4.3" data-path="sample-space-probability.html"><a href="sample-space-probability.html#surprising-probability-facts"><i class="fa fa-check"></i><b>7.4.3</b> Surprising probability facts</a></li>
+</ul></li>
+<li class="chapter" data-level="7.5" data-path="sample-space-probability.html"><a href="sample-space-probability.html#conditional-probability"><i class="fa fa-check"></i><b>7.5</b> Conditional probability</a>
+<ul>
+<li class="chapter" data-level="7.5.1" data-path="sample-space-probability.html"><a href="sample-space-probability.html#examples-1"><i class="fa fa-check"></i><b>7.5.1</b> Examples</a></li>
+<li class="chapter" data-level="7.5.2" data-path="sample-space-probability.html"><a href="sample-space-probability.html#difference-between-prab-and-prba"><i class="fa fa-check"></i><b>7.5.2</b> Difference between <span class="math inline">\(\Pr(A|B)\)</span> and <span class="math inline">\(\Pr(B|A)\)</span></a></li>
+</ul></li>
+<li class="chapter" data-level="7.6" data-path="sample-space-probability.html"><a href="sample-space-probability.html#law-of-total-probability"><i class="fa fa-check"></i><b>7.6</b> Law of total probability</a></li>
+<li class="chapter" data-level="7.7" data-path="sample-space-probability.html"><a href="sample-space-probability.html#bayes-rule"><i class="fa fa-check"></i><b>7.7</b> Bayes’ Rule</a></li>
+<li class="chapter" data-level="7.8" data-path="sample-space-probability.html"><a href="sample-space-probability.html#independence-of-probabilities"><i class="fa fa-check"></i><b>7.8</b> Independence of probabilities</a>
+<ul>
+<li class="chapter" data-level="7.8.1" data-path="sample-space-probability.html"><a href="sample-space-probability.html#rolling-a-4-sided-die"><i class="fa fa-check"></i><b>7.8.1</b> Rolling a 4-sided die</a></li>
+<li class="chapter" data-level="7.8.2" data-path="sample-space-probability.html"><a href="sample-space-probability.html#independence-and-causal-inference"><i class="fa fa-check"></i><b>7.8.2</b> Independence and causal inference</a></li>
+<li class="chapter" data-level="7.8.3" data-path="sample-space-probability.html"><a href="sample-space-probability.html#independence-of-a-collection-of-events"><i class="fa fa-check"></i><b>7.8.3</b> Independence of a collection of events</a></li>
+<li class="chapter" data-level="7.8.4" data-path="sample-space-probability.html"><a href="sample-space-probability.html#independent-trials-and-the-binomial-probabilities"><i class="fa fa-check"></i><b>7.8.4</b> Independent trials and the binomial probabilities</a></li>
+</ul></li>
+<li class="chapter" data-level="7.9" data-path="sample-space-probability.html"><a href="sample-space-probability.html#counting"><i class="fa fa-check"></i><b>7.9</b> Counting</a>
+<ul>
+<li class="chapter" data-level="7.9.1" data-path="sample-space-probability.html"><a href="sample-space-probability.html#counting-principle"><i class="fa fa-check"></i><b>7.9.1</b> Counting principle</a></li>
+<li class="chapter" data-level="7.9.2" data-path="sample-space-probability.html"><a href="sample-space-probability.html#permutations"><i class="fa fa-check"></i><b>7.9.2</b> Permutations</a></li>
+<li class="chapter" data-level="7.9.3" data-path="sample-space-probability.html"><a href="sample-space-probability.html#combinations"><i class="fa fa-check"></i><b>7.9.3</b> Combinations</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html"><i class="fa fa-check"></i><b>8</b> Discrete random variables</a>
+<ul>
+<li class="chapter" data-level="" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#learning-objectives-7"><i class="fa fa-check"></i>Learning objectives</a></li>
+<li class="chapter" data-level="" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#supplemental-readings-7"><i class="fa fa-check"></i>Supplemental readings</a></li>
+<li class="chapter" data-level="8.1" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#random-variable"><i class="fa fa-check"></i><b>8.1</b> Random variable</a>
+<ul>
+<li class="chapter" data-level="8.1.1" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#discrete-random-variables-1"><i class="fa fa-check"></i><b>8.1.1</b> Discrete random variables</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#probability-mass-functions"><i class="fa fa-check"></i><b>8.2</b> Probability mass functions</a>
+<ul>
+<li class="chapter" data-level="8.2.1" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#intuition-1"><i class="fa fa-check"></i><b>8.2.1</b> Intuition</a></li>
+<li class="chapter" data-level="8.2.2" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#definition-3"><i class="fa fa-check"></i><b>8.2.2</b> Definition</a></li>
+</ul></li>
+<li class="chapter" data-level="8.3" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#cumulative-mass-function"><i class="fa fa-check"></i><b>8.3</b> Cumulative mass function</a>
+<ul>
+<li class="chapter" data-level="8.3.1" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#three-person-experiment"><i class="fa fa-check"></i><b>8.3.1</b> Three person experiment</a></li>
+</ul></li>
+<li class="chapter" data-level="8.4" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#famous-discrete-random-variables"><i class="fa fa-check"></i><b>8.4</b> Famous discrete random variables</a>
+<ul>
+<li class="chapter" data-level="8.4.1" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#bernoulli"><i class="fa fa-check"></i><b>8.4.1</b> Bernoulli</a></li>
+<li class="chapter" data-level="8.4.2" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#binomial"><i class="fa fa-check"></i><b>8.4.2</b> Binomial</a></li>
+<li class="chapter" data-level="8.4.3" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#geometric"><i class="fa fa-check"></i><b>8.4.3</b> Geometric</a></li>
+<li class="chapter" data-level="8.4.4" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#poisson"><i class="fa fa-check"></i><b>8.4.4</b> Poisson</a></li>
+</ul></li>
+<li class="chapter" data-level="8.5" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#functions-of-random-variables"><i class="fa fa-check"></i><b>8.5</b> Functions of random variables</a></li>
+<li class="chapter" data-level="8.6" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#expectation-mean-and-variance"><i class="fa fa-check"></i><b>8.6</b> Expectation, mean, and variance</a>
+<ul>
+<li class="chapter" data-level="8.6.1" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#motivation"><i class="fa fa-check"></i><b>8.6.1</b> Motivation</a></li>
+<li class="chapter" data-level="8.6.2" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#expectation"><i class="fa fa-check"></i><b>8.6.2</b> Expectation</a></li>
+<li class="chapter" data-level="8.6.3" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#variance-moments-and-the-expected-value-rule"><i class="fa fa-check"></i><b>8.6.3</b> Variance, moments, and the expected value rule</a></li>
+<li class="chapter" data-level="8.6.4" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#practice-calculating-expectation-and-variance"><i class="fa fa-check"></i><b>8.6.4</b> Practice calculating expectation and variance</a></li>
+<li class="chapter" data-level="8.6.5" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#decision-making-using-expected-values"><i class="fa fa-check"></i><b>8.6.5</b> Decision making using expected values</a></li>
+</ul></li>
+<li class="chapter" data-level="8.7" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#cumulative-mass-function-redux"><i class="fa fa-check"></i><b>8.7</b> Cumulative mass function, redux</a>
+<ul>
+<li class="chapter" data-level="8.7.1" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#common-cmfs"><i class="fa fa-check"></i><b>8.7.1</b> Common CMFs</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="general-random-variables.html"><a href="general-random-variables.html"><i class="fa fa-check"></i><b>9</b> General random variables</a>
+<ul>
+<li class="chapter" data-level="" data-path="general-random-variables.html"><a href="general-random-variables.html#learning-objectives-8"><i class="fa fa-check"></i>Learning objectives</a></li>
+<li class="chapter" data-level="" data-path="general-random-variables.html"><a href="general-random-variables.html#supplemental-readings-8"><i class="fa fa-check"></i>Supplemental readings</a></li>
+<li class="chapter" data-level="9.1" data-path="general-random-variables.html"><a href="general-random-variables.html#continuous-random-variables"><i class="fa fa-check"></i><b>9.1</b> Continuous random variables</a></li>
+<li class="chapter" data-level="9.2" data-path="general-random-variables.html"><a href="general-random-variables.html#probability-density-function"><i class="fa fa-check"></i><b>9.2</b> Probability density function</a>
+<ul>
+<li class="chapter" data-level="9.2.1" data-path="general-random-variables.html"><a href="general-random-variables.html#definition-4"><i class="fa fa-check"></i><b>9.2.1</b> Definition</a></li>
+<li class="chapter" data-level="9.2.2" data-path="general-random-variables.html"><a href="general-random-variables.html#example-uniform-random-variable"><i class="fa fa-check"></i><b>9.2.2</b> Example: Uniform Random Variable</a></li>
+<li class="chapter" data-level="9.2.3" data-path="general-random-variables.html"><a href="general-random-variables.html#expectation-continuous"><i class="fa fa-check"></i><b>9.2.3</b> Expectation</a></li>
+<li class="chapter" data-level="9.2.4" data-path="general-random-variables.html"><a href="general-random-variables.html#exponential-random-variable"><i class="fa fa-check"></i><b>9.2.4</b> Exponential random variable</a></li>
+</ul></li>
+<li class="chapter" data-level="9.3" data-path="general-random-variables.html"><a href="general-random-variables.html#cumulative-distribution-function"><i class="fa fa-check"></i><b>9.3</b> Cumulative distribution function</a>
+<ul>
+<li class="chapter" data-level="9.3.1" data-path="general-random-variables.html"><a href="general-random-variables.html#properties-of-cdfs"><i class="fa fa-check"></i><b>9.3.1</b> Properties of CDFs</a></li>
+</ul></li>
+<li class="chapter" data-level="9.4" data-path="general-random-variables.html"><a href="general-random-variables.html#normal-distribution"><i class="fa fa-check"></i><b>9.4</b> Normal distribution</a>
+<ul>
+<li class="chapter" data-level="9.4.1" data-path="general-random-variables.html"><a href="general-random-variables.html#expected-valuevariance-of-normal-distribution"><i class="fa fa-check"></i><b>9.4.1</b> Expected value/variance of normal distribution</a></li>
+<li class="chapter" data-level="9.4.2" data-path="general-random-variables.html"><a href="general-random-variables.html#why-rely-on-the-standard-normal-distribution"><i class="fa fa-check"></i><b>9.4.2</b> Why rely on the standard normal distribution</a></li>
+</ul></li>
+<li class="chapter" data-level="9.5" data-path="general-random-variables.html"><a href="general-random-variables.html#gamma-distribution"><i class="fa fa-check"></i><b>9.5</b> Gamma distribution</a>
+<ul>
+<li class="chapter" data-level="9.5.1" data-path="general-random-variables.html"><a href="general-random-variables.html#properties-of-gamma-distributions"><i class="fa fa-check"></i><b>9.5.1</b> Properties of Gamma distributions</a></li>
+<li class="chapter" data-level="9.5.2" data-path="general-random-variables.html"><a href="general-random-variables.html#importance-of-the-gamma-distribution"><i class="fa fa-check"></i><b>9.5.2</b> Importance of the Gamma distribution</a></li>
+</ul></li>
+<li class="chapter" data-level="9.6" data-path="general-random-variables.html"><a href="general-random-variables.html#chi2-distribution"><i class="fa fa-check"></i><b>9.6</b> <span class="math inline">\(\chi^2\)</span> distribution</a>
+<ul>
+<li class="chapter" data-level="9.6.1" data-path="general-random-variables.html"><a href="general-random-variables.html#chi2-properties"><i class="fa fa-check"></i><b>9.6.1</b> <span class="math inline">\(\chi^2\)</span> properties</a></li>
+</ul></li>
+<li class="chapter" data-level="9.7" data-path="general-random-variables.html"><a href="general-random-variables.html#students-t-distribution"><i class="fa fa-check"></i><b>9.7</b> Student’s <span class="math inline">\(t\)</span> distribution</a>
+<ul>
+<li class="chapter" data-level="9.7.1" data-path="general-random-variables.html"><a href="general-random-variables.html#history-of-students-t"><i class="fa fa-check"></i><b>9.7.1</b> History of Student’s <span class="math inline">\(t\)</span></a></li>
+<li class="chapter" data-level="9.7.2" data-path="general-random-variables.html"><a href="general-random-variables.html#differences-from-the-normal-distribution"><i class="fa fa-check"></i><b>9.7.2</b> Differences from the Normal Distribution</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="multivar-distribs.html"><a href="multivar-distribs.html"><i class="fa fa-check"></i><b>10</b> Multivariate distributions</a>
+<ul>
+<li class="chapter" data-level="" data-path="multivar-distribs.html"><a href="multivar-distribs.html#learning-objectives-9"><i class="fa fa-check"></i>Learning objectives</a></li>
+<li class="chapter" data-level="" data-path="multivar-distribs.html"><a href="multivar-distribs.html#supplemental-readings-9"><i class="fa fa-check"></i>Supplemental readings</a></li>
+<li class="chapter" data-level="10.1" data-path="multivar-distribs.html"><a href="multivar-distribs.html#multivariate-distribution"><i class="fa fa-check"></i><b>10.1</b> Multivariate distribution</a></li>
+<li class="chapter" data-level="10.2" data-path="multivar-distribs.html"><a href="multivar-distribs.html#examples-of-joint-pdfs"><i class="fa fa-check"></i><b>10.2</b> Examples of joint PDFs</a></li>
+<li class="chapter" data-level="10.3" data-path="multivar-distribs.html"><a href="multivar-distribs.html#multivariate-cumulative-density-function"><i class="fa fa-check"></i><b>10.3</b> Multivariate cumulative density function</a></li>
+<li class="chapter" data-level="10.4" data-path="multivar-distribs.html"><a href="multivar-distribs.html#marginalization"><i class="fa fa-check"></i><b>10.4</b> Marginalization</a>
+<ul>
+<li class="chapter" data-level="10.4.1" data-path="multivar-distribs.html"><a href="multivar-distribs.html#joint-vs.-conditional-pdf"><i class="fa fa-check"></i><b>10.4.1</b> Joint vs. conditional PDF</a></li>
+<li class="chapter" data-level="10.4.2" data-path="multivar-distribs.html"><a href="multivar-distribs.html#why-does-marginalization-work"><i class="fa fa-check"></i><b>10.4.2</b> Why does marginalization work?</a></li>
+<li class="chapter" data-level="10.4.3" data-path="multivar-distribs.html"><a href="multivar-distribs.html#move-to-the-continuous-case"><i class="fa fa-check"></i><b>10.4.3</b> Move to the continuous case</a></li>
+<li class="chapter" data-level="10.4.4" data-path="multivar-distribs.html"><a href="multivar-distribs.html#a-simple-example"><i class="fa fa-check"></i><b>10.4.4</b> A (simple) example</a></li>
+<li class="chapter" data-level="10.4.5" data-path="multivar-distribs.html"><a href="multivar-distribs.html#more-complex-example"><i class="fa fa-check"></i><b>10.4.5</b> More complex example</a></li>
+</ul></li>
+<li class="chapter" data-level="10.5" data-path="multivar-distribs.html"><a href="multivar-distribs.html#conditional-distribution"><i class="fa fa-check"></i><b>10.5</b> Conditional distribution</a>
+<ul>
+<li class="chapter" data-level="10.5.1" data-path="multivar-distribs.html"><a href="multivar-distribs.html#a-simple-example-of-dependence"><i class="fa fa-check"></i><b>10.5.1</b> A (simple) example of dependence</a></li>
+</ul></li>
+<li class="chapter" data-level="10.6" data-path="multivar-distribs.html"><a href="multivar-distribs.html#expectation-1"><i class="fa fa-check"></i><b>10.6</b> Expectation</a></li>
+<li class="chapter" data-level="10.7" data-path="multivar-distribs.html"><a href="multivar-distribs.html#covariance-and-correlation"><i class="fa fa-check"></i><b>10.7</b> Covariance and correlation</a>
+<ul>
+<li class="chapter" data-level="10.7.1" data-path="multivar-distribs.html"><a href="multivar-distribs.html#some-observations"><i class="fa fa-check"></i><b>10.7.1</b> Some observations</a></li>
+</ul></li>
+<li class="chapter" data-level="10.8" data-path="multivar-distribs.html"><a href="multivar-distribs.html#sums-of-random-variables"><i class="fa fa-check"></i><b>10.8</b> Sums of random variables</a></li>
+<li class="chapter" data-level="10.9" data-path="multivar-distribs.html"><a href="multivar-distribs.html#multivariate-normal-distribution-1"><i class="fa fa-check"></i><b>10.9</b> Multivariate normal distribution</a>
+<ul>
+<li class="chapter" data-level="10.9.1" data-path="multivar-distribs.html"><a href="multivar-distribs.html#bivariate-example"><i class="fa fa-check"></i><b>10.9.1</b> Bivariate example</a></li>
+<li class="chapter" data-level="10.9.2" data-path="multivar-distribs.html"><a href="multivar-distribs.html#properties-of-the-multivariate-normal-distribution"><i class="fa fa-check"></i><b>10.9.2</b> Properties of the multivariate normal distribution</a></li>
+<li class="chapter" data-level="10.9.3" data-path="multivar-distribs.html"><a href="multivar-distribs.html#independence-and-multivariate-normal"><i class="fa fa-check"></i><b>10.9.3</b> Independence and multivariate normal</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="sequences-derivatives.html"><a href="sequences-derivatives.html#limits"><i class="fa fa-check"></i><b>11</b> Properties of random variables and limit theorems</a>
+<ul>
+<li class="chapter" data-level="" data-path="limits.html"><a href="limits.html"><i class="fa fa-check"></i>Learning objectives</a></li>
+<li class="chapter" data-level="" data-path="limits.html"><a href="limits.html#supplemental-readings-10"><i class="fa fa-check"></i>Supplemental readings</a></li>
+<li class="chapter" data-level="11.1" data-path="limits.html"><a href="limits.html#iterated-expectations"><i class="fa fa-check"></i><b>11.1</b> Iterated Expectations</a></li>
+<li class="chapter" data-level="11.2" data-path="limits.html"><a href="limits.html#change-of-coordinates"><i class="fa fa-check"></i><b>11.2</b> Change of coordinates</a></li>
+<li class="chapter" data-level="11.3" data-path="limits.html"><a href="limits.html#moment-generating-functions"><i class="fa fa-check"></i><b>11.3</b> Moment generating functions</a>
+<ul>
+<li class="chapter" data-level="11.3.1" data-path="limits.html"><a href="limits.html#the-moments-of-the-normal-distribution"><i class="fa fa-check"></i><b>11.3.1</b> The moments of the normal distribution</a></li>
+<li class="chapter" data-level="11.3.2" data-path="limits.html"><a href="limits.html#extracting-moments-of-the-normal-distribution"><i class="fa fa-check"></i><b>11.3.2</b> Extracting moments of the normal distribution</a></li>
+</ul></li>
+<li class="chapter" data-level="11.4" data-path="limits.html"><a href="limits.html#sequences-of-independent-random-variables"><i class="fa fa-check"></i><b>11.4</b> Sequences of independent random variables</a></li>
+<li class="chapter" data-level="11.5" data-path="limits.html"><a href="limits.html#inequalities-and-limit-theorems"><i class="fa fa-check"></i><b>11.5</b> Inequalities and limit theorems</a>
+<ul>
+<li class="chapter" data-level="11.5.1" data-path="limits.html"><a href="limits.html#limit-theorems"><i class="fa fa-check"></i><b>11.5.1</b> Limit theorems</a></li>
+<li class="chapter" data-level="11.5.2" data-path="limits.html"><a href="limits.html#weak-law-of-large-numbers"><i class="fa fa-check"></i><b>11.5.2</b> Weak law of large numbers</a></li>
+</ul></li>
+<li class="chapter" data-level="11.6" data-path="limits.html"><a href="limits.html#sequence-of-random-variables"><i class="fa fa-check"></i><b>11.6</b> Sequence of random variables</a>
+<ul>
+<li class="chapter" data-level="11.6.1" data-path="limits.html"><a href="limits.html#meanvariance-of-sample-mean"><i class="fa fa-check"></i><b>11.6.1</b> Mean/variance of sample mean</a></li>
+<li class="chapter" data-level="11.6.2" data-path="limits.html"><a href="limits.html#weak-law-of-large-numbers-1"><i class="fa fa-check"></i><b>11.6.2</b> Weak law of large numbers</a></li>
+</ul></li>
+<li class="chapter" data-level="11.7" data-path="limits.html"><a href="limits.html#sequences-and-convergence"><i class="fa fa-check"></i><b>11.7</b> Sequences and convergence</a>
+<ul>
+<li class="chapter" data-level="11.7.1" data-path="limits.html"><a href="limits.html#convergence-definitions"><i class="fa fa-check"></i><b>11.7.1</b> Convergence definitions</a></li>
+<li class="chapter" data-level="11.7.2" data-path="limits.html"><a href="limits.html#convergence-in-probability"><i class="fa fa-check"></i><b>11.7.2</b> Convergence in probability</a></li>
+<li class="chapter" data-level="11.7.3" data-path="limits.html"><a href="limits.html#almost-sure-convergence"><i class="fa fa-check"></i><b>11.7.3</b> Almost sure convergence</a></li>
+<li class="chapter" data-level="11.7.4" data-path="limits.html"><a href="limits.html#convergence-in-distribution"><i class="fa fa-check"></i><b>11.7.4</b> Convergence in distribution</a></li>
+<li class="chapter" data-level="11.7.5" data-path="limits.html"><a href="limits.html#convergence-in-distribution-not-rightarrow-convergence-in-probability"><i class="fa fa-check"></i><b>11.7.5</b> Convergence in distribution <span class="math inline">\(\not \Rightarrow\)</span> convergence in probability</a></li>
+<li class="chapter" data-level="11.7.6" data-path="limits.html"><a href="limits.html#central-limit-theorem"><i class="fa fa-check"></i><b>11.7.6</b> Central limit theorem</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="classic-inference.html"><a href="classic-inference.html"><i class="fa fa-check"></i><b>12</b> Classical statistical inference</a>
+<ul>
+<li class="chapter" data-level="" data-path="classic-inference.html"><a href="classic-inference.html#learning-objectives-11"><i class="fa fa-check"></i>Learning objectives</a></li>
+<li class="chapter" data-level="" data-path="classic-inference.html"><a href="classic-inference.html#supplemental-readings-11"><i class="fa fa-check"></i>Supplemental readings</a></li>
+<li class="chapter" data-level="12.1" data-path="classic-inference.html"><a href="classic-inference.html#statistical-inference"><i class="fa fa-check"></i><b>12.1</b> Statistical inference</a></li>
+<li class="chapter" data-level="12.2" data-path="classic-inference.html"><a href="classic-inference.html#parametric-models"><i class="fa fa-check"></i><b>12.2</b> Parametric models</a>
+<ul>
+<li class="chapter" data-level="12.2.1" data-path="classic-inference.html"><a href="classic-inference.html#examples-of-parametric-models"><i class="fa fa-check"></i><b>12.2.1</b> Examples of parametric models</a></li>
+</ul></li>
+<li class="chapter" data-level="12.3" data-path="classic-inference.html"><a href="classic-inference.html#point-estimates"><i class="fa fa-check"></i><b>12.3</b> Point estimates</a>
+<ul>
+<li class="chapter" data-level="12.3.1" data-path="classic-inference.html"><a href="classic-inference.html#properties-of-point-estimates"><i class="fa fa-check"></i><b>12.3.1</b> Properties of point estimates</a></li>
+</ul></li>
+<li class="chapter" data-level="12.4" data-path="classic-inference.html"><a href="classic-inference.html#confidence-sets"><i class="fa fa-check"></i><b>12.4</b> Confidence sets</a>
+<ul>
+<li class="chapter" data-level="12.4.1" data-path="classic-inference.html"><a href="classic-inference.html#caution-interpreting-confidence-intervals"><i class="fa fa-check"></i><b>12.4.1</b> Caution interpreting confidence intervals</a></li>
+<li class="chapter" data-level="12.4.2" data-path="classic-inference.html"><a href="classic-inference.html#constructing-confidence-intervals"><i class="fa fa-check"></i><b>12.4.2</b> Constructing confidence intervals</a></li>
+</ul></li>
+<li class="chapter" data-level="12.5" data-path="classic-inference.html"><a href="classic-inference.html#hypothesis-testing"><i class="fa fa-check"></i><b>12.5</b> Hypothesis testing</a>
+<ul>
+<li class="chapter" data-level="12.5.1" data-path="classic-inference.html"><a href="classic-inference.html#types-of-errors"><i class="fa fa-check"></i><b>12.5.1</b> Types of errors</a></li>
+<li class="chapter" data-level="12.5.2" data-path="classic-inference.html"><a href="classic-inference.html#power-function"><i class="fa fa-check"></i><b>12.5.2</b> Power function</a></li>
+<li class="chapter" data-level="12.5.3" data-path="classic-inference.html"><a href="classic-inference.html#sided-tests"><i class="fa fa-check"></i><b>12.5.3</b> Sided tests</a></li>
+<li class="chapter" data-level="12.5.4" data-path="classic-inference.html"><a href="classic-inference.html#example-hypothesis-test"><i class="fa fa-check"></i><b>12.5.4</b> Example hypothesis test</a></li>
+<li class="chapter" data-level="12.5.5" data-path="classic-inference.html"><a href="classic-inference.html#wald-test"><i class="fa fa-check"></i><b>12.5.5</b> Wald test</a></li>
+<li class="chapter" data-level="12.5.6" data-path="classic-inference.html"><a href="classic-inference.html#wald-or-t-test"><i class="fa fa-check"></i><b>12.5.6</b> Wald or <span class="math inline">\(t\)</span>-test?</a></li>
+<li class="chapter" data-level="12.5.7" data-path="classic-inference.html"><a href="classic-inference.html#relationship-to-confidence-intervals"><i class="fa fa-check"></i><b>12.5.7</b> Relationship to confidence intervals</a></li>
+<li class="chapter" data-level="12.5.8" data-path="classic-inference.html"><a href="classic-inference.html#statistical-vs.-scientific-significance"><i class="fa fa-check"></i><b>12.5.8</b> Statistical vs. scientific significance</a></li>
+</ul></li>
+<li class="chapter" data-level="12.6" data-path="classic-inference.html"><a href="classic-inference.html#p-values"><i class="fa fa-check"></i><b>12.6</b> <span class="math inline">\(p\)</span>-values</a>
+<ul>
+<li class="chapter" data-level="12.6.1" data-path="classic-inference.html"><a href="classic-inference.html#interpreting-p-values"><i class="fa fa-check"></i><b>12.6.1</b> Interpreting <span class="math inline">\(p\)</span>-values</a></li>
+<li class="chapter" data-level="12.6.2" data-path="classic-inference.html"><a href="classic-inference.html#calculating-p-values"><i class="fa fa-check"></i><b>12.6.2</b> Calculating <span class="math inline">\(p\)</span>-values</a></li>
+<li class="chapter" data-level="12.6.3" data-path="classic-inference.html"><a href="classic-inference.html#pearsons-chi2-test-for-multinomial-data"><i class="fa fa-check"></i><b>12.6.3</b> Pearson’s <span class="math inline">\(\chi^2\)</span> test for multinomial data</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="mle-ols.html"><a href="mle-ols.html"><i class="fa fa-check"></i><b>13</b> Maximum likelihood estimation and linear regression</a>
+<ul>
+<li class="chapter" data-level="" data-path="mle-ols.html"><a href="mle-ols.html#learning-objectives-12"><i class="fa fa-check"></i>Learning objectives</a></li>
+<li class="chapter" data-level="" data-path="mle-ols.html"><a href="mle-ols.html#supplemental-readings-12"><i class="fa fa-check"></i>Supplemental readings</a></li>
+<li class="chapter" data-level="13.1" data-path="mle-ols.html"><a href="mle-ols.html#maximum-likelihood"><i class="fa fa-check"></i><b>13.1</b> Maximum likelihood</a>
+<ul>
+<li class="chapter" data-level="13.1.1" data-path="mle-ols.html"><a href="mle-ols.html#properties-of-maximum-likelihood-estimators"><i class="fa fa-check"></i><b>13.1.1</b> Properties of maximum likelihood estimators</a></li>
+</ul></li>
+<li class="chapter" data-level="13.2" data-path="mle-ols.html"><a href="mle-ols.html#least-squares-regression"><i class="fa fa-check"></i><b>13.2</b> Least squares regression</a>
+<ul>
+<li class="chapter" data-level="13.2.1" data-path="mle-ols.html"><a href="mle-ols.html#simple-linear-regression"><i class="fa fa-check"></i><b>13.2.1</b> Simple linear regression</a></li>
+<li class="chapter" data-level="13.2.2" data-path="mle-ols.html"><a href="mle-ols.html#estimation-strategy"><i class="fa fa-check"></i><b>13.2.2</b> Estimation strategy</a></li>
+<li class="chapter" data-level="13.2.3" data-path="mle-ols.html"><a href="mle-ols.html#least-squares-estimator"><i class="fa fa-check"></i><b>13.2.3</b> Least squares estimator</a></li>
+<li class="chapter" data-level="13.2.4" data-path="mle-ols.html"><a href="mle-ols.html#maximum-likelihood-estimation"><i class="fa fa-check"></i><b>13.2.4</b> Maximum likelihood estimation</a></li>
+<li class="chapter" data-level="13.2.5" data-path="mle-ols.html"><a href="mle-ols.html#properties-of-the-least-squares-estimator"><i class="fa fa-check"></i><b>13.2.5</b> Properties of the least squares estimator</a></li>
+</ul></li>
+<li class="chapter" data-level="13.3" data-path="mle-ols.html"><a href="mle-ols.html#assumptions-of-linear-regression-models"><i class="fa fa-check"></i><b>13.3</b> Assumptions of linear regression models</a>
+<ul>
+<li class="chapter" data-level="13.3.1" data-path="mle-ols.html"><a href="mle-ols.html#linearity"><i class="fa fa-check"></i><b>13.3.1</b> Linearity</a></li>
+<li class="chapter" data-level="13.3.2" data-path="mle-ols.html"><a href="mle-ols.html#constant-variance"><i class="fa fa-check"></i><b>13.3.2</b> Constant variance</a></li>
+<li class="chapter" data-level="13.3.3" data-path="mle-ols.html"><a href="mle-ols.html#normality"><i class="fa fa-check"></i><b>13.3.3</b> Normality</a></li>
+<li class="chapter" data-level="13.3.4" data-path="mle-ols.html"><a href="mle-ols.html#independence"><i class="fa fa-check"></i><b>13.3.4</b> Independence</a></li>
+<li class="chapter" data-level="13.3.5" data-path="mle-ols.html"><a href="mle-ols.html#fixed-x-or-x-measured-without-error-and-independent-of-the-error"><i class="fa fa-check"></i><b>13.3.5</b> Fixed <span class="math inline">\(X\)</span>, or <span class="math inline">\(X\)</span> measured without error and independent of the error</a></li>
+<li class="chapter" data-level="13.3.6" data-path="mle-ols.html"><a href="mle-ols.html#x-is-not-invariant"><i class="fa fa-check"></i><b>13.3.6</b> <span class="math inline">\(X\)</span> is not invariant</a></li>
+<li class="chapter" data-level="13.3.7" data-path="mle-ols.html"><a href="mle-ols.html#handling-violations-of-assumptions"><i class="fa fa-check"></i><b>13.3.7</b> Handling violations of assumptions</a></li>
+</ul></li>
+<li class="chapter" data-level="13.4" data-path="mle-ols.html"><a href="mle-ols.html#unusual-and-influential-data"><i class="fa fa-check"></i><b>13.4</b> Unusual and influential data</a>
+<ul>
+<li class="chapter" data-level="13.4.1" data-path="mle-ols.html"><a href="mle-ols.html#terms"><i class="fa fa-check"></i><b>13.4.1</b> Terms</a></li>
+<li class="chapter" data-level="13.4.2" data-path="mle-ols.html"><a href="mle-ols.html#measuring-leverage"><i class="fa fa-check"></i><b>13.4.2</b> Measuring leverage</a></li>
+<li class="chapter" data-level="13.4.3" data-path="mle-ols.html"><a href="mle-ols.html#measuring-discrepancy"><i class="fa fa-check"></i><b>13.4.3</b> Measuring discrepancy</a></li>
+<li class="chapter" data-level="13.4.4" data-path="mle-ols.html"><a href="mle-ols.html#measuring-influence"><i class="fa fa-check"></i><b>13.4.4</b> Measuring influence</a></li>
+<li class="chapter" data-level="13.4.5" data-path="mle-ols.html"><a href="mle-ols.html#visualizing-leverage-discrepancy-and-influence"><i class="fa fa-check"></i><b>13.4.5</b> Visualizing leverage, discrepancy, and influence</a></li>
+<li class="chapter" data-level="13.4.6" data-path="mle-ols.html"><a href="mle-ols.html#numerical-rules-of-thumb"><i class="fa fa-check"></i><b>13.4.6</b> Numerical rules of thumb</a></li>
+<li class="chapter" data-level="13.4.7" data-path="mle-ols.html"><a href="mle-ols.html#how-to-treat-unusual-observations"><i class="fa fa-check"></i><b>13.4.7</b> How to treat unusual observations</a></li>
+</ul></li>
+<li class="chapter" data-level="13.5" data-path="mle-ols.html"><a href="mle-ols.html#non-normally-distributed-errors"><i class="fa fa-check"></i><b>13.5</b> Non-normally distributed errors</a>
+<ul>
+<li class="chapter" data-level="13.5.1" data-path="mle-ols.html"><a href="mle-ols.html#detecting-non-normally-distributed-errors"><i class="fa fa-check"></i><b>13.5.1</b> Detecting non-normally distributed errors</a></li>
+<li class="chapter" data-level="13.5.2" data-path="mle-ols.html"><a href="mle-ols.html#fixing-non-normally-distributed-errors"><i class="fa fa-check"></i><b>13.5.2</b> Fixing non-normally distributed errors</a></li>
+</ul></li>
+<li class="chapter" data-level="13.6" data-path="mle-ols.html"><a href="mle-ols.html#non-constant-error-variance"><i class="fa fa-check"></i><b>13.6</b> Non-constant error variance</a>
+<ul>
+<li class="chapter" data-level="13.6.1" data-path="mle-ols.html"><a href="mle-ols.html#detecting-heteroscedasticity"><i class="fa fa-check"></i><b>13.6.1</b> Detecting heteroscedasticity</a></li>
+<li class="chapter" data-level="13.6.2" data-path="mle-ols.html"><a href="mle-ols.html#accounting-for-heteroscedasticity"><i class="fa fa-check"></i><b>13.6.2</b> Accounting for heteroscedasticity</a></li>
+</ul></li>
+<li class="chapter" data-level="13.7" data-path="mle-ols.html"><a href="mle-ols.html#non-linearity-in-the-data"><i class="fa fa-check"></i><b>13.7</b> Non-linearity in the data</a>
+<ul>
+<li class="chapter" data-level="13.7.1" data-path="mle-ols.html"><a href="mle-ols.html#partial-residual-plots"><i class="fa fa-check"></i><b>13.7.1</b> Partial residual plots</a></li>
+</ul></li>
+<li class="chapter" data-level="13.8" data-path="mle-ols.html"><a href="mle-ols.html#collinearity"><i class="fa fa-check"></i><b>13.8</b> Collinearity</a>
+<ul>
+<li class="chapter" data-level="13.8.1" data-path="mle-ols.html"><a href="mle-ols.html#perfect-collinearity"><i class="fa fa-check"></i><b>13.8.1</b> Perfect collinearity</a></li>
+<li class="chapter" data-level="13.8.2" data-path="mle-ols.html"><a href="mle-ols.html#less-than-perfect-collinearity"><i class="fa fa-check"></i><b>13.8.2</b> Less-than-perfect collinearity</a></li>
+<li class="chapter" data-level="13.8.3" data-path="mle-ols.html"><a href="mle-ols.html#fixing-multicollinearity"><i class="fa fa-check"></i><b>13.8.3</b> Fixing multicollinearity</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="bayesian-inference.html"><a href="bayesian-inference.html"><i class="fa fa-check"></i><b>14</b> Bayesian inference</a>
+<ul>
+<li class="chapter" data-level="" data-path="bayesian-inference.html"><a href="bayesian-inference.html#learning-objectives-13"><i class="fa fa-check"></i>Learning objectives</a></li>
+<li class="chapter" data-level="" data-path="bayesian-inference.html"><a href="bayesian-inference.html#supplemental-readings-13"><i class="fa fa-check"></i>Supplemental readings</a></li>
+<li class="chapter" data-level="14.1" data-path="bayesian-inference.html"><a href="bayesian-inference.html#bayesian-philosophy"><i class="fa fa-check"></i><b>14.1</b> Bayesian philosophy</a></li>
+<li class="chapter" data-level="14.2" data-path="bayesian-inference.html"><a href="bayesian-inference.html#bayes-theorem"><i class="fa fa-check"></i><b>14.2</b> Bayes’ theorem</a></li>
+<li class="chapter" data-level="14.3" data-path="bayesian-inference.html"><a href="bayesian-inference.html#bayesian-method"><i class="fa fa-check"></i><b>14.3</b> Bayesian method</a>
+<ul>
+<li class="chapter" data-level="14.3.1" data-path="bayesian-inference.html"><a href="bayesian-inference.html#example-coin-tossing"><i class="fa fa-check"></i><b>14.3.1</b> Example: coin tossing</a></li>
+</ul></li>
+<li class="chapter" data-level="14.4" data-path="bayesian-inference.html"><a href="bayesian-inference.html#updating-your-prior-beliefs"><i class="fa fa-check"></i><b>14.4</b> Updating your prior beliefs</a></li>
+<li class="chapter" data-level="14.5" data-path="bayesian-inference.html"><a href="bayesian-inference.html#simulation"><i class="fa fa-check"></i><b>14.5</b> Simulation</a></li>
+<li class="chapter" data-level="14.6" data-path="bayesian-inference.html"><a href="bayesian-inference.html#priors"><i class="fa fa-check"></i><b>14.6</b> Priors</a>
+<ul>
+<li class="chapter" data-level="14.6.1" data-path="bayesian-inference.html"><a href="bayesian-inference.html#improper-priors"><i class="fa fa-check"></i><b>14.6.1</b> Improper priors</a></li>
+<li class="chapter" data-level="14.6.2" data-path="bayesian-inference.html"><a href="bayesian-inference.html#flat-priors-are-not-invariant"><i class="fa fa-check"></i><b>14.6.2</b> Flat priors are not invariant</a></li>
+</ul></li>
+<li class="chapter" data-level="14.7" data-path="bayesian-inference.html"><a href="bayesian-inference.html#multiparameter-problems"><i class="fa fa-check"></i><b>14.7</b> Multiparameter problems</a></li>
+<li class="chapter" data-level="14.8" data-path="bayesian-inference.html"><a href="bayesian-inference.html#critiques-and-defenses-of-bayesian-inference"><i class="fa fa-check"></i><b>14.8</b> Critiques and defenses of Bayesian inference</a>
+<ul>
+<li class="chapter" data-level="14.8.1" data-path="bayesian-inference.html"><a href="bayesian-inference.html#critique-of-bayesian-inference"><i class="fa fa-check"></i><b>14.8.1</b> Critique of Bayesian inference</a></li>
+<li class="chapter" data-level="14.8.2" data-path="bayesian-inference.html"><a href="bayesian-inference.html#defense-of-bayesian-inference"><i class="fa fa-check"></i><b>14.8.2</b> Defense of Bayesian inference</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="bayesian-inference.html"><a href="bayesian-inference.html#acknowledgements-1"><i class="fa fa-check"></i>Acknowledgements</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Computational Math Camp</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="discrete-random-variables" class="section level1 hasAnchor" number="8">
+<h1><span class="header-section-number">Lecture 8</span> Discrete random variables<a href="discrete-random-variables.html#discrete-random-variables" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="learning-objectives-7" class="section level2 unnumbered hasAnchor">
+<h2>Learning objectives<a href="discrete-random-variables.html#learning-objectives-7" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ul>
+<li>Define random variables</li>
+<li>Distinguish between discrete and interval variables</li>
+<li>Identify discrete random variable distributions relevant to social science</li>
+<li>Review measures of central tendency and dispersion</li>
+<li>Define expected value and variance</li>
+<li>Define cumulative mass functions (CMFs) for discrete random variables</li>
+</ul>
+</div>
+<div id="supplemental-readings-7" class="section level2 unnumbered hasAnchor">
+<h2>Supplemental readings<a href="discrete-random-variables.html#supplemental-readings-7" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ul>
+<li>Chapter 2.1-.4, <span class="citation">Bertsekas and Tsitsiklis (<a href="#ref-bertsekas2008" role="doc-biblioref">2008</a>)</span></li>
+<li><a href="https://canvas.uchicago.edu/files/5924812/download?download_frd=1">Equivalent reading from Bertsekas and Tsitsiklis lecture notes</a></li>
+</ul>
+</div>
+<div id="random-variable" class="section level2 hasAnchor" number="8.1">
+<h2><span class="header-section-number">8.1</span> Random variable<a href="discrete-random-variables.html#random-variable" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>A <strong>random variable</strong> is a random process or variable with a numerical outcome. More formally, it is a random variable <span class="math inline">\(X\)</span> that is a function of the sample space</p>
+<ul>
+<li>Number of incumbents who win</li>
+<li>An indicator whether a country defaults on a loan (1 if a default, 0 otherwise)</li>
+<li>Number of casualties in a war (rather than all possible outcomes)</li>
+</ul>
+<p><span class="math display">\[X:\text{Sample Space} \rightarrow \Re\]</span></p>
+<div class="example">
+<p><span id="exm:unlabeled-div-120" class="example"><strong>Example 8.1  (Treatment assignment) </strong></span>Suppose we have <span class="math inline">\(3\)</span> units, flipping fair coin (<span class="math inline">\(\frac{1}{2}\)</span>) to assign each unit. Assign to <span class="math inline">\(T=\)</span>Treatment or <span class="math inline">\(C=\)</span>control, with <span class="math inline">\(X\)</span> = Number of units received treatment. The function is</p>
+<p><span class="math display">\[
+X  = \left \{ \begin{array} {ll}
+0  \text{  if  } (C, C, C)  \\
+1 \text{  if  } (T, C, C) \text{ or } (C, T, C) \text{ or } (C, C, T) \\
+2 \text{ if  }  (T, T, C) \text{ or } (T, C, T) \text{ or } (C, T, T) \\
+3 \text{ if } (T, T, T)
+\end{array} \right.
+\]</span></p>
+<p>In other words:</p>
+<p><span class="math display">\[
+\begin{aligned}
+X( (C, C, C) )  &amp; = 0 \\
+X( (T, C, C)) &amp; =  1 \\
+X((T, C, T)) &amp; = 2 \\
+X((T, T, T)) &amp; = 3
+\end{aligned}
+\]</span></p>
+</div>
+<div class="example">
+<p><span id="exm:unlabeled-div-121" class="example"><strong>Example 8.2  (Legislative calls) </strong></span><span class="math inline">\(X\)</span> = Number of Calls into congressional office in some period <span class="math inline">\(p\)</span></p>
+<p><span class="math display">\[X(c) = c\]</span></p>
+</div>
+<div class="example">
+<p><span id="exm:unlabeled-div-122" class="example"><strong>Example 8.3  (Electoral outcome) </strong></span>Define <span class="math inline">\(v\)</span> as the proportion of vote the candidate receives. <span class="math inline">\(X = 1\)</span> if <span class="math inline">\(v&gt;0.50\)</span>, while <span class="math inline">\(X = 0\)</span> if <span class="math inline">\(v&lt;0.50\)</span>. For example, if <span class="math inline">\(v = 0.48\)</span>, then <span class="math inline">\(X(v) = 0\)</span>.</p>
+</div>
+<div class="example">
+<p><span id="exm:unlabeled-div-123" class="example"><strong>Example 8.4  (Loan default) </strong></span>An indicator whether a country defaults on a loan (1 if a default, 0 otherwise)</p>
+</div>
+<p>Not all random variables are the result of an experiment - most are observational.</p>
+<div id="discrete-random-variables-1" class="section level3 hasAnchor" number="8.1.1">
+<h3><span class="header-section-number">8.1.1</span> Discrete random variables<a href="discrete-random-variables.html#discrete-random-variables-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><strong>Discrete random variables</strong> are a random variable with a finite or countably infinite range. A random variable with an uncountably infinite number of values is <strong>continuous</strong>.</p>
+</div>
+</div>
+<div id="probability-mass-functions" class="section level2 hasAnchor" number="8.2">
+<h2><span class="header-section-number">8.2</span> Probability mass functions<a href="discrete-random-variables.html#probability-mass-functions" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>A <strong>probability mass function</strong> (PMF) defines the probability of the values that a discrete random variable can take.</p>
+<div id="intuition-1" class="section level3 hasAnchor" number="8.2.1">
+<h3><span class="header-section-number">8.2.1</span> Intuition<a href="discrete-random-variables.html#intuition-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Go back to our experiment example – probability comes from probability of outcomes</p>
+<p><span class="math display">\[\Pr(C, T, C) = \Pr(C)\Pr(T)\Pr(C) = \frac{1}{2}\frac{1}{2}\frac{1}{2} = \frac{1}{8}\]</span></p>
+<p>This applies to all outcomes:</p>
+<p><span class="math display">\[
+\begin{aligned}
+p(X = 0) &amp; = \Pr(C, C, C) = \frac{1}{8}\\
+p(X = 1) &amp; = \Pr(T, C, C) + \Pr(C, T, C) + \Pr(C, C, T) = \frac{3}{8} \\
+p(X = 2) &amp; = \Pr(T, T, C)  + \Pr(T, C, T) + \Pr(C, T, T) = \frac{3}{8} \\
+p(X = 3) &amp; = \Pr(T, T, T) = \frac{1}{8} \\
+p(X = a) &amp;= 0 \, \forall \, a \notin (0, 1, 2, 3)
+\end{aligned}
+\]</span></p>
+<p><img src="08-discrete-random-vars_files/figure-html/pmf-1.png" width="90%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="definition-3" class="section level3 hasAnchor" number="8.2.2">
+<h3><span class="header-section-number">8.2.2</span> Definition<a href="discrete-random-variables.html#definition-3" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="definition">
+<p><span id="def:unlabeled-div-124" class="definition"><strong>Definition 8.1  (Probability mass function) </strong></span>For a discrete random variable <span class="math inline">\(X\)</span>, define the probability mass function <span class="math inline">\(p_X(x)\)</span> as</p>
+<p><span class="math display">\[p_X(x) = \Pr(X = x)\]</span></p>
+</div>
+<p>Use upper-case letters to denote random variables, and lower-case letters to denote real numbers such as the numerical values of a random variable. Note that</p>
+<p><span class="math display">\[\sum_x p_{X}(x) = 1\]</span></p>
+<p><span class="math inline">\(x\)</span> ranges over all possible values of <span class="math inline">\(X\)</span> which makes sense - probability must sum to 1.</p>
+<p>We can also add probabilities for smaller sets <span class="math inline">\(S\)</span> of possible values of <span class="math inline">\(X \in S\)</span>.</p>
+<p><span class="math display">\[\Pr(X \in S) = \sum_{x \in S} p_X (x)\]</span></p>
+<p>For example, if <span class="math inline">\(X\)</span> is the number of heads obtained in two independent tosses of a fair coin, the probability of at least one head is</p>
+<p><span class="math display">\[\Pr (X &gt; 0) = \sum_{x=1}^2 p_X (x) = \frac{1}{2} + \frac{1}{4} = \frac{3}{4}\]</span></p>
+<p>To calculate the PMF of a random variable <span class="math inline">\(X\)</span></p>
+<ul>
+<li>For each possible value <span class="math inline">\(x\)</span> of <span class="math inline">\(X\)</span>
+<ol style="list-style-type: decimal">
+<li>Collect all possible outcomes that give rise to the event <span class="math inline">\(\{ X=x \}\)</span></li>
+<li>Add their probabilities to obtain <span class="math inline">\(p_X (x)\)</span></li>
+</ol></li>
+</ul>
+<div class="example">
+<p><span id="exm:unlabeled-div-125" class="example"><strong>Example 8.5  (Topic models) </strong></span>Topics are distinct concepts (war in Afghanistan, national debt, fire department grants) found in a corpus of text documents. Mathematically they are probability mass functions on Words (probability of using word, when discussing a topic).</p>
+<p>Suppose we have a set of words:</p>
+<ul>
+<li><p>(afghanistan, fire, department, soldier, troop, war, grant)</p></li>
+<li><p>Topic 1 (war)</p>
+<ul>
+<li><span class="math inline">\(\Pr(\text{afghanistan}) = 0.3\)</span>; <span class="math inline">\(\Pr(\text{fire}) = 0.0001\)</span>; <span class="math inline">\(\Pr(\text{department}) = 0.0001\)</span>; <span class="math inline">\(\Pr(\text{soldier}) = 0.2\)</span>; <span class="math inline">\(\Pr(\text{troop}) = 0.2\)</span>; <span class="math inline">\(\Pr(\text{war})=0.2997\)</span>; <span class="math inline">\(\Pr(\text{grant})=0.0001\)</span></li>
+</ul></li>
+<li><p>Topic 2 (fire departments):</p>
+<ul>
+<li><span class="math inline">\(\Pr(\text{afghanistan}) = 0.0001\)</span>; <span class="math inline">\(\Pr(\text{fire}) = 0.3\)</span>; <span class="math inline">\(\Pr(\text{department}) = 0.2\)</span>; <span class="math inline">\(\Pr(\text{soldier}) = 0.0001\)</span>; <span class="math inline">\(\Pr(\text{troop}) = 0.0001\)</span>; <span class="math inline">\(\Pr(\text{war})=0.0001\)</span>; <span class="math inline">\(\Pr(\text{grant})=0.2997\)</span></li>
+</ul></li>
+</ul>
+<p>Topic models take a set of documents and estimate topics.</p>
+</div>
+</div>
+</div>
+<div id="cumulative-mass-function" class="section level2 hasAnchor" number="8.3">
+<h2><span class="header-section-number">8.3</span> Cumulative mass function<a href="discrete-random-variables.html#cumulative-mass-function" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="definition">
+<p><span id="def:unlabeled-div-126" class="definition"><strong>Definition 8.2  (Cumulative mass function) </strong></span>For a random variable <span class="math inline">\(X\)</span>, define the <strong>cumulative mass function</strong> <span class="math inline">\(F(x)\)</span> as,</p>
+<p><span class="math display">\[F(x) = \Pr(X \leq x)\]</span></p>
+</div>
+<p>The CMF characterizes how probability cumulates as <span class="math inline">\(X\)</span> gets larger. <span class="math inline">\(F(x) \in [0,1]\)</span>, and <span class="math inline">\(F(x)\)</span> is non-decreasing.</p>
+<div id="three-person-experiment" class="section level3 hasAnchor" number="8.3.1">
+<h3><span class="header-section-number">8.3.1</span> Three person experiment<a href="discrete-random-variables.html#three-person-experiment" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Consider the three person experiment: <span class="math inline">\(\Pr(T) = \Pr(C) = 1/2\)</span>. What is <span class="math inline">\(F(2)\)</span>?</p>
+<p><span class="math display">\[
+\begin{aligned}
+F(2) &amp; = \Pr(X = 0) + \Pr(X = 1) + \Pr(X = 2) \\
+&amp; = \frac{1}{8} + \frac{3}{8} + \frac{3}{8} \\
+&amp; = \frac{7}{8}
+\end{aligned}
+\]</span></p>
+<p>What is <span class="math inline">\(F(2) - F(1)\)</span>?</p>
+<p><span class="math display">\[
+\begin{aligned}
+F(2)  - F(1) &amp; = [\Pr(X = 0) + \Pr(X = 1) + \Pr(X = 2)]  \nonumber \\
+&amp; \quad -[\Pr(X = 0) + \Pr(X = 1)] \\
+F(2) - F(1) &amp; = \Pr(X = 2)
+\end{aligned}
+\]</span></p>
+<p>There is a close relationship between PMFs and CMFs.</p>
+<p><img src="08-discrete-random-vars_files/figure-html/cmf-1.png" width="90%" style="display: block; margin: auto;" /></p>
+<p>Cumulative functions are similar to integration, but over a discrete set of values.</p>
+</div>
+</div>
+<div id="famous-discrete-random-variables" class="section level2 hasAnchor" number="8.4">
+<h2><span class="header-section-number">8.4</span> Famous discrete random variables<a href="discrete-random-variables.html#famous-discrete-random-variables" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="bernoulli" class="section level3 hasAnchor" number="8.4.1">
+<h3><span class="header-section-number">8.4.1</span> Bernoulli<a href="discrete-random-variables.html#bernoulli" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="definition">
+<p><span id="def:unlabeled-div-127" class="definition"><strong>Definition 8.3  (Bernoulli random variable) </strong></span>Suppose <span class="math inline">\(X\)</span> is a random variable, with <span class="math inline">\(X \in \{0, 1\}\)</span> and <span class="math inline">\(\Pr(X = 1) = \pi\)</span>. Then we will say that <span class="math inline">\(X\)</span> is <strong>Bernoulli</strong> random variable,</p>
+<p><span class="math display">\[p_X(k)= \pi^{k} (1- \pi)^{1 - k}\]</span></p>
+<p>for <span class="math inline">\(k \in \{0,1\}\)</span> and <span class="math inline">\(p_X(k) = 0\)</span> otherwise.</p>
+</div>
+
+<div class="rmdnote">
+<span class="math inline">\(\pi\)</span> does not refer to <span class="math inline">\(3.14159\)</span> in this instance, it is a variable. Terrible choice of symbol, but it is convention.
+</div>
+<p>We will (equivalently) say that</p>
+<p><span class="math display">\[Y \sim \text{Bernoulli}(\pi)\]</span></p>
+<p>Suppose we flip a fair coin and <span class="math inline">\(Y = 1\)</span> if the outcome is Heads.</p>
+<p><span class="math display">\[
+\begin{aligned}
+Y &amp; \sim \text{Bernoulli}(1/2) \nonumber \\
+p_X(1) &amp; = (1/2)^{1} (1- 1/2)^{ 1- 1} = 1/2 \nonumber \\
+p_X(0) &amp; = (1/2)^{0} (1- 1/2)^{1 - 0} = (1- 1/2) \nonumber
+\end{aligned}
+\]</span></p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:bernoulli"></span>
+<img src="08-discrete-random-vars_files/figure-html/bernoulli-1.png" alt="Example Bernoulli probability mass functions" width="90%" />
+<p class="caption">
+Figure 8.1: Example Bernoulli probability mass functions
+</p>
+</div>
+<p>Other examples include:</p>
+<ul>
+<li>Person is healthy or sick</li>
+<li>Person votes or does not vote</li>
+</ul>
+</div>
+<div id="binomial" class="section level3 hasAnchor" number="8.4.2">
+<h3><span class="header-section-number">8.4.2</span> Binomial<a href="discrete-random-variables.html#binomial" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="definition">
+<p><span id="def:unlabeled-div-128" class="definition"><strong>Definition 8.4  (Binomial random variable) </strong></span>Suppose <span class="math inline">\(X\)</span> is a random variable that counts the number of successes in <span class="math inline">\(N\)</span> independent and identically distributed Bernoulli trials. Then <span class="math inline">\(X\)</span> is a <strong>Binomial</strong> random variable,</p>
+<p><span class="math display">\[p_X(k) = {{N}\choose{k}}\pi^{k} (1- \pi)^{n-k}\]</span></p>
+<p>for <span class="math inline">\(k \in \{0, 1, 2, \ldots, N\}\)</span> and <span class="math inline">\(p_X(k) = 0\)</span> otherwise, and <span class="math inline">\(\binom{N}{k} = \frac{N!}{(N-k)! k!}\)</span>. Equivalently,</p>
+<p><span class="math display">\[Y \sim \text{Binomial}(N, \pi)\]</span></p>
+</div>
+<p>Binomial random variables can be used as a model to count the number of successes across <span class="math inline">\(N\)</span> trials.</p>
+<div id="example" class="section level4 hasAnchor" number="8.4.2.1">
+<h4><span class="header-section-number">8.4.2.1</span> Example<a href="discrete-random-variables.html#example" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:binomial"></span>
+<img src="08-discrete-random-vars_files/figure-html/binomial-1.png" alt="Example Binomial probability mass functions" width="90%" />
+<p class="caption">
+Figure 8.2: Example Binomial probability mass functions
+</p>
+</div>
+<p>Recall our experiment example:</p>
+<ul>
+<li><span class="math inline">\(\Pr(T) = \Pr(C) = 1/2\)</span></li>
+<li><span class="math inline">\(Z =\)</span> number of units assigned to treatment</li>
+</ul>
+<p><span class="math display">\[
+\begin{aligned}
+Z &amp; \sim  \text{Binomial}(1/2)\\
+p_Z(0) &amp; = {{3}\choose{0}} (1/2)^{0} (1- 1/2)^{3-0} = 1 \times \frac{1}{8}\\
+p_Z(1) &amp; = {{3}\choose{1}} (1/2)^{1} (1 - 1/2)^{2} = 3 \times \frac{1}{8} \\
+p_Z(2) &amp; = {{3}\choose{2}} (1/2)^{2} (1- 1/2)^1 = 3 \times \frac{1}{8} \\
+p_Z(3) &amp; = {{3}\choose{3}} (1/2)^{3} (1 - 1/2)^{0} = 1 \times \frac{1}{8}
+\end{aligned}
+\]</span></p>
+</div>
+</div>
+<div id="geometric" class="section level3 hasAnchor" number="8.4.3">
+<h3><span class="header-section-number">8.4.3</span> Geometric<a href="discrete-random-variables.html#geometric" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li>A model to count the number of trials of a Bernoulli outcome before success occurs the first time</li>
+</ul>
+<div class="definition">
+<p><span id="def:unlabeled-div-129" class="definition"><strong>Definition 8.5  (Geometric random variable) </strong></span>Suppose <span class="math inline">\(X\)</span> is a random variable that counts the number of tosses needed for a head to come up the first time. Its PMF is</p>
+<p><span class="math display">\[p_X(k) = (1 - p)^{k-1}p, \quad k = 1, 2, \ldots\]</span></p>
+<p><span class="math inline">\((1 - p)^{k-1}p\)</span> is the probability of the sequence consisting of <span class="math inline">\(k-1\)</span> successive trials followed by a head. This is a valid PMF because</p>
+<p><span class="math display">\[
+\begin{aligned}
+\sum_{k=1}^{\infty} p_X(k) &amp;= \sum_{k=1}^{\infty} (1 - p)^{k-1}p \\
+&amp;= p \sum_{k=1}^{\infty} (1 - p)^{k-1} \\&amp;
+= p \times \frac{1}{1 - (1-p)} \\
+&amp;= 1
+\end{aligned}
+\]</span></p>
+</div>
+<p>Geometric random variables can be used to count the number of trials of a Bernoulli outcome before success occurs the first time.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:geometric"></span>
+<img src="08-discrete-random-vars_files/figure-html/geometric-1.png" alt="Example Geometric probability mass functions" width="90%" />
+<p class="caption">
+Figure 8.3: Example Geometric probability mass functions
+</p>
+</div>
+<p>Examples include:</p>
+<ul>
+<li>Number of attempts before passing a test</li>
+<li>Finding a missing item in a search</li>
+</ul>
+</div>
+<div id="poisson" class="section level3 hasAnchor" number="8.4.4">
+<h3><span class="header-section-number">8.4.4</span> Poisson<a href="discrete-random-variables.html#poisson" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Often social scientists are interested in counting the number of events that occur:</p>
+<ul>
+<li>Number of wars started</li>
+<li>Number of speeches made</li>
+<li>Number of bribes offered</li>
+<li>Number of people waiting for license</li>
+</ul>
+<p>These are generally referred to as <strong>event counts</strong>.</p>
+<div class="definition">
+<p><span id="def:unlabeled-div-130" class="definition"><strong>Definition 8.6  (Poisson random variable) </strong></span>Suppose <span class="math inline">\(X\)</span> is a random variable that takes on values <span class="math inline">\(X \in \{0, 1, 2, \ldots, \}\)</span> and that <span class="math inline">\(\Pr(X = k) = p_X(k)\)</span> is,</p>
+<p><span class="math display">\[p_X(k) = e^{-\lambda} \frac{\lambda^{k}}{k!}, \quad k = 0,1,2,\ldots\]</span></p>
+<p>for <span class="math inline">\(k \in \{0, 1, \ldots, \}\)</span> and <span class="math inline">\(0\)</span> otherwise. Then we will say that <span class="math inline">\(X\)</span> follows a <strong>Poisson</strong> distribution with <strong>rate</strong> parameter <span class="math inline">\(\lambda\)</span></p>
+<p><span class="math display">\[X \sim \text{Poisson}(\lambda)\]</span></p>
+</div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:poisson"></span>
+<img src="08-discrete-random-vars_files/figure-html/poisson-1.png" alt="Example Poisson probability mass functions" width="90%" />
+<p class="caption">
+Figure 8.4: Example Poisson probability mass functions
+</p>
+</div>
+<div class="example">
+<p><span id="exm:unlabeled-div-131" class="example"><strong>Example 8.6  (Presidential threats) </strong></span>Suppose the number of threats a president makes in a term is given by <span class="math inline">\(X \sim \text{Poisson}(5)\)</span><a href="#fn18" class="footnote-ref" id="fnref18"><sup>18</sup></a> What is the probability the president will make ten threats?</p>
+<p><span class="math display">\[p_X(10) = e^{-\lambda} \frac{5^{10}}{10!}\]</span></p>
+</div>
+<p><img src="08-discrete-random-vars_files/figure-html/poisson-president-1.png" width="90%" style="display: block; margin: auto;" /></p>
+<div id="approximating-a-binomial-random-variable" class="section level4 hasAnchor" number="8.4.4.1">
+<h4><span class="header-section-number">8.4.4.1</span> Approximating a binomial random variable<a href="discrete-random-variables.html#approximating-a-binomial-random-variable" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>The Poisson PMF with parameter <span class="math inline">\(\lambda\)</span> is a good approximation for a binomial PMF with parameters <span class="math inline">\(n\)</span> and <span class="math inline">\(p\)</span></p>
+<p><span class="math display">\[e^{-\lambda} \frac{\lambda^{k}}{k!} \approx {{N}\choose{k}}\pi^{k} (1- \pi)^{n-k}, \quad \text{if } k \ll n\]</span></p>
+<p>provided <span class="math inline">\(\lambda = np\)</span>, <span class="math inline">\(n\)</span> is very large, and <span class="math inline">\(p\)</span> is very small. Sometimes using the Poisson PMF results in simpler models and easier calculations. For instance, <span class="math inline">\(n = 100\)</span> and <span class="math inline">\(p = 0.01\)</span>.</p>
+<p>Using the binomial PMF</p>
+<p><span class="math display">\[\frac{100!}{95! 5!} \times 0.01^5 (1 - 0.01)^{95} = 0.00290\]</span></p>
+<p>Versus using the Poisson PMF with <span class="math inline">\(\lambda = np = 100 \times 0.01 = 1\)</span></p>
+<p><span class="math display">\[e^{-1} \frac{1}{5!} = 0.00306\]</span></p>
+</div>
+</div>
+</div>
+<div id="functions-of-random-variables" class="section level2 hasAnchor" number="8.5">
+<h2><span class="header-section-number">8.5</span> Functions of random variables<a href="discrete-random-variables.html#functions-of-random-variables" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Given a random variable <span class="math inline">\(X\)</span>, you may wish to create a new random variable <span class="math inline">\(Y\)</span> using transformations of <span class="math inline">\(X\)</span>. This could be a linear function of the form</p>
+<p><span class="math display">\[Y = g(X) = aX + b\]</span></p>
+<p>where <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> are scalars. It could be a logarithmic transformation</p>
+<p><span class="math display">\[g(X) = \log(X)\]</span></p>
+<p>If <span class="math inline">\(Y = g(X)\)</span> is a function of a random variable <span class="math inline">\(X\)</span>, then <span class="math inline">\(Y\)</span> is also a random variable. All outcomes in the sample space defined with a numerical value <span class="math inline">\(x\)</span> for <span class="math inline">\(X\)</span> also have a numerical value <span class="math inline">\(y = g(x)\)</span> for <span class="math inline">\(Y\)</span>.</p>
+</div>
+<div id="expectation-mean-and-variance" class="section level2 hasAnchor" number="8.6">
+<h2><span class="header-section-number">8.6</span> Expectation, mean, and variance<a href="discrete-random-variables.html#expectation-mean-and-variance" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The PMF of a random variable <span class="math inline">\(X\)</span> provides several numbers – the probabilities of all possible values of <span class="math inline">\(X\)</span>. Often it is desirable to summarize this information into a single representative number: the <strong>expectation</strong> of <span class="math inline">\(X\)</span> – weighted average of the possible values of <span class="math inline">\(X\)</span>.</p>
+<div id="motivation" class="section level3 hasAnchor" number="8.6.1">
+<h3><span class="header-section-number">8.6.1</span> Motivation<a href="discrete-random-variables.html#motivation" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Consider spinning a wheel of fortune many times. At each spin, one of the numbers <span class="math inline">\(m_1, m_2, \ldots, m_n\)</span> comes up with corresponding probability <span class="math inline">\(p_1, p_2, \ldots, p_n\)</span>, and this is your monetary reward from that spin. What is the amount of money that you “expect” to get “per spin”? The terms “expect” and “per spin” are a little ambiguous, but here is a reasonable interpretation.</p>
+<p>Suppose you spin the wheel <span class="math inline">\(k\)</span> times, and that <span class="math inline">\(k_i\)</span> is the number of times that the outcome is <span class="math inline">\(m_i\)</span>. Then, the total amount received is <span class="math inline">\(m_1 k_1 + m_2 k_2 + \ldots + m_n k_n\)</span>. The amount received per spin is a simple average:</p>
+<p><span class="math display">\[M = \frac{m_1 k_1 + m_2 k_2 + \ldots + m_n k_n}{k}\]</span></p>
+<p>If the number of spins <span class="math inline">\(k\)</span> is very large and we interpret probabilities as relative frequencies, we could anticipate that <span class="math inline">\(m_i\)</span> comes up a fraction of times roughly equal to <span class="math inline">\(p_i\)</span>:</p>
+<p><span class="math display">\[\frac{k_i}{k} \approx p_i, i = 1, \ldots,n\]</span></p>
+<p>Thus, the amount of money you “expect” to receive is</p>
+<p><span class="math display">\[M = \frac{m_1 k_1 + m_2 k_2 + \ldots + m_n k_n}{k} \approx m_1p_1 + m_2p_2 + \ldots + m_np_n\]</span></p>
+</div>
+<div id="expectation" class="section level3 hasAnchor" number="8.6.2">
+<h3><span class="header-section-number">8.6.2</span> Expectation<a href="discrete-random-variables.html#expectation" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="definition">
+<p><span id="def:unlabeled-div-132" class="definition"><strong>Definition 8.7  (Expected value) </strong></span>Define <strong>expected value</strong> (known as <strong>expectation</strong> or the <strong>mean</strong>) of a random variable <span class="math inline">\(X\)</span>, with PMF <span class="math inline">\(p_X\)</span> as</p>
+<p><span class="math display">\[\E[X] = \sum_{x:p(x)&gt;0} x p(x)\]</span></p>
+<p>where <span class="math inline">\(\sum_{x:p(x)&gt;0}\)</span> is all values of <span class="math inline">\(X\)</span> with probability greater than 0.</p>
+<p>In words: for all values of <span class="math inline">\(x\)</span> with <span class="math inline">\(p(x)\)</span> greater than zero, take the weighted average of the values.</p>
+</div>
+<div class="example">
+<p><span id="exm:unlabeled-div-133" class="example"><strong>Example 8.7  </strong></span>Suppose <span class="math inline">\(X\)</span> is number of units assigned to treatment, in one of our previous example.</p>
+<p><span class="math display">\[
+X  = \left \{ \begin{array} {ll}
+0  \text{  if  } (C, C, C)  \\
+1 \text{  if  } (T, C, C) \text{ or } (C, T, C) \text{ or } (C, C, T) \\
+2 \text{ if  }  (T, T, C) \text{ or } (T, C, T) \text{ or } (C, T, T) \\
+3 \text{ if } (T, T, T)
+\end{array} \right.
+\]</span></p>
+<p>What is <span class="math inline">\(\E[X]\)</span>?</p>
+<p><span class="math display">\[
+\begin{aligned}
+\E[X]  &amp; = 0\times \frac{1}{8} + 1 \times \frac{3}{8} + 2 \times \frac{3}{8} + 3 \times \frac{1}{8} \\
+&amp; = 1.5
+\end{aligned}
+\]</span></p>
+</div>
+<p>The expected value is essentially a weighted average, or the average outcome (value in the middle of the range). It gives us a measure of <strong>central tendency</strong>.</p>
+<div class="example">
+<p><span id="exm:unlabeled-div-134" class="example"><strong>Example 8.8  (A single person poll) </strong></span>Suppose that there is a group of <span class="math inline">\(N\)</span> people. Suppose <span class="math inline">\(M&lt; N\)</span> people approve of Donald Trump’s performance as president, and <span class="math inline">\(N - M\)</span> disapprove of his performance.</p>
+<p>Draw one person <span class="math inline">\(i\)</span>, with <span class="math inline">\(\Pr(\text{Draw } i ) = \frac{1}{N}\)</span></p>
+<p><span class="math display">\[
+X  = \left \{ \begin{array} {ll}
+    1  \text{  if  person Approves}  \\
+    0 \text{  if  Disapproves}   \\
+\end{array} \right.
+\]</span></p>
+<p>What is <span class="math inline">\(\E[X]\)</span>?</p>
+<p><span class="math display">\[
+\begin{aligned}
+\E[X] &amp; = 1 \times \Pr(\text{Approve})  + 0 \times \Pr(\text{Disapprove}) \\
+&amp; = 1 \times \frac{M}{N} \\
+&amp; = \frac{M}{N}
+\end{aligned}
+\]</span></p>
+</div>
+<div id="indicator-variables-and-probabilities" class="section level4 hasAnchor" number="8.6.2.1">
+<h4><span class="header-section-number">8.6.2.1</span> Indicator variables and probabilities<a href="discrete-random-variables.html#indicator-variables-and-probabilities" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div class="proposition">
+<p><span id="prp:unlabeled-div-135" class="proposition"><strong>Proposition 8.1  </strong></span>Suppose <span class="math inline">\(A\)</span> is an event. Define random variable <span class="math inline">\(I\)</span> such that <span class="math inline">\(I= 1\)</span> if an outcome in <span class="math inline">\(A\)</span> occurs and <span class="math inline">\(I =0\)</span> if an outcome in <span class="math inline">\(A^{c}\)</span> occurs. Then,</p>
+<p><span class="math display">\[\E[I] = \Pr(A)\]</span></p>
+</div>
+<div class="proof">
+<p><span id="unlabeled-div-136" class="proof"><em>Proof</em>. </span><span class="math display">\[
+\begin{aligned}
+\E[I]  &amp; =  1 \times \Pr(A) + 0 \times \Pr(A^{c}) \\
+&amp; = \Pr(A)
+\end{aligned}
+\]</span></p>
+</div>
+</div>
+</div>
+<div id="variance-moments-and-the-expected-value-rule" class="section level3 hasAnchor" number="8.6.3">
+<h3><span class="header-section-number">8.6.3</span> Variance, moments, and the expected value rule<a href="discrete-random-variables.html#variance-moments-and-the-expected-value-rule" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Other quantities we care about include variance and moments.</p>
+<div id="moments" class="section level4 hasAnchor" number="8.6.3.1">
+<h4><span class="header-section-number">8.6.3.1</span> Moments<a href="discrete-random-variables.html#moments" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<ul>
+<li>1st moment: <span class="math inline">\(\E[X^1] = \E[X]\)</span> - that is, the mean</li>
+<li>2nd moment: <span class="math inline">\(\E[X^2]\)</span></li>
+<li><span class="math inline">\(n\)</span>th moment: <span class="math inline">\(\E[X^n]\)</span></li>
+</ul>
+</div>
+<div id="variance" class="section level4 hasAnchor" number="8.6.3.2">
+<h4><span class="header-section-number">8.6.3.2</span> Variance<a href="discrete-random-variables.html#variance" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Expected value is a measure of <strong>central tendency</strong>. What about <strong>spread</strong> or <strong>dispersion</strong>?</p>
+<p>For each value, we might measure distance from the center. For example, Euclidean distance is squared <span class="math inline">\(d(x, E[X])^{2} = (x - E[X])^2\)</span></p>
+<p>Then, we might take weighted average of these distances</p>
+<p><span class="math display">\[
+\begin{aligned}
+\E[(X - \E[X])^2] &amp; = \sum_{x:p_X(x)&gt;0} (x  - \E[X])^2p_X(x) \\
+&amp; = \sum_{x:p_X(x)&gt;0} \left(x^2 p_X(x)\right)  - 2 \E[X]\sum_{x:p_X(x)&gt;0} \left(x p_X(x)\right) + \E[X]^2\sum_{x:p_X(x)&gt;0} p_X(x)  \\
+&amp; =  \E[X^2] - 2\E[X]^2 + \E[X]^2 \\
+&amp; = \E[X^2] - \E[X]^2 \\
+&amp; = \text{Var}(X)
+\end{aligned}
+\]</span></p>
+<p>Defined as the expected value of the random variable <span class="math inline">\((X - \E[X])^2\)</span></p>
+<p><span class="math display">\[
+\begin{aligned}
+\Var(X) &amp;= \E[(X - \E[X])^2] \\
+&amp;= \E[X^2] - \E[X]^2
+\end{aligned}
+\]</span></p>
+<ul>
+<li>Since <span class="math inline">\((X - \E[X])^2\)</span> can only take non-negative values, <span class="math inline">\(\Var(X) \geq 0\)</span></li>
+</ul>
+<p>This is a measure of <strong>dispersion</strong> of <span class="math inline">\(X\)</span> around its mean. We will define the <strong>standard deviation</strong> of <span class="math inline">\(X\)</span>, <span class="math inline">\(\sigma_X = \sqrt{\Var(X)}\)</span>. Standard deviation is easier to interpret sometimes since it is in the same units as <span class="math inline">\(X\)</span>.</p>
+<div id="calculating-variance-of-a-random-variable" class="section level5 hasAnchor" number="8.6.3.2.1">
+<h5><span class="header-section-number">8.6.3.2.1</span> Calculating variance of a random variable<a href="discrete-random-variables.html#calculating-variance-of-a-random-variable" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>We could generate the PMF of the random variable <span class="math inline">\((X - \E[X])^2\)</span>, then calculate the expectation of this function – it is just a linear function.</p>
+<p>Instead, we can take a shortcut: the <strong>expected value rule for functions of random variables</strong>. Let <span class="math inline">\(X\)</span> be a random variable with PMF <span class="math inline">\(p_X\)</span>, and let <span class="math inline">\(g(X)\)</span> be a function of <span class="math inline">\(X\)</span>. Then, the expected value of the random variable <span class="math inline">\(g(X)\)</span> is given by</p>
+<p><span class="math display">\[\E[g(X)] = \sum_{x} g(x) p_X(x)\]</span></p>
+<p>This allows us to rewrite our variance formula:</p>
+<p><span class="math display">\[
+\begin{align}
+\Var(X) &amp;= \E[(X - \E[X])^2] \\
+\Var(X) &amp;= \E[X^2] - \E[X]^2
+\end{align}
+\]</span></p>
+<p>We just need the first and second moments to calculate variance.</p>
+</div>
+</div>
+</div>
+<div id="practice-calculating-expectation-and-variance" class="section level3 hasAnchor" number="8.6.4">
+<h3><span class="header-section-number">8.6.4</span> Practice calculating expectation and variance<a href="discrete-random-variables.html#practice-calculating-expectation-and-variance" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="bernoulli-variable" class="section level4 hasAnchor" number="8.6.4.1">
+<h4><span class="header-section-number">8.6.4.1</span> Bernoulli variable<a href="discrete-random-variables.html#bernoulli-variable" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<ul>
+<li><p>Suppose <span class="math inline">\(Y \sim \text{Bernoulli}(\pi)\)</span></p>
+<p><span class="math display">\[
+  \begin{aligned}
+  \E[Y] &amp; = 1 \times \Pr(Y = 1) + 0 \times \Pr(Y = 0) \nonumber \\
+  &amp; = \pi + 0 (1 - \pi) \nonumber  = \pi \\
+  \Var(Y) &amp; = \E[Y^2] - \E[Y]^2 \nonumber  \\
+  \E[Y^2] &amp; = 1^{2} \Pr(Y = 1) + 0^{2} \Pr(Y = 0) \nonumber \\
+  &amp; = \pi \nonumber \\
+  \Var(Y) &amp; = \pi - \pi^{2} \nonumber \\
+  &amp; = \pi(1 - \pi ) \nonumber
+  \end{aligned}
+  \]</span></p></li>
+<li><p><span class="math inline">\(\E[Y] = \pi\)</span></p></li>
+<li><p><span class="math inline">\(\Var(Y) = \pi(1- \pi)\)</span></p></li>
+<li><p>What is the maximum variance?</p>
+<p><span class="math display">\[
+  \begin{aligned}
+  \Var(Y) &amp; = \pi - \pi^{2} \nonumber \\
+  &amp; = 0.5(1 - 0.5 ) \\
+  &amp; = 0.25
+  \end{aligned}
+  \]</span></p></li>
+</ul>
+</div>
+<div id="binomial-1" class="section level4 hasAnchor" number="8.6.4.2">
+<h4><span class="header-section-number">8.6.4.2</span> Binomial<a href="discrete-random-variables.html#binomial-1" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p><span class="math display">\[Z = \sum_{i=1}^{N} Y_{i} \text{ where } Y_{i} \sim \text{Bernoulli}(\pi)\]</span></p>
+<p><span class="math display">\[
+\begin{aligned}
+\E[Z] &amp; = \E[Y_{1} + Y_{2} + Y_{3} + \ldots + Y_{N} ] \\
+&amp; = \sum_{i=1}^{N} \E[Y_{i} ] \\
+&amp; = N \pi \\
+\Var(Z) &amp; = \sum_{i=1}^{N} \Var(Y_{i}) \\
+&amp; = N \pi (1-\pi)
+\end{aligned}
+\]</span></p>
+</div>
+</div>
+<div id="decision-making-using-expected-values" class="section level3 hasAnchor" number="8.6.5">
+<h3><span class="header-section-number">8.6.5</span> Decision making using expected values<a href="discrete-random-variables.html#decision-making-using-expected-values" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>We can use expected values to optimizes the choice between several candidate decisions that result in random rewards. View the expected reward of a decision as its average payoff over a large number of trials, and choose a decision with maximum expected reward.</p>
+<div class="example">
+<p><span id="exm:unlabeled-div-137" class="example"><strong>Example 8.9  (Going to war) </strong></span>Suppose country <span class="math inline">\(1\)</span> is engaged in a conflict and can either win or lose. Define <span class="math inline">\(Y = 1\)</span> if the country wins and <span class="math inline">\(Y = 0\)</span> otherwise. Then,</p>
+<p><span class="math display">\[Y \sim \text{Bernoulli}(\pi)\]</span></p>
+<p>Suppose country <span class="math inline">\(1\)</span> is deciding whether to fight a war. Engaging in the war will cost the country <span class="math inline">\(c\)</span>. If they win, country <span class="math inline">\(1\)</span> receives <span class="math inline">\(B\)</span>. What is <span class="math inline">\(1\)</span>’s expected utility from fighting a war?</p>
+<p><span class="math display">\[
+\begin{aligned}
+\E[U(\text{war})] &amp; = U(\text{war} | \text{win}) \times \Pr(\text{win}) + U(\text{war} | \text{lose}) \times \Pr(\text{lose}) \\
+&amp; = (B - c) \Pr(Y = 1) + (- c) \Pr(Y = 0 ) \\
+&amp; = B \times \Pr(Y = 1)  - c(\Pr(Y = 1)  + \Pr(Y = 0)) \\
+&amp; = B \times \pi - c
+\end{aligned}
+\]</span></p>
+<p>Based on your beliefs about the appropriate values for <span class="math inline">\(B, \pi, c\)</span>, you can decide whether to engage in the war</p>
+<ul>
+<li>If expected utility is greater than 0, you should decide to go to war</li>
+<li>If expected utility is less than 0, you should decide not to go to war</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="cumulative-mass-function-redux" class="section level2 hasAnchor" number="8.7">
+<h2><span class="header-section-number">8.7</span> Cumulative mass function, redux<a href="discrete-random-variables.html#cumulative-mass-function-redux" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The <strong>cumulative mass function</strong> (CMF) defines the the cumulative probability <span class="math inline">\(F_X(x)\)</span> up to the value of <span class="math inline">\(x\)</span>. For a discrete random variable <span class="math inline">\(X\)</span>, we define the CMF <span class="math inline">\(F_X\)</span> which provides the probability <span class="math inline">\(\Pr (X \leq x)\)</span>. For every <span class="math inline">\(x\)</span></p>
+<p><span class="math display">\[F_X(x) = \Pr (X \leq x) = \sum_{k \leq x} p_X(k)\]</span></p>
+<p>Any random variable associated with a given probability model has a CMF. Basic properties of CMFs for discrete random variables are:</p>
+<ul>
+<li><p><span class="math inline">\(F_X\)</span> is monotonically non-decreasing – if <span class="math inline">\(x \leq y\)</span>, then <span class="math inline">\(F_X(x) \leq F_X(y)\)</span></p></li>
+<li><p><span class="math inline">\(F_X(x)\)</span> tends to <span class="math inline">\(0\)</span> as <span class="math inline">\(x \rightarrow -\infty\)</span>, and to <span class="math inline">\(1\)</span> as <span class="math inline">\(x \rightarrow \infty\)</span></p></li>
+<li><p><span class="math inline">\(F_X(x)\)</span> is a piecewise constant function of <span class="math inline">\(x\)</span></p></li>
+<li><p>If <span class="math inline">\(X\)</span> is discrete and takes integer values, the PMF and the CMF can be obtained from each other by summing or differencing:</p>
+<p><span class="math display">\[F_X(k) = \sum_{i = -\infty}^k p_X(i),\]</span>
+<span class="math display">\[p_X(k) = \Pr (X \leq k) - \Pr (X \leq k-1) = F_X(k) - F_X(k-1)\]</span></p>
+<p>for all integers <span class="math inline">\(k\)</span></p></li>
+</ul>
+<div id="common-cmfs" class="section level3 hasAnchor" number="8.7.1">
+<h3><span class="header-section-number">8.7.1</span> Common CMFs<a href="discrete-random-variables.html#common-cmfs" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:bernoulli-cmf"></span>
+<img src="08-discrete-random-vars_files/figure-html/bernoulli-cmf-1.png" alt="Example Bernoulli cumulative mass functions" width="90%" /><img src="08-discrete-random-vars_files/figure-html/bernoulli-cmf-2.png" alt="Example Bernoulli cumulative mass functions" width="90%" /><img src="08-discrete-random-vars_files/figure-html/bernoulli-cmf-3.png" alt="Example Bernoulli cumulative mass functions" width="90%" />
+<p class="caption">
+Figure 8.5: Example Bernoulli cumulative mass functions
+</p>
+</div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:binomial-cmf"></span>
+<img src="08-discrete-random-vars_files/figure-html/binomial-cmf-1.png" alt="Example Binomial cumulative mass functions" width="90%" /><img src="08-discrete-random-vars_files/figure-html/binomial-cmf-2.png" alt="Example Binomial cumulative mass functions" width="90%" /><img src="08-discrete-random-vars_files/figure-html/binomial-cmf-3.png" alt="Example Binomial cumulative mass functions" width="90%" /><img src="08-discrete-random-vars_files/figure-html/binomial-cmf-4.png" alt="Example Binomial cumulative mass functions" width="90%" />
+<p class="caption">
+Figure 8.6: Example Binomial cumulative mass functions
+</p>
+</div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:geometric-cmf"></span>
+<img src="08-discrete-random-vars_files/figure-html/geometric-cmf-1.png" alt="Example Geometric cumulative mass functions" width="90%" /><img src="08-discrete-random-vars_files/figure-html/geometric-cmf-2.png" alt="Example Geometric cumulative mass functions" width="90%" /><img src="08-discrete-random-vars_files/figure-html/geometric-cmf-3.png" alt="Example Geometric cumulative mass functions" width="90%" />
+<p class="caption">
+Figure 8.7: Example Geometric cumulative mass functions
+</p>
+</div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:poisson-cmf"></span>
+<img src="08-discrete-random-vars_files/figure-html/poisson-cmf-1.png" alt="Example Poisson cumulative mass functions" width="90%" /><img src="08-discrete-random-vars_files/figure-html/poisson-cmf-2.png" alt="Example Poisson cumulative mass functions" width="90%" /><img src="08-discrete-random-vars_files/figure-html/poisson-cmf-3.png" alt="Example Poisson cumulative mass functions" width="90%" />
+<p class="caption">
+Figure 8.8: Example Poisson cumulative mass functions
+</p>
+</div>
+
+</div>
+</div>
+</div>
+<h3>References<a href="references.html#references" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-bertsekas2008" class="csl-entry">
+Bertsekas, Dimitri P, and John N Tsitsiklis. 2008. <span>“Introduction to Probability.”</span>
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol start="18">
+<li id="fn18"><p>Clearly estimated pre-Trump.<a href="discrete-random-variables.html#fnref18" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="sample-space-probability.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="general-random-variables.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/math-camp/notes/edit/master/08-discrete-random-vars.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "section"
+},
+"theme": "readable",
+"highlight": "pygment"
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
