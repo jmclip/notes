@@ -144,10 +144,9 @@ All course materials can be found on the [course Canvas site](https://canvas.uch
 
 ### Teaching assistants
 
-- 
-- 
-- 
-- 
+- Kaya Borlase
+- John Wang
+- Wenqian Zhang
 
 ### Prerequisites for the math camp
 
@@ -160,7 +159,7 @@ All course materials can be found on the [course Canvas site](https://canvas.uch
     * High school/AP/IB training may be sufficient depending on the depth of the course and how recently you completed it
 
 **We assume prior exposure to the content covered in this camp** - our goal is to refresh material which you have previously learned, not teach it to you fresh
-    * Impossible to teach all this material from scratch in just two weeks
+    * Impossible to teach all this material from scratch in just three weeks
 
 ### Alternatives to this camp
 
@@ -173,7 +172,7 @@ All course materials can be found on the [course Canvas site](https://canvas.uch
 
 * You don't take this course for a grade
     * Pass/fail (no credit)
-    * Show up in class, complete the problem sets satisfactorily (not perfectly), and you'll pass
+    * Show up (virtually), complete the problem sets satisfactorily (not perfectly), and you'll pass
 * That said, **it should not matter**
 * The irony of grad school
     * Grades no longer matter (or should not)
@@ -197,7 +196,7 @@ Problem sets will be evaluated and returned within 24 hours, and the solution ke
 
 <blockquote class="twitter-tweet"><p lang="en" dir="ltr">15 min rule: when stuck, you HAVE to try on your own for 15 min; after 15 min, you HAVE to ask for help.- Brain AMA <a href="https://t.co/MS7FnjXoGH">pic.twitter.com/MS7FnjXoGH</a></p>&mdash; Rachel Thomas (@math_rachel) <a href="https://twitter.com/math_rachel/status/764931533383749632?ref_src=twsrc%5Etfw">August 14, 2016</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
-We will follow the **15 minute rule** in this class. If you encounter an issue in your problem sets, spend up to 15 minutes troubleshooting the problem on your own. However, if after 15 minutes you still cannot solve the problem, **ask for help**. The instructional staff has office hours spaced throughout the day. Feel free to log in on Zoom to ask your question.
+We will follow the **15 minute rule** in this class. If you encounter an issue in your problem sets, spend up to 15 minutes troubleshooting the problem on your own. However, if after 15 minutes you still cannot solve the problem, **ask for help**. The instructional staff will be on site for help during class hours or after class by appointment scheduled via email. 
     
 ### Why are we doing this
 

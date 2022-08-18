@@ -225,7 +225,7 @@ their-uses
 goals-for-this-camp
 course-logistics
 course-staff
-me-dr.-benjamin-soltoff
+me-dr.-yanyan-sheng
 teaching-assistants-1
 prerequisites-for-the-math-camp
 alternatives-to-this-camp

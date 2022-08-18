@@ -2,7 +2,7 @@
 title: "Computational Math Camp"
 subtitle: "Lecture Notes"
 author: "Yanyan Sheng"
-date: "2022-08-17"
+date: "2022-08-18"
 site: bookdown::bookdown_site
 output: bookdown::gitbook
 documentclass: krantz
@@ -17,23 +17,23 @@ description: "Contains lecture notes for the 2022 Computational Math Camp."
 
 ## Meeting information {-}
 
-* Meeting day: September 6-September 16, MTWThF
+* Meeting day: September 6-September 16, MTWRF
 * Time: 9am-1pm CT (week 1); 9am-5pm CT (week 2)
 * Location:
-    TBD
+    1155 E 60th St (room 142/138)
 
 ## Instructional staff {-}
 
-* [Dr. Yanyan Sheng]
-* Email: [yysheng@uchicago.edu](mailto:yysheng@uchicago.edu)
+* Dr. Yanyan Sheng
+* Email: [y.sheng@uchicago.edu](mailto:y.sheng@uchicago.edu)
 * Office: Room 223, [1155 E. 60th St.](https://goo.gl/maps/KWgm792dKjdoBWjWA)
 * Office hours: [By appointment] 
 
 ### Teaching assistants {-}
 
-- 
--
--
+- Kaya Borlase
+- John Wang
+- Wenqian Zhang
 
 ## Course description {-}
 
@@ -72,17 +72,17 @@ There are no required textbooks for the camp. Readings will be drawn from course
 
 ## Course format {-}
 
-Each day's material, including course notes, supplementary readings, and problem sets, will be released at 5pm Chicago time the night before the date on the course schedule below. This includes any required readings and the assigned problem set. I strongly encourage you to complete the reading that evening.
+Each day's problem set(s) will be released at 5pm Chicago time the night before the date on the course schedule below. I strongly encourage you to complete the required readings that evening.
 
-Each day you are invited to come to campus between 9am-1pm in week 1 and between 9am-5pm in week 2 to work on the problem sets in small groups. Myself or a TA will be available to answer any questions you have about the readings or the problem sets. You may leave as soon as you are finished with the problem set, and it should be submitted before 9pm.
+Each day you are invited to come to campus between 9am-1pm in week 1 and between 9am-5pm in week 2 to work on the problem sets in small groups. Myself or a TA will be available to answer any questions you have about the readings or the problem sets. You may leave as soon as you are finished with the problem set, and it should be submitted before 5pm or 8pm that evening.
 
 If you have questions or confusions about the material or problem sets, **come speak to a TA**. I recognize not all students will be able to utilize these hours. You can also post questions on the discussion thread for that day's material and myself or a TA will respond as soon as possible.
 
-I also have office hours available by appointment. You can schedule them by sending an email. Feel free to meet with me to discuss any concepts or questions regarding the material in the math camp, as well as any other questions you have about the MACSS program or upcoming fall quarter.
+I also have office hours available by appointment. You can schedule them by sending an email. Feel free to meet with me to discuss any concepts or questions regarding the material in the math camp, as well as any other questions you have about the MACSS program, the MAPSS QMSA program or upcoming fall quarter.
 
 ### Problem sets {-}
 
-Each problem set is designed to take no more than **three hours**. If you are spending more than three hours on a problem set, you should make sure you are asking questions when you are confused. All problem sets will be submitted via Canvas. For each problem set, write out your answers to each exercise on paper **and show your work**. You will need to scan your answers to a PDF to upload on Canvas. If you do not have a scanner at home (and why would you?), you can use your phone to scan your work. A couple recommended scanning apps are:
+Each problem set is designed to take no more than **three hours**. If you are spending more than three hours on a problem set, you should make sure you are asking questions when you are confused. All problem sets will be submitted via Canvas. For each problem set, write out your answers to each exercise on paper **and show your work**. You will need to scan your answers to a PDF or Word Doc to upload on Canvas. If you do not have a scanner at home, you can use your phone to scan your work. A couple recommended scanning apps are:
 
 * For iOS, [Evernote](https://itunes.apple.com/us/app/evernote-scannable/id883338188?mt=8) is a good choice
 * For Android, [Genius Scan](https://play.google.com/store/apps/details?id=com.thegrizzlylabs.geniusscan.free) works well
