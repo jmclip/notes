@@ -131,21 +131,20 @@ All course materials can be found on the [course Canvas site](https://canvas.uch
 
 ### Course staff
 
-#### Me (Dr. Benjamin Soltoff)
+#### Me (Dr. Yanyan Sheng)
 
-<img src="images/ben-soltoff.jpg" width="60%" style="display: block; margin: auto;" />
-
-* Assistant Senior Instructional Professor in Computational Social Science
-* Associate Director of the [Masters in Computational Social Science](http://macss.uchicago.edu) program
-* PhD in political science, fields including American politics, political methodology, law & courts
+* Senior Instructional Professor in Computational Social Science
+* Associate Director of the [Committee on Quantitative Methods](https://voices.uchicago.edu/qrmeth/) 
+* PhD in educational measurement and statistics 
 * Current teaching rotation
-    * Computational Math Camp
-    * Computing for the Social Sciences
-    - Data Storytelling
-    * Perspectives on Computational Analysis
+    * Introductory Statistical Methods 
+    * Foundations of Statistical Theory
+    * Overview of Quantitative Methods in the Social and Behavioral Sciences
+    * Principles of Measurement
 
 ### Teaching assistants
 
+- 
 - 
 - 
 - 
@@ -161,7 +160,7 @@ All course materials can be found on the [course Canvas site](https://canvas.uch
     * High school/AP/IB training may be sufficient depending on the depth of the course and how recently you completed it
 
 **We assume prior exposure to the content covered in this camp** - our goal is to refresh material which you have previously learned, not teach it to you fresh
-    * Impossible to teach all this material from scratch in just three weeks
+    * Impossible to teach all this material from scratch in just two weeks
 
 ### Alternatives to this camp
 
@@ -174,7 +173,7 @@ All course materials can be found on the [course Canvas site](https://canvas.uch
 
 * You don't take this course for a grade
     * Pass/fail (no credit)
-    * Show up (virtually), complete the problem sets satisfactorily (not perfectly), and you'll pass
+    * Show up in class, complete the problem sets satisfactorily (not perfectly), and you'll pass
 * That said, **it should not matter**
 * The irony of grad school
     * Grades no longer matter (or should not)
