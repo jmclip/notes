@@ -2,7 +2,7 @@
 title: "Computational Math Camp"
 subtitle: "Lecture Notes"
 author: "Yanyan Sheng"
-date: "2022-08-18"
+date: "2022-08-24"
 site: bookdown::bookdown_site
 output: bookdown::gitbook
 documentclass: krantz
@@ -37,7 +37,7 @@ description: "Contains lecture notes for the 2022 Computational Math Camp."
 
 ## Course description {-}
 
-This course surveys mathematical and statistical tools that are foundational to computational social science. Topics to be reviewed include mathematical notation and linear equations, calculus, linear algebra, probability theory, and statistical inference. Students are assumed to have encountered most of these topics previously, so that the camp serves as a refresher rather than teaching entirely new topics. Class sessions will emphasize problem solving and in-class exercises applying these techniques. Students who successfully complete the camp are situated to pass the MACSS math and statistics placement exam and enroll in computationally-enhanced course offerings at the University of Chicago without prior introductory coursework.
+This course surveys mathematical and statistical tools that are foundational to computational social science. Topics to be reviewed include mathematical notation and linear equations, calculus, linear algebra, probability theory, and statistical inference. Students are assumed to have encountered most of these topics previously, so that the camp serves as a refresher rather than teaching entirely new topics. Class sessions will emphasize problem solving and in-class exercises applying these techniques. Students who successfully complete the camp are situated to pass the MACSS math and statistics placement exam and enroll in computationally-enhanced or statistically theoretical course offerings at the University of Chicago without prior introductory coursework.
 
 ## Who should take this course {-}
 
