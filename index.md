@@ -1,8 +1,8 @@
 --- 
 title: "Computational Math Camp"
 subtitle: "Lecture Notes"
-author: "Yanyan Sheng"
-date: "2022-08-24"
+# author: "Yanyan Sheng"
+date: "2022-08-29"
 site: bookdown::bookdown_site
 output: bookdown::gitbook
 documentclass: krantz

@@ -172,7 +172,7 @@ All course materials can be found on the [course Canvas site](https://canvas.uch
 
 * You don't take this course for a grade
     * Pass/fail (no credit)
-    * Show up (virtually), complete the problem sets satisfactorily (not perfectly), and you'll pass
+    * Show up in class, complete the problem sets satisfactorily (not perfectly), and you'll pass
 * That said, **it should not matter**
 * The irony of grad school
     * Grades no longer matter (or should not)
