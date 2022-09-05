@@ -123,7 +123,7 @@ All are used to study social scientific phenomena:
 * Survey math and statistical tools that are foundational to CSS
 * Review common mathematical notation
 * Apply math/statistics methods
-* Prepare students to pass the MACSS math/stats placement exam and enroll in computationally-enhanced course offerings at UChicago
+* Prepare students to pass the MACSS math/stats placement exam and enroll in computationally-enhanced or statistically theoretical course offerings at UChicago
 
 ## Course logistics
 
@@ -159,7 +159,7 @@ All course materials can be found on the [course Canvas site](https://canvas.uch
     * High school/AP/IB training may be sufficient depending on the depth of the course and how recently you completed it
 
 **We assume prior exposure to the content covered in this camp** - our goal is to refresh material which you have previously learned, not teach it to you fresh
-    * Impossible to teach all this material from scratch in just three weeks
+    * Impossible to teach all this material from scratch in just two weeks
 
 ### Alternatives to this camp
 
