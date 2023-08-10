@@ -718,3 +718,4 @@ multiparameter-problems
 critiques-and-defenses-of-bayesian-inference
 critique-of-bayesian-inference
 defense-of-bayesian-inference
+author-yanyan-sheng

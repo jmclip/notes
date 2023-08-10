@@ -1,3 +1,8 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+---
 # Linear equations, inequalities, sets and functions, quadratics, and logarithms {#sets-functions}
 
 
@@ -49,7 +54,7 @@ The Division of the Social Sciences also includes interdisciplinary committees w
 **Computational social science** (CSS) is a modern interdisciplinary approach to the study of social scientific phenomena. Researchers in this field use computers to model, simulated, and analyze social phenomena. While historically CSS was limited to the application of numerical methods and simulation (e.g. agent-based modeling) to complex issues of social science research, over the past decade this has evolved to describe the intersection of computer science, math/statistics, and social science @lazer2009.
 
 <div class="figure" style="text-align: center">
-<img src="images/ccsvenn.jpeg" alt="Source: http://giventhedata.blogspot.com/2013/03/data-science-in-businesscomputational.html" width="90%" />
+<img src="notes/images/ccsvenn.jpeg" alt="Source: http://giventhedata.blogspot.com/2013/03/data-science-in-businesscomputational.html" width="90%" />
 <p class="caption">(\#fig:css-img)Source: http://giventhedata.blogspot.com/2013/03/data-science-in-businesscomputational.html</p>
 </div>
 
@@ -194,7 +199,7 @@ Problem sets will be evaluated and returned within 24 hours, and the solution ke
 
 #### 15 minute rule
 
-<blockquote class="twitter-tweet"><p lang="en" dir="ltr">15 min rule: when stuck, you HAVE to try on your own for 15 min; after 15 min, you HAVE to ask for help.- Brain AMA <a href="https://t.co/MS7FnjXoGH">pic.twitter.com/MS7FnjXoGH</a></p>&mdash; Rachel Thomas (@math_rachel) <a href="https://twitter.com/math_rachel/status/764931533383749632?ref_src=twsrc%5Etfw">August 14, 2016</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<!-- <blockquote class="twitter-tweet"><p lang="en" dir="ltr">15 min rule: when stuck, you HAVE to try on your own for 15 min; after 15 min, you HAVE to ask for help.- Brain AMA <a href="https://t.co/MS7FnjXoGH">pic.twitter.com/MS7FnjXoGH</a></p>&mdash; Rachel Thomas (@math_rachel) <a href="https://twitter.com/math_rachel/status/764931533383749632?ref_src=twsrc%5Etfw">August 14, 2016</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script> -->
 
 We will follow the **15 minute rule** in this class. If you encounter an issue in your problem sets, spend up to 15 minutes troubleshooting the problem on your own. However, if after 15 minutes you still cannot solve the problem, **ask for help**. The instructional staff will be on site for help during class hours or after class by appointment scheduled via email. 
     
@@ -202,7 +207,7 @@ We will follow the **15 minute rule** in this class. If you encounter an issue i
 
 What is the point of solving all this math/stats by hand when computers can do it for us?
 
-<div class="reddit-embed" data-embed-media="www.redditmedia.com" data-embed-parent="false" data-embed-live="false" data-embed-uuid="8304bbaa-04bb-4a98-b866-ebc381d9afff" data-embed-created="2018-08-30T17:34:20.160Z"><a href="https://www.reddit.com/r/AskReddit/comments/9anxn8/kids_in_school_used_to_say_well_never_need_to/e4x4j3a/">Comment</a> from discussion <a href="https://www.reddit.com/r/AskReddit/comments/9anxn8/kids_in_school_used_to_say_well_never_need_to/">Kids in school used to say “We’ll never need to know this in the real world”. What, in your experience, were they wrong about?</a>.</div><script async src="https://www.redditstatic.com/comment-embed.js"></script>
+<!-- <div class="reddit-embed" data-embed-media="www.redditmedia.com" data-embed-parent="false" data-embed-live="false" data-embed-uuid="8304bbaa-04bb-4a98-b866-ebc381d9afff" data-embed-created="2018-08-30T17:34:20.160Z"><a href="https://www.reddit.com/r/AskReddit/comments/9anxn8/kids_in_school_used_to_say_well_never_need_to/e4x4j3a/">Comment</a> from discussion <a href="https://www.reddit.com/r/AskReddit/comments/9anxn8/kids_in_school_used_to_say_well_never_need_to/">Kids in school used to say “We’ll never need to know this in the real world”. What, in your experience, were they wrong about?</a>.</div><script async src="https://www.redditstatic.com/comment-embed.js"></script> -->
 
 The truth is that math skills translate to other domains. While perhaps overly simplified, computer science is essentially a bunch of math. Applying mathematical techniques and completing the exercises on the problem sets requires focus, determination, and grit. **You'll need all of that to survive grad school.**
 
